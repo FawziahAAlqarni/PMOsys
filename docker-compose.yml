@@ -1,0 +1,59 @@
+services:
+  fe:
+    build:
+      context: ./fe
+      args:
+        NEXT_PUBLIC_API_URL: ${API_URL:-http://localhost:3000/api}
+    ports:
+      - "8008:8008"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - be
+    networks:
+      - app-network
+
+  be:
+    build:
+      context: ./be
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - API_PORT=3000
+    networks:
+      - app-network
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+  postgres:
+    image: postgres:18.1-alpine
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-basem_task_management}
+    env_file:
+      - .env
+    ports:
+      - '${DB_PORT:-5432}:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USERNAME:-postgres}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
