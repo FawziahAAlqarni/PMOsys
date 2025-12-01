@@ -9,6 +9,7 @@ Full-stack Portfolio Task Management application with CRUD operations for managi
 ## Development Commands
 
 ### Frontend (fe/)
+
 ```bash
 cd fe
 npm run dev          # Dev server at http://localhost:8008
@@ -18,6 +19,7 @@ npm run lint         # Run ESLint
 ```
 
 ### Backend (be/)
+
 ```bash
 cd be
 npm run start:dev    # Watch mode with auto-reload
@@ -33,6 +35,7 @@ npm run format       # Prettier formatting
 ```
 
 ### Docker
+
 ```bash
 docker-compose up -d              # Start all services (fe, be, postgres)
 docker-compose up -d postgres     # Start only database
@@ -42,11 +45,13 @@ docker-compose down               # Stop all services
 ## Architecture
 
 ### Tech Stack
+
 - **Frontend:** Next.js 16, React 19 (with React Compiler), TypeScript, Tailwind CSS v4
 - **Backend:** NestJS 11 with Fastify adapter, TypeORM 11, PostgreSQL 18
 - **Infrastructure:** Docker Compose, node:24-alpine
 
 ### Project Structure
+
 ```
 ├── fe/                    # Next.js frontend (port 8008)
 │   └── src/app/
@@ -66,18 +71,20 @@ docker-compose down               # Stop all services
 ```
 
 ### API Endpoints
+
 Base URL: `/api/portfolio-tasks`
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/` | Create task |
-| GET | `/` | List all (optional `?portfolio=HA` filter) |
-| GET | `/:id` | Get by UUID |
-| GET | `/by-task-id/:taskId` | Get by taskId (e.g., "HA_1") |
-| PATCH | `/:id` | Update task |
-| DELETE | `/:id` | Delete task |
+| Method | Endpoint              | Description                                |
+|--------|-----------------------|--------------------------------------------|
+| POST   | `/`                   | Create task                                |
+| GET    | `/`                   | List all (optional `?portfolio=HA` filter) |
+| GET    | `/:id`                | Get by UUID                                |
+| GET    | `/by-task-id/:taskId` | Get by taskId (e.g., "HA_1")               |
+| PATCH  | `/:id`                | Update task                                |
+| DELETE | `/:id`                | Delete task                                |
 
 ### Database Schema
+
 ```typescript
 // PortfolioTask entity
 interface PortfolioTask {
@@ -109,6 +116,7 @@ interface PortfolioCounter {
 ## Environment Variables
 
 ### Root (.env)
+
 ```
 DB_HOST=localhost
 DB_PORT=5432
@@ -118,12 +126,14 @@ DB_NAME=basem_task_management
 ```
 
 ### Frontend (fe/.env)
+
 ```
 WEB_PORT=8008
 NEXT_PUBLIC_API_URL=http://localhost:3000/api
 ```
 
 ### Backend (be/.env)
+
 ```
 API_PORT=3030
 ```

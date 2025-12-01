@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Portfolio } from './portfolio.enum';
+import {Portfolio} from './portfolio.enum';
 
 @Entity('portfolio_tasks')
 export class PortfolioTask {
@@ -21,13 +21,10 @@ export class PortfolioTask {
   @Column()
   taskName: string;
 
-  @Column({ unique: true })
-  taskId: string; // Format: HA_1, MA_4, EA_9
-
-  @Column({ type: 'date' })
+  @Column({type: 'date'})
   dueDate: Date;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({type: 'int', default: 0})
   completionPercentage: number; // 0-100
 
   @CreateDateColumn()

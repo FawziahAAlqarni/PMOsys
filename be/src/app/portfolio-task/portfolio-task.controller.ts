@@ -6,39 +6,34 @@ import {Portfolio} from './entities/portfolio.enum';
 
 @Controller('portfolio-tasks')
 export class PortfolioTaskController {
-    constructor(private readonly portfolioTaskService: PortfolioTaskService) {
-    }
+  constructor(private readonly portfolioTaskService: PortfolioTaskService) {
+  }
 
-    @Post()
-    create(@Body() createDto: CreatePortfolioTaskDto) {
-        return this.portfolioTaskService.create(createDto);
-    }
+  @Post()
+  create(@Body() createDto: CreatePortfolioTaskDto) {
+    return this.portfolioTaskService.create(createDto);
+  }
 
-    @Get()
-    findAll(@Query('portfolio') portfolio?: Portfolio) {
-        if (portfolio) {
-            return this.portfolioTaskService.findByPortfolio(portfolio);
-        }
-        return this.portfolioTaskService.findAll();
+  @Get()
+  findAll(@Query('portfolio') portfolio?: Portfolio) {
+    if (portfolio) {
+      return this.portfolioTaskService.findByPortfolio(portfolio);
     }
+    return this.portfolioTaskService.findAll();
+  }
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.portfolioTaskService.findOne(id);
-    }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.portfolioTaskService.findOne(id);
+  }
 
-    @Get('by-task-id/:taskId')
-    findByTaskId(@Param('taskId') taskId: string) {
-        return this.portfolioTaskService.findByTaskId(taskId);
-    }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateDto: UpdatePortfolioTaskDto) {
+    return this.portfolioTaskService.update(id, updateDto);
+  }
 
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() updateDto: UpdatePortfolioTaskDto) {
-        return this.portfolioTaskService.update(id, updateDto);
-    }
-
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.portfolioTaskService.remove(id);
-    }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.portfolioTaskService.remove(id);
+  }
 }

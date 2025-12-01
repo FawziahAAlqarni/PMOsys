@@ -72,15 +72,15 @@ export default function Home() {
 
   const weekOptions = useMemo(() => getThursdayWeekOptions(), []);
 
-  useEffect(() => {
-    void fetchTasks();
-  }, []);
-
   const fetchTasks = async () => {
     const res = await fetch(API_URL);
     const data = await res.json();
     setTasks(data);
   };
+
+  useEffect(() => {
+    void fetchTasks();
+  }, []);
 
   const handleAddTask = async () => {
     if (!taskName || !dueDate) return;
