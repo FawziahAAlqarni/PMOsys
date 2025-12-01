@@ -28,6 +28,6 @@ USER nestjs
 
 EXPOSE 3000
 
-ENV API_PORT=3000
+ENV API_PORT=3030
 
 CMD ["node", "dist/main.js"]

@@ -125,7 +125,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3000/api
 
 ### Backend (be/.env)
 ```
-API_PORT=3000
+API_PORT=3030
 ```
 
 ## Configuration Notes

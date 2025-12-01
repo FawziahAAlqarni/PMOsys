@@ -18,11 +18,12 @@ async function bootstrap() {
     } else {
         app.enableCors({
             ...corsOptions,
-            origin: ['http://localhost:8008'],
+            origin: ['http://localhost:3000'],
         });
     }
     app.setGlobalPrefix('api');
-    await app.listen(3000, '0.0.0.0');
+    const port = process.env.PORT || 3030;
+    await app.listen(port, '0.0.0.0');
 }
 
 bootstrap();
