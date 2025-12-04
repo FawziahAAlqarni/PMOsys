@@ -12,7 +12,7 @@ import {PortfolioTaskModule} from './portfolio-task/portfolio-task.module';
       port: parseInt(process.env.DB_PORT || '5432', 10),
       username: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD || 'postgres',
-      database: process.env.DB_NAME || 'basem_task_management',
+      database: process.env.DB_NAME || 'project_management',
       autoLoadEntities: true,
       synchronize: process.env.NODE_ENV !== 'production',
     }),

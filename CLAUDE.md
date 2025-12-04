@@ -53,18 +53,18 @@ docker-compose down               # Stop all services
 ### Project Structure
 
 ```
-├── fe/                    # Next.js frontend (port 8008)
+├── fe/                    # Next.js frontend
 │   └── src/app/
 │       ├── page.tsx       # Main task management page (client component)
 │       └── layout.tsx     # Root layout
-├── be/                    # NestJS backend (port 3000)
+├── be/                    # NestJS backend
 │   └── src/
 │       ├── main.ts        # Entry point, Fastify setup, CORS
 │       └── app/
 │           ├── app.module.ts              # Root module with TypeORM config
-│           └── portfolio-task/            # Core feature module
-│               ├── portfolio-task.controller.ts
-│               ├── portfolio-task.service.ts
+│           └── featuer/                   # feature module
+│               ├── feature.controller.ts
+│               ├── feature.service.ts
 │               ├── entities/              # TypeORM entities
 │               └── dto/                   # Input validation DTOs
 └── docker-compose.yml     # Multi-container orchestration
@@ -79,7 +79,6 @@ Base URL: `/api/portfolio-tasks`
 | POST   | `/`                   | Create task                                |
 | GET    | `/`                   | List all (optional `?portfolio=HA` filter) |
 | GET    | `/:id`                | Get by UUID                                |
-| GET    | `/by-task-id/:taskId` | Get by taskId (e.g., "HA_1")               |
 | PATCH  | `/:id`                | Update task                                |
 | DELETE | `/:id`                | Delete task                                |
 
@@ -122,7 +121,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=postgres
-DB_NAME=basem_task_management
+DB_NAME=project_management
 ```
 
 ### Frontend (fe/.env)
