@@ -14,11 +14,11 @@ export class ProjectCardService {
 
   async create(dto: CreateProjectCardDto): Promise<ProjectCard> {
 
-    const task = this.projectCardRepository.create({
+    const projectCard = this.projectCardRepository.create({
       ...dto,
     });
 
-    return this.projectCardRepository.save(task);
+    return this.projectCardRepository.save(projectCard);
   }
 
   async findAll(): Promise<ProjectCard[]> {
