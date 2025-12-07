@@ -2,6 +2,7 @@ import {Module} from '@nestjs/common';
 import {ConfigModule} from '@nestjs/config';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import {PortfolioTaskModule} from './portfolio-task/portfolio-task.module';
+import {ProjectCardModule} from "./project-card/project-card.module";
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import {PortfolioTaskModule} from './portfolio-task/portfolio-task.module';
       synchronize: process.env.NODE_ENV !== 'production',
     }),
     PortfolioTaskModule,
+    ProjectCardModule,
   ]
 })
 export class AppModule {
