@@ -1,6 +1,7 @@
 import {Injectable} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
+import {PinoLogger, InjectPinoLogger} from 'nestjs-pino';
 import {ProjectCard} from './entities/project-card.entity';
 import {CreateProjectCardDto} from './dto/create-project-card.dto';
 
@@ -9,16 +10,24 @@ export class ProjectCardService {
   constructor(
     @InjectRepository(ProjectCard)
     private readonly projectCardRepository: Repository<ProjectCard>,
+    @InjectPinoLogger(ProjectCardService.name)
+    private readonly logger: PinoLogger,
   ) {
   }
 
   async create(dto: CreateProjectCardDto): Promise<ProjectCard> {
-
     const projectCard = this.projectCardRepository.create({
       ...dto,
     });
 
-    return this.projectCardRepository.save(projectCard);
+    const savedProjectCard = await this.projectCardRepository.save(projectCard);
+
+    this.logger.info({
+      projectCardId: savedProjectCard.id,
+      projectCardName: savedProjectCard.name,
+    }, 'Project card created');
+
+    return savedProjectCard;
   }
 
   async findAll(): Promise<ProjectCard[]> {

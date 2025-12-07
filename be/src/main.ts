@@ -6,13 +6,21 @@ import {
 import {AppModule} from "./app/app.module";
 import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
 import {ValidationPipe} from '@nestjs/common';
+import {Logger} from 'nestjs-pino';
+import {v4 as uuidv4} from 'uuid';
 
 async function bootstrap() {
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    new FastifyAdapter({
+      genReqId: () => uuidv4(),
+      requestIdLogLabel: 'traceId',
+    }),
+    {bufferLogs: true},
   );
+
+  app.useLogger(app.get(Logger));
   const corsOptions = {
     methods: ['GET', 'HEAD', 'POST', 'PATCH', 'DELETE'],
   };
@@ -51,7 +59,8 @@ async function bootstrap() {
   });
 
   const port = process.env.PORT || 3030;
-  console.log('Server is running on port ' + port);
+  const logger = app.get(Logger);
+  logger.log(`Server is running on port ${port}`, 'Bootstrap');
   await app.listen(port, '0.0.0.0');
 }
 

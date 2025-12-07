@@ -1,12 +1,47 @@
 import {Module} from '@nestjs/common';
 import {ConfigModule} from '@nestjs/config';
 import {TypeOrmModule} from '@nestjs/typeorm';
+import {LoggerModule} from 'nestjs-pino';
+import {v4 as uuidv4} from 'uuid';
 import {PortfolioTaskModule} from './portfolio-task/portfolio-task.module';
 import {ProjectCardModule} from "./project-card/project-card.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport:
+          process.env.LOG_PRETTY === 'true'
+            ? {
+              target: 'pino-pretty',
+              options: {
+                colorize: true,
+                singleLine: false,
+                translateTime: 'HH:MM:ss.l',
+                ignore: 'pid,hostname',
+              },
+            }
+            :
+            undefined,
+        level: process.env.LOG_LEVEL || 'info',
+        autoLogging: true,
+
+        // Generate trace ID (backend only, no client headers accepted)
+        genReqId: () => uuidv4(),
+
+        redact: {
+          paths: [
+            'req.headers.authorization',
+            'req.headers.cookie',
+            'req.body.password',
+            'req.body.token',
+          ],
+          censor: 'censored'
+        },
+      },
+    }),
+
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST || 'localhost',
@@ -17,6 +52,7 @@ import {ProjectCardModule} from "./project-card/project-card.module";
       autoLoadEntities: true,
       synchronize: process.env.NODE_ENV !== 'production',
     }),
+
     PortfolioTaskModule,
     ProjectCardModule,
   ]
