@@ -8,6 +8,7 @@ import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
 import {ValidationPipe} from '@nestjs/common';
 
 async function bootstrap() {
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
@@ -36,7 +37,6 @@ async function bootstrap() {
     }),
   );
 
-  // Serve APIs at root (/); Swagger will be available at /docs
 
   // OpenAPI/Swagger setup at /docs and JSON at /docs-json
   const config = new DocumentBuilder()
@@ -47,8 +47,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document, {
     jsonDocumentUrl: 'docs-json',
-    swaggerOptions: { persistAuthorization: true },
+    swaggerOptions: {persistAuthorization: true},
   });
+
   const port = process.env.PORT || 3030;
   console.log('Server is running on port ' + port);
   await app.listen(port, '0.0.0.0');
