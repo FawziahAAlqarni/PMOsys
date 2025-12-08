@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import Navbar from '@/components/Navbar';
 import PortfolioView from '@/components/PortfolioView';
 import AnalyticsView from '@/components/AnalyticsView';
@@ -7,7 +7,7 @@ import ProjectDetailsView from '@/components/ProjectDetailsView';
 import NewProjectModal from '@/components/modals/NewProjectModal';
 import CharterModal from '@/components/modals/CharterModal';
 import RiskRegisterModal from '@/components/modals/RiskRegisterModal';
-import { GATES_TEMPLATE } from '@/lib/constants';
+import {GATES_TEMPLATE} from '@/lib/constants';
 
 export default function Home() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -84,7 +84,7 @@ export default function Home() {
         )}
 
         {currentView === 'analytics' && (
-          <AnalyticsView projects={projects} />
+          <AnalyticsView projects={projects}/>
         )}
 
         {currentView === 'project_details' && activeProject && (
@@ -111,10 +111,10 @@ export default function Home() {
           project={activeProject}
           onClose={() => setShowCharterModal(false)}
           onSave={(updatedCharter: any) => {
-            const updatedProject = { ...activeProject, charterData: updatedCharter };
+            const updatedProject = {...activeProject, charterData: updatedCharter};
             // Mark charter requirement as done in Gate 1 (index 0)
             const gate1Req = updatedProject.gates[0].requirements.find((r: any) => r.type === 'charter_form');
-            if(gate1Req) gate1Req.done = true;
+            if (gate1Req) gate1Req.done = true;
             handleUpdateProject(updatedProject);
             setShowCharterModal(false);
           }}
@@ -125,21 +125,21 @@ export default function Home() {
         <RiskRegisterModal
           project={activeProject}
           onClose={() => {
-             if(activeProject.risks && activeProject.risks.length > 0) {
-                 const updatedProject = { ...activeProject };
-                 if (updatedProject.currentGateIndex < updatedProject.gates.length) {
-                    const currentGate = updatedProject.gates[updatedProject.currentGateIndex];
-                    const req = currentGate.requirements.find((r: any) => r.type === 'risk_register');
-                    if(req) {
-                        req.done = true;
-                        handleUpdateProject(updatedProject);
-                    }
-                 }
-             }
-             setShowRiskModal(false);
+            if (activeProject.risks && activeProject.risks.length > 0) {
+              const updatedProject = {...activeProject};
+              if (updatedProject.currentGateIndex < updatedProject.gates.length) {
+                const currentGate = updatedProject.gates[updatedProject.currentGateIndex];
+                const req = currentGate.requirements.find((r: any) => r.type === 'risk_register');
+                if (req) {
+                  req.done = true;
+                  handleUpdateProject(updatedProject);
+                }
+              }
+            }
+            setShowRiskModal(false);
           }}
           onSaveRisks={(newRisks: any[]) => {
-            handleUpdateProject({ ...activeProject, risks: newRisks });
+            handleUpdateProject({...activeProject, risks: newRisks});
           }}
         />
       )}
