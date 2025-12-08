@@ -67,7 +67,7 @@ export default function Home() {
   const activeProject = projects.find(p => p.id === activeProjectId);
 
   return (
-    <>
+    <div dir="rtl" className="h-screen flex flex-col bg-[#f8faf9] font-sans text-gray-800 overflow-hidden">
       <Navbar
         currentView={currentView}
         setCurrentView={setCurrentView}
@@ -143,6 +143,6 @@ export default function Home() {
           }}
         />
       )}
-    </>
+    </div>
   );
 }
