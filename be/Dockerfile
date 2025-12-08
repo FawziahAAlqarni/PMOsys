@@ -26,7 +26,7 @@ COPY --from=builder --chown=nestjs:nodejs /app/package.json ./
 
 USER nestjs
 
-EXPOSE 3000
+EXPOSE 3030
 
 ENV API_PORT=3030
 

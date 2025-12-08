@@ -1,3 +1,4 @@
+import {AuthModule} from './auth/auth.module';
 import {Module} from '@nestjs/common';
 import {ConfigModule} from '@nestjs/config';
 import {TypeOrmModule} from '@nestjs/typeorm';
@@ -53,8 +54,7 @@ import {JwtAuthGuard} from "./auth/guards/jwt-auth.guard";
       autoLoadEntities: true,
       synchronize: process.env.NODE_ENV !== 'production',
     }),
-
-    PortfolioTaskModule,
+    AuthModule,
     ProjectCardModule,
   ],
   providers: [
