@@ -1,8 +1,10 @@
 'use client';
 import React from 'react';
 import { Plus, ArrowLeft } from 'lucide-react';
+import { TOTAL_GATES } from '@/lib/constants';
+import type { PortfolioViewProps } from '@/types';
 
-export default function PortfolioView({ projects, onOpenNewProject, onSelectProject }: any) {
+export default function PortfolioView({ projects, onOpenNewProject, onSelectProject }: PortfolioViewProps) {
   return (
     <div className="max-w-7xl mx-auto animate-fade-in">
       <div className="flex justify-between items-end mb-10 border-b border-gray-200 pb-4">
@@ -24,10 +26,10 @@ export default function PortfolioView({ projects, onOpenNewProject, onSelectProj
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((p: any) => {
-            const isFinished = p.currentGateIndex >= 4;
+          {projects.map((p) => {
+            const isFinished = p.currentGateIndex >= TOTAL_GATES;
             const gateName = isFinished ? "مكتمل" : p.gates[p.currentGateIndex].name;
-            const progress = Math.round((p.currentGateIndex / 4) * 100);
+            const progress = Math.round((p.currentGateIndex / TOTAL_GATES) * 100);
 
             return (
               <div

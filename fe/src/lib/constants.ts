@@ -1,3 +1,9 @@
+// App Configuration
+export const TOTAL_GATES = 4;
+export const HIGH_RISK_THRESHOLD = 15; // probability * impact >= 15
+export const MEDIUM_RISK_THRESHOLD = 8; // probability * impact >= 8
+export const LOCALSTORAGE_KEY = 'strategic_pms_react_v2';
+
 export const MNG_COLORS = {
   green: {
     50: '#f2fcf5',

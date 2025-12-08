@@ -1,19 +1,20 @@
 'use client';
 import React, { useState, useMemo } from 'react';
 import { ShieldAlert, X, Plus, List, TrendingUp } from 'lucide-react';
+import type { RiskRegisterModalProps, Risk, RiskFormData, RiskType, ResponseType, RiskPhase, RiskStatus, ImpactScope } from '@/types';
 
-export default function RiskRegisterModal({ project, onClose, onSaveRisks }: any) {
-  const [risks, setRisks] = useState(project.risks || []);
+export default function RiskRegisterModal({ project, onClose, onSaveRisks }: RiskRegisterModalProps) {
+  const [risks, setRisks] = useState<Risk[]>(project.risks || []);
   const [selectedRiskId, setSelectedRiskId] = useState<number | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
-  const getEmptyRiskForm = () => ({
-    title: '', desc: '', scope: '', subScope: '', type: 'Threat', response: 'Mitigate',
-    prob: 1, impact: 1, mitigation: '', phase: 'Elaboration', status: 'Open',
+  const getEmptyRiskForm = (): RiskFormData => ({
+    title: '', desc: '', scope: '', subScope: '', type: 'Threat' as RiskType, response: 'Mitigate' as ResponseType,
+    prob: 1, impact: 1, mitigation: '', phase: 'Detailing' as RiskPhase, status: 'Open' as RiskStatus,
     indicator: '', indDate: '', isChallenge: false
   });
 
-  const [formData, setFormData] = useState(getEmptyRiskForm());
+  const [formData, setFormData] = useState<RiskFormData>(getEmptyRiskForm());
 
   const subScopeOptions = useMemo(() => {
     const main = formData.scope;
@@ -34,7 +35,7 @@ export default function RiskRegisterModal({ project, onClose, onSaveRisks }: any
     setIsEditing(true);
   };
 
-  const handleEdit = (risk: any) => {
+  const handleEdit = (risk: Risk) => {
     setFormData({
       title: risk.title, desc: risk.description, scope: risk.impactScope, subScope: risk.subImpactScope,
       type: risk.type, response: risk.responseType, prob: risk.probability, impact: risk.impact,
@@ -48,11 +49,11 @@ export default function RiskRegisterModal({ project, onClose, onSaveRisks }: any
   const handleSaveForm = () => {
     if(!formData.title) { alert("العنوان مطلوب"); return; }
 
-    const riskObj = {
+    const riskObj: Risk = {
       id: selectedRiskId || Date.now(),
       title: formData.title,
       description: formData.desc,
-      impactScope: formData.scope,
+      impactScope: formData.scope as ImpactScope | '',
       subImpactScope: formData.subScope,
       type: formData.type,
       responseType: formData.response,
@@ -66,9 +67,9 @@ export default function RiskRegisterModal({ project, onClose, onSaveRisks }: any
       isChallenge: formData.isChallenge
     };
 
-    let updatedRisks;
+    let updatedRisks: Risk[];
     if (selectedRiskId) {
-      updatedRisks = risks.map((r: any) => r.id === selectedRiskId ? riskObj : r);
+      updatedRisks = risks.map((r) => r.id === selectedRiskId ? riskObj : r);
     } else {
       updatedRisks = [...risks, riskObj];
     }
@@ -113,7 +114,7 @@ export default function RiskRegisterModal({ project, onClose, onSaveRisks }: any
             </div>
             <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2">
               {risks.length === 0 && <div className="text-center text-gray-400 py-8 text-sm">لا توجد مخاطر مسجلة</div>}
-              {risks.map((r: any) => {
+              {risks.map((r) => {
                 const s = r.probability * r.impact;
                 const badgeColor = s >= 15 ? 'bg-red-100 text-red-800 border-red-200' : s >= 8 ? 'bg-yellow-100 text-yellow-800 border-yellow-200' : 'bg-green-100 text-green-800 border-green-200';
                 return (
@@ -158,7 +159,7 @@ export default function RiskRegisterModal({ project, onClose, onSaveRisks }: any
 
                   <div>
                     <label className="block text-sm font-bold text-gray-700 mb-1">نطاق الأثر</label>
-                    <select value={formData.scope} onChange={e => setFormData({...formData, scope: e.target.value})} className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none">
+                    <select value={formData.scope} onChange={e => setFormData({...formData, scope: e.target.value as ImpactScope | ''})} className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none">
                       <option value="">اختر...</option>
                       <option value="الاستراتيجية">الاستراتيجية</option>
                       <option value="المالية">المالية</option>
@@ -198,14 +199,14 @@ export default function RiskRegisterModal({ project, onClose, onSaveRisks }: any
 
                   <div>
                     <label className="block text-sm font-bold text-gray-700 mb-1">نوع الخطر</label>
-                    <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})} className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none">
+                    <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value as RiskType})} className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none">
                       <option value="Threat">تهديد (سلبي)</option>
                       <option value="Opportunity">فرصة (إيجابي)</option>
                     </select>
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-gray-700 mb-1">نوع الاستجابة</label>
-                    <select value={formData.response} onChange={e => setFormData({...formData, response: e.target.value})} className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none">
+                    <select value={formData.response} onChange={e => setFormData({...formData, response: e.target.value as ResponseType})} className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none">
                       <option value="Mitigate">تخفيف (Mitigate)</option>
                       <option value="Avoid">تجنب (Avoid)</option>
                       <option value="Transfer">تحويل (Transfer)</option>
@@ -214,14 +215,14 @@ export default function RiskRegisterModal({ project, onClose, onSaveRisks }: any
                   </div>
 
                   <div><label className="block text-sm font-bold text-gray-700 mb-1">المرحلة</label>
-                    <select value={formData.phase} onChange={e => setFormData({...formData, phase: e.target.value})} className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none">
-                      <option value="Elaboration">التخطيط / التفصيل</option>
+                    <select value={formData.phase} onChange={e => setFormData({...formData, phase: e.target.value as RiskPhase})} className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none">
+                      <option value="Detailing">التخطيط / التفصيل</option>
                       <option value="Execution">التنفيذ</option>
                       <option value="Closing">الإغلاق</option>
                     </select>
                   </div>
                   <div><label className="block text-sm font-bold text-gray-700 mb-1">حالة الخطر</label>
-                    <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})} className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none">
+                    <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value as RiskStatus})} className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg outline-none">
                       <option value="Open">مفتوح</option>
                       <option value="Closed">مغلق</option>
                     </select>

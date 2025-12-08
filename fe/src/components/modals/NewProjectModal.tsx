@@ -1,8 +1,9 @@
 'use client';
 import React, { useState } from 'react';
 import { Target } from 'lucide-react';
+import type { NewProjectModalProps } from '@/types';
 
-export default function NewProjectModal({ onClose, onCreate }: { onClose: () => void, onCreate: (name: string, desc: string) => void }) {
+export default function NewProjectModal({ onClose, onCreate }: NewProjectModalProps) {
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
 

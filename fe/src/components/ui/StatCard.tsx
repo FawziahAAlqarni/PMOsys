@@ -1,12 +1,5 @@
 import React from 'react';
-
-interface StatCardProps {
-  title: string;
-  value: string | number;
-  icon: React.ReactNode;
-  colorClass: string;
-  bgClass: string;
-}
+import type { StatCardProps } from '@/types';
 
 export default function StatCard({ title, value, icon, colorClass, bgClass }: StatCardProps) {
   return (

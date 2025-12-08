@@ -2,8 +2,9 @@
 import React from 'react';
 import { LayoutGrid, PieChart, RotateCw } from 'lucide-react';
 import NavButton from './ui/NavButton';
+import type { NavbarProps } from '@/types';
 
-export default function Navbar({ currentView, setCurrentView, onReset }: any) {
+export default function Navbar({ currentView, setCurrentView, onReset }: NavbarProps) {
   return (
     <nav className="bg-[#006C35] text-white shadow-lg shrink-0 z-30 border-b-4 border-[#C5A96F]">
       <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">

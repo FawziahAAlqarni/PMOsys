@@ -4,24 +4,26 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearSca
 import { Doughnut, Bar } from 'react-chartjs-2';
 import { FolderOpen, CheckCheck, AlertTriangle, Flame } from 'lucide-react';
 import StatCard from './ui/StatCard';
+import { TOTAL_GATES, HIGH_RISK_THRESHOLD } from '@/lib/constants';
+import type { AnalyticsViewProps } from '@/types';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
-export default function AnalyticsView({ projects }: { projects: any[] }) {
+export default function AnalyticsView({ projects }: AnalyticsViewProps) {
   const totalProjects = projects.length;
-  const completedProjects = projects.filter(p => p.currentGateIndex >= 4).length;
+  const completedProjects = projects.filter(p => p.currentGateIndex >= TOTAL_GATES).length;
   const activeProjects = totalProjects - completedProjects;
 
   let totalRisks = 0;
   let highRisks = 0;
-  const gateCounts = [0, 0, 0, 0];
+  const gateCounts = new Array(TOTAL_GATES).fill(0);
 
   projects.forEach(p => {
     if (p.risks) {
       totalRisks += p.risks.length;
-      highRisks += p.risks.filter((r: any) => (r.probability * r.impact) >= 15).length;
+      highRisks += p.risks.filter((r) => (r.probability * r.impact) >= HIGH_RISK_THRESHOLD).length;
     }
-    if (p.currentGateIndex < 4) {
+    if (p.currentGateIndex < TOTAL_GATES) {
       gateCounts[p.currentGateIndex]++;
     }
   });

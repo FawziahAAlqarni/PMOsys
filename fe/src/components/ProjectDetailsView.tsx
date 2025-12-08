@@ -1,9 +1,11 @@
 'use client';
 import React from 'react';
 import { ArrowRight, CheckCircle2, Trophy, Target, FileText, Circle, ShieldAlert, List, Plus, CheckCheck, Unlock, Lock, ArrowLeft } from 'lucide-react';
+import { TOTAL_GATES } from '@/lib/constants';
+import type { ProjectDetailsViewProps, RequirementItemProps } from '@/types';
 
-export default function ProjectDetailsView({ project, onUpdateProject, onBack, openCharter, openRisks }: any) {
-  const isComplete = project.currentGateIndex >= 4;
+export default function ProjectDetailsView({ project, onUpdateProject, onBack, openCharter, openRisks }: ProjectDetailsViewProps) {
+  const isComplete = project.currentGateIndex >= TOTAL_GATES;
   const currentGate = isComplete ? null : project.gates[project.currentGateIndex];
 
   const toggleRequirement = (reqIndex: number) => {
@@ -20,11 +22,11 @@ export default function ProjectDetailsView({ project, onUpdateProject, onBack, o
     const updatedProject = { ...project };
     updatedProject.currentGateIndex++;
     onUpdateProject(updatedProject);
-    alert(updatedProject.currentGateIndex >= 4 ? "مبروك! تم إنجاز المشروع بالكامل." : "تم عبور البوابة بنجاح!");
+    alert(updatedProject.currentGateIndex >= TOTAL_GATES ? "مبروك! تم إنجاز المشروع بالكامل." : "تم عبور البوابة بنجاح!");
   };
 
-  const allReqsMet = currentGate ? currentGate.requirements.every((r: any) => r.done) : false;
-  const progress = Math.min(project.currentGateIndex, 3) / 3 * 100;
+  const allReqsMet = currentGate ? currentGate.requirements.every((r) => r.done) : false;
+  const progress = Math.min(project.currentGateIndex, TOTAL_GATES - 1) / (TOTAL_GATES - 1) * 100;
 
   let gateBtnText = "رفع طلب دخول البوابة الأولى";
   let gateBtnSub = "إرسال المتطلبات للاعتماد";
@@ -56,7 +58,7 @@ export default function ProjectDetailsView({ project, onUpdateProject, onBack, o
             ></div>
         </div>
 
-        {project.gates.map((gate: any, idx: number) => {
+        {project.gates.map((gate, idx) => {
           let stateClass = "bg-white border-4 border-gray-200 text-gray-400";
           if (idx < project.currentGateIndex) stateClass = "bg-[#006C35] border-4 border-[#006C35] text-white";
           else if (idx === project.currentGateIndex && !isComplete) stateClass = "bg-white border-4 border-[#C5A96F] text-[#006C35] scale-110 shadow-[0_0_15px_rgba(197,169,111,0.3)]";
@@ -85,7 +87,7 @@ export default function ProjectDetailsView({ project, onUpdateProject, onBack, o
             العودة للمحفظة
           </button>
         </div>
-      ) : (
+      ) : currentGate && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8">
           <div className="lg:col-span-8 space-y-6">
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
@@ -96,7 +98,7 @@ export default function ProjectDetailsView({ project, onUpdateProject, onBack, o
                 متطلبات {currentGate.name}
               </h3>
               <div className="space-y-4">
-                {currentGate.requirements.map((req: any, i: number) => (
+                {currentGate.requirements.map((req, i) => (
                   <RequirementItem
                     key={i}
                     req={req}
@@ -144,7 +146,7 @@ export default function ProjectDetailsView({ project, onUpdateProject, onBack, o
   );
 }
 
-function RequirementItem({ req, onToggle, openCharter, openRisks }: any) {
+function RequirementItem({ req, onToggle, openCharter, openRisks }: RequirementItemProps) {
   if (req.type === 'charter_form') {
     return (
       <div className={`flex items-center justify-between p-5 rounded-xl border transition-all duration-200 ${req.done ? 'border-[#e1f8e8] bg-[#f2fcf5]' : 'border-gray-100 bg-white shadow-sm hover:border-[#C5A96F]'}`}>

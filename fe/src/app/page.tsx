@@ -7,11 +7,12 @@ import ProjectDetailsView from '@/components/ProjectDetailsView';
 import NewProjectModal from '@/components/modals/NewProjectModal';
 import CharterModal from '@/components/modals/CharterModal';
 import RiskRegisterModal from '@/components/modals/RiskRegisterModal';
-import { GATES_TEMPLATE } from '@/lib/constants';
+import { GATES_TEMPLATE, LOCALSTORAGE_KEY } from '@/lib/constants';
+import type { Project, ViewType, CharterData, Risk } from '@/types';
 
 export default function Home() {
-  const [projects, setProjects] = useState<any[]>([]);
-  const [currentView, setCurrentView] = useState('portfolio');
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [currentView, setCurrentView] = useState<ViewType>('portfolio');
   const [activeProjectId, setActiveProjectId] = useState<number | null>(null);
 
   // Modals State
@@ -20,20 +21,21 @@ export default function Home() {
   const [showRiskModal, setShowRiskModal] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem('strategic_pms_react_v2');
+    const stored = localStorage.getItem(LOCALSTORAGE_KEY);
     if (stored) {
       setProjects(JSON.parse(stored));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('strategic_pms_react_v2', JSON.stringify(projects));
+    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(projects));
   }, [projects]);
 
   const handleCreateProject = (name: string, desc: string) => {
-    const newProj = {
+    const newProj: Project = {
       id: Date.now(),
       name,
+      projectManager: '',
       description: desc,
       charterData: {},
       risks: [],
@@ -47,13 +49,13 @@ export default function Home() {
     setCurrentView('project_details');
   };
 
-  const handleUpdateProject = (updatedProject: any) => {
+  const handleUpdateProject = (updatedProject: Project) => {
     setProjects(projects.map(p => p.id === updatedProject.id ? updatedProject : p));
   };
 
   const handleResetSystem = () => {
     if (confirm("تحذير: سيتم حذف جميع البيانات والبدء من جديد. هل أنت متأكد؟")) {
-      localStorage.removeItem('strategic_pms_react_v2');
+      localStorage.removeItem(LOCALSTORAGE_KEY);
       setProjects([]);
       setCurrentView('portfolio');
     }
@@ -110,10 +112,16 @@ export default function Home() {
         <CharterModal
           project={activeProject}
           onClose={() => setShowCharterModal(false)}
-          onSave={(updatedCharter: any) => {
-            const updatedProject = { ...activeProject, charterData: updatedCharter };
+          onSave={(updates) => {
+            const updatedProject = {
+              ...activeProject,
+              name: updates.name,
+              description: updates.description,
+              projectManager: updates.projectManager,
+              charterData: updates.charterData
+            };
             // Mark charter requirement as done in Gate 1 (index 0)
-            const gate1Req = updatedProject.gates[0].requirements.find((r: any) => r.type === 'charter_form');
+            const gate1Req = updatedProject.gates[0].requirements.find((r) => r.type === 'charter_form');
             if(gate1Req) gate1Req.done = true;
             handleUpdateProject(updatedProject);
             setShowCharterModal(false);
@@ -129,7 +137,7 @@ export default function Home() {
                  const updatedProject = { ...activeProject };
                  if (updatedProject.currentGateIndex < updatedProject.gates.length) {
                     const currentGate = updatedProject.gates[updatedProject.currentGateIndex];
-                    const req = currentGate.requirements.find((r: any) => r.type === 'risk_register');
+                    const req = currentGate.requirements.find((r) => r.type === 'risk_register');
                     if(req) {
                         req.done = true;
                         handleUpdateProject(updatedProject);
@@ -138,7 +146,7 @@ export default function Home() {
              }
              setShowRiskModal(false);
           }}
-          onSaveRisks={(newRisks: any[]) => {
+          onSaveRisks={(newRisks: Risk[]) => {
             handleUpdateProject({ ...activeProject, risks: newRisks });
           }}
         />

@@ -1,12 +1,13 @@
 'use client';
 import React, { useState } from 'react';
 import { FileText, X, Info, Save } from 'lucide-react';
+import type { CharterModalProps, CharterFormData } from '@/types';
 
-export default function CharterModal({ project, onClose, onSave }: any) {
-  const [data, setData] = useState({
+export default function CharterModal({ project, onClose, onSave }: CharterModalProps) {
+  const [data, setData] = useState<CharterFormData>({
     name: project.name,
     desc: project.description,
-    manager: project.charterData?.projectManager || '',
+    manager: project.projectManager || '',
     strategicObj: project.charterData?.strategicObj || '',
     strategicRes: project.charterData?.strategicRes || '',
     portfolio: project.charterData?.portfolio || '',
@@ -27,15 +28,19 @@ export default function CharterModal({ project, onClose, onSave }: any) {
       return;
     }
     onSave({
+      name: data.name,
+      description: data.desc,
       projectManager: data.manager,
-      strategicObj: data.strategicObj,
-      strategicRes: data.strategicRes,
-      programName: data.progName,
-      programManager: data.progManager,
-      portfolio: data.portfolio,
-      portfolioManager: data.portfolioManager,
-      dependencies: data.dependencies,
-      techCommittee: data.techCommittee
+      charterData: {
+        strategicObj: data.strategicObj,
+        strategicRes: data.strategicRes,
+        programName: data.progName,
+        programManager: data.progManager,
+        portfolio: data.portfolio,
+        portfolioManager: data.portfolioManager,
+        dependencies: data.dependencies,
+        techCommittee: data.techCommittee
+      }
     });
   };
 

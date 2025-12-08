@@ -1,11 +1,5 @@
 import React from 'react';
-
-interface NavButtonProps {
-  active: boolean;
-  onClick: () => void;
-  icon: React.ReactNode;
-  label: string;
-}
+import type { NavButtonProps } from '@/types';
 
 export default function NavButton({ active, onClick, icon, label }: NavButtonProps) {
   return (
