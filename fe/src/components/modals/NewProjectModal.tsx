@@ -6,14 +6,6 @@ import type { NewProjectModalProps } from '@/types';
 export default function NewProjectModal({ onClose, onCreate }: NewProjectModalProps) {
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
-  const [budget, setBudget] = useState('');
-  const [weeks, setWeeks] = useState('');
-
-  const handleCreate = () => {
-    if (name && desc && budget !== '' && weeks !== '') {
-      onCreate(name, desc, parseFloat(budget), parseInt(weeks));
-    }
-  };
 
   return (
     <div className="fixed inset-0 bg-[#003319]/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -23,48 +15,25 @@ export default function NewProjectModal({ onClose, onCreate }: NewProjectModalPr
         </h2>
         <div className="space-y-5">
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">اسم المبادرة</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">اسم المبادرة المبدئي</label>
             <input
               value={name} onChange={e => setName(e.target.value)}
               className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#006C35] focus:border-[#006C35] outline-none"
             />
           </div>
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">الوصف</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">الهدف العام</label>
             <textarea
               value={desc} onChange={e => setDesc(e.target.value)}
               rows={3}
               className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#006C35] focus:border-[#006C35] outline-none"
             ></textarea>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">الميزانية المقدرة</label>
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value={budget}
-                onChange={e => setBudget(e.target.value)}
-                className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#006C35] focus:border-[#006C35] outline-none"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">المدة (بالأسابيع)</label>
-              <input
-                type="number"
-                min="1"
-                value={weeks}
-                onChange={e => setWeeks(e.target.value)}
-                className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-1 focus:ring-[#006C35] focus:border-[#006C35] outline-none"
-              />
-            </div>
-          </div>
         </div>
         <div className="mt-8 flex justify-end gap-3">
           <button onClick={onClose} className="px-6 py-2 rounded-lg hover:bg-gray-100 font-bold text-gray-600">إلغاء</button>
           <button
-            onClick={handleCreate}
+            onClick={() => { if(name) onCreate(name, desc); }}
             className="px-6 py-2 bg-[#006C35] text-white rounded-lg font-bold shadow-lg hover:bg-[#004d25]"
           >
             إنشاء

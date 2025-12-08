@@ -4,7 +4,6 @@ import {Repository} from 'typeorm';
 import {PinoLogger, InjectPinoLogger} from 'nestjs-pino';
 import {ProjectCard} from './entities/project-card.entity';
 import {CreateProjectCardDto} from './dto/create-project-card.dto';
-import {UpdateProjectCardDto} from './dto/update-project-card.dto';
 
 @Injectable()
 export class ProjectCardService {
@@ -19,8 +18,6 @@ export class ProjectCardService {
   async create(dto: CreateProjectCardDto): Promise<ProjectCard> {
     const projectCard = this.projectCardRepository.create({
       ...dto,
-      currentGateIndex: 0, // Always start at gate 0
-      status: 'active', // Status is determined by system
     });
 
     const savedProjectCard = await this.projectCardRepository.save(projectCard);
@@ -50,23 +47,6 @@ export class ProjectCardService {
   //     order: {createdAt: 'ASC'},
   //   });
   // }
-
-  async update(id: string, dto: UpdateProjectCardDto): Promise<ProjectCard> {
-    const projectCard = await this.findOne(id);
-    if (!projectCard) {
-      throw new Error('Project card not found');
-    }
-
-    Object.assign(projectCard, dto);
-    const updatedProjectCard = await this.projectCardRepository.save(projectCard);
-
-    this.logger.info({
-      projectCardId: updatedProjectCard.id,
-      projectCardName: updatedProjectCard.name,
-    }, 'Project card updated');
-
-    return updatedProjectCard;
-  }
 
   async remove(id: string): Promise<void> {
     await this.projectCardRepository.softDelete(id);
