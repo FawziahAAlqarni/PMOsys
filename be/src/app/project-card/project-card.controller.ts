@@ -1,10 +1,17 @@
 import {Controller, Get, Post, Body, Patch, Param, Delete} from '@nestjs/common';
 import {ProjectCardService} from './project-card.service';
 import {CreateProjectCardDto} from './dto/create-project-card.dto';
+import {UpdateProjectCardDto} from './dto/update-project-card.dto';
+import {GATES_TEMPLATE} from './constants/gates.constant';
 
 @Controller('project-cards')
 export class ProjectCardController {
   constructor(private readonly projectCardService: ProjectCardService) {
+  }
+
+  @Get('gates/template')
+  getGatesTemplate() {
+    return GATES_TEMPLATE;
   }
 
   @Post()
@@ -20,6 +27,11 @@ export class ProjectCardController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.projectCardService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateDto: UpdateProjectCardDto) {
+    return this.projectCardService.update(id, updateDto);
   }
 
 }

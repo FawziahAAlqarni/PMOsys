@@ -4,9 +4,13 @@ import { ArrowRight, CheckCircle2, Trophy, Target, FileText, Circle, ShieldAlert
 import { TOTAL_GATES } from '@/lib/constants';
 import type { ProjectDetailsViewProps, RequirementItemProps } from '@/types';
 
-export default function ProjectDetailsView({ project, onUpdateProject, onBack, openCharter, openRisks }: ProjectDetailsViewProps) {
+export default function ProjectDetailsView({project, gates, onUpdateProject, onBack, openCharter, openRisks}: ProjectDetailsViewProps) {
   const isComplete = project.currentGateIndex >= TOTAL_GATES;
-  const currentGate = isComplete ? null : project.gates[project.currentGateIndex];
+  const currentGate = isComplete ? null : gates[project.currentGateIndex];
+
+  const isRequirementDone = (gateIndex: number, reqIndex: number): boolean => {
+    return project.gateRequirementsState?.[gateIndex]?.[reqIndex] || false;
+  };
 
   const toggleRequirement = (reqIndex: number) => {
     if (!currentGate) return;
@@ -14,7 +18,14 @@ export default function ProjectDetailsView({ project, onUpdateProject, onBack, o
     if (req.type === 'charter_form' || req.type === 'risk_register') return;
 
     const updatedProject = { ...project };
-    updatedProject.gates[project.currentGateIndex].requirements[reqIndex].done = !req.done;
+    if (!updatedProject.gateRequirementsState) {
+      updatedProject.gateRequirementsState = {};
+    }
+    if (!updatedProject.gateRequirementsState[project.currentGateIndex]) {
+      updatedProject.gateRequirementsState[project.currentGateIndex] = {};
+    }
+    const currentState = updatedProject.gateRequirementsState[project.currentGateIndex][reqIndex] || false;
+    updatedProject.gateRequirementsState[project.currentGateIndex][reqIndex] = !currentState;
     onUpdateProject(updatedProject);
   };
 
@@ -25,7 +36,7 @@ export default function ProjectDetailsView({ project, onUpdateProject, onBack, o
     alert(updatedProject.currentGateIndex >= TOTAL_GATES ? "مبروك! تم إنجاز المشروع بالكامل." : "تم عبور البوابة بنجاح!");
   };
 
-  const allReqsMet = currentGate ? currentGate.requirements.every((r) => r.done) : false;
+  const allReqsMet = currentGate ? currentGate.requirements.every((_, idx) => isRequirementDone(project.currentGateIndex, idx)) : false;
   const progress = Math.min(project.currentGateIndex, TOTAL_GATES - 1) / (TOTAL_GATES - 1) * 100;
 
   let gateBtnText = "رفع طلب دخول البوابة الأولى";
@@ -58,7 +69,7 @@ export default function ProjectDetailsView({ project, onUpdateProject, onBack, o
             ></div>
         </div>
 
-        {project.gates.map((gate, idx) => {
+        {gates.map((gate, idx) => {
           let stateClass = "bg-white border-4 border-gray-200 text-gray-400";
           if (idx < project.currentGateIndex) stateClass = "bg-[#006C35] border-4 border-[#006C35] text-white";
           else if (idx === project.currentGateIndex && !isComplete) stateClass = "bg-white border-4 border-[#C5A96F] text-[#006C35] scale-110 shadow-[0_0_15px_rgba(197,169,111,0.3)]";
@@ -101,7 +112,7 @@ export default function ProjectDetailsView({ project, onUpdateProject, onBack, o
                 {currentGate.requirements.map((req, i) => (
                   <RequirementItem
                     key={i}
-                    req={req}
+                    req={{...req, done: isRequirementDone(project.currentGateIndex, i)}}
                     onToggle={() => toggleRequirement(i)}
                     openCharter={openCharter}
                     openRisks={openRisks}

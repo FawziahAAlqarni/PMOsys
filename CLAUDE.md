@@ -43,7 +43,7 @@ this alignment is done in one-to-one settings and is out of the system scope.
 - portfolio (foreign key)
 - description (multi line)
 - Learned lessons from previous projects (multi line text)
-- dependencies on other projects
+- dependencies on other projects (multi line text)
 - technical committee to oversee the project's outputs (list of users, we just store this info without any interactions 
 for them)
 - strategic objective of the project (foreign key)

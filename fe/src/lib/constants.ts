@@ -28,7 +28,7 @@ export const GATES_TEMPLATE = [
     subTitle: "التأسيس والموافقة",
     icon: "lightbulb",
     requirements: [
-      { txt: "تعبئة بطاقة المشروع (Project Charter)", type: "charter_form", done: false },
+      {txt: "تعبئة بطاقة المشروع (Project Card)", type: "charter_form", done: false},
       { txt: "تعبئة سجل المخاطر", type: "risk_register", done: false },
       { txt: "تعبئة الدروس المستفادة", type: "checkbox", done: false }
     ]

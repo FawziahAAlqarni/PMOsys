@@ -1,6 +1,6 @@
 // Core Types
 export type Portfolio = 'HA' | 'MA' | 'EA' | 'PMO';
-export type ViewType = 'portfolio' | 'analytics' | 'project_details';
+export type ViewType = 'portfolio' | 'analytics';
 export type ProjectStatus = 'active' | 'completed';
 
 // Risk Types
@@ -66,17 +66,21 @@ export interface Gate {
   requirements: Requirement[];
 }
 
-// Project Type
+// Project Type (Project Card)
 export interface Project {
-  id: number;
+  id: string;
   name: string;
-  projectManager: string,
+  estimatedBudget: number;
+  durationInWeeks: number;
   description: string;
-  charterData: Partial<CharterData>;
+  learnedLessons?: string;
+  dependencies?: string;
+  technicalCommittee?: string[];
   risks: Risk[];
   currentGateIndex: number;
-  gates: Gate[];
+  gateRequirementsState: Record<string, Record<string, boolean>>;
   status: ProjectStatus;
+  // Gates are fetched from API template, not stored per project
 }
 
 // Form Data Types
@@ -121,11 +125,12 @@ export interface NavbarProps {
 export interface PortfolioViewProps {
   projects: Project[];
   onOpenNewProject: () => void;
-  onSelectProject: (id: number) => void;
+  onSelectProject: (id: string) => void;
 }
 
 export interface ProjectDetailsViewProps {
   project: Project;
+  gates: Gate[];
   onUpdateProject: (project: Project) => void;
   onBack: () => void;
   openCharter: () => void;
@@ -145,7 +150,7 @@ export interface AnalyticsViewProps {
 
 export interface NewProjectModalProps {
   onClose: () => void;
-  onCreate: (name: string, desc: string) => void;
+  onCreate: (name: string, desc: string, budget: number, weeks: number) => void;
 }
 
 export interface CharterModalProps {
