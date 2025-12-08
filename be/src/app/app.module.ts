@@ -3,8 +3,9 @@ import {ConfigModule} from '@nestjs/config';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import {LoggerModule} from 'nestjs-pino';
 import {v4 as uuidv4} from 'uuid';
-import {PortfolioTaskModule} from './portfolio-task/portfolio-task.module';
 import {ProjectCardModule} from "./project-card/project-card.module";
+import {APP_GUARD} from "@nestjs/core";
+import {JwtAuthGuard} from "./auth/guards/jwt-auth.guard";
 
 @Module({
   imports: [
@@ -55,7 +56,13 @@ import {ProjectCardModule} from "./project-card/project-card.module";
 
     PortfolioTaskModule,
     ProjectCardModule,
-  ]
+  ],
+  providers: [
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: JwtAuthGuard,
+    // },
+  ],
 })
 export class AppModule {
 }
