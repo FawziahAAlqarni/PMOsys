@@ -3,7 +3,7 @@ services:
     build:
       context: ./fe
       args:
-        NEXT_PUBLIC_API_URL: ${API_URL:-http://localhost:3000/api}
+        NEXT_PUBLIC_API_URL: ${API_URL:-http://localhost:3030/api}
     ports:
       - "8008:8008"
     environment:
