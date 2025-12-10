@@ -8,6 +8,7 @@ import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
 import {ValidationPipe} from '@nestjs/common';
 import {Logger} from 'nestjs-pino';
 import {v4 as uuidv4} from 'uuid';
+import {JwtAuthGuard} from "./app/auth/guards/jwt-auth.guard";
 
 async function bootstrap() {
 
@@ -45,6 +46,8 @@ async function bootstrap() {
     }),
   );
 
+  // global auth guard
+  // app.useGlobalGuards(new JwtAuthGuard())
 
   // OpenAPI/Swagger setup at /docs and JSON at /docs-json
   const config = new DocumentBuilder()
