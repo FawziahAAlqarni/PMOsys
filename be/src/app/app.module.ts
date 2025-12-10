@@ -4,7 +4,7 @@ import {ConfigModule} from '@nestjs/config';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import {LoggerModule} from 'nestjs-pino';
 import {v4 as uuidv4} from 'uuid';
-import {ProjectCardModule} from "./project-card/project-card.module";
+import {ProjectModule} from "./projects/project.module";
 import {APP_GUARD} from "@nestjs/core";
 import {JwtAuthGuard} from "./auth/guards/jwt-auth.guard";
 
@@ -55,7 +55,7 @@ import {JwtAuthGuard} from "./auth/guards/jwt-auth.guard";
       synchronize: process.env.NODE_ENV !== 'production',
     }),
     AuthModule,
-    ProjectCardModule,
+    ProjectModule,
   ],
   providers: [
     // {
