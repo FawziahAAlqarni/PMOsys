@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { FileText, X, Info, Save } from 'lucide-react';
+import {PORTFOLIOS} from '@/lib/constants';
 
 export default function CharterModal({ project, onClose, onSave }: any) {
   const [data, setData] = useState({
@@ -83,9 +84,9 @@ export default function CharterModal({ project, onClose, onSave }: any) {
                   <label className="block text-sm font-bold text-gray-700 mb-1">المحفظة</label>
                   <select name="portfolio" value={data.portfolio} onChange={handleChange} className="w-full p-3 bg-white border border-gray-300 rounded-lg outline-none">
                     <option value="">اختر المحفظة...</option>
-                    <option value="الشؤون الصحية">الشؤون الصحية</option>
-                    <option value="الشؤون التنفيذية">الشؤون التنفيذية</option>
-                    <option value="الشؤون العسكرية">الشؤون العسكرية</option>
+                    {PORTFOLIOS.map(portfolio => (
+                      <option key={portfolio.id} value={portfolio.nameAr}>{portfolio.nameAr}</option>
+                    ))}
                   </select>
                 </div>
                 <div><label className="block text-sm font-bold text-gray-700 mb-1">مدير المحفظة</label><input name="portfolioManager" value={data.portfolioManager} onChange={handleChange} className="w-full p-3 bg-white border border-gray-300 rounded-lg outline-none" /></div>

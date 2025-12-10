@@ -16,6 +16,44 @@ export const MNG_COLORS = {
   }
 };
 
+export const PORTFOLIOS = [
+  {
+    id: 'HA',
+    nameAr: 'الشؤون الصحية',
+    nameEn: 'Health Affairs',
+    icon: 'heart-pulse', // lucide icon name
+    color: '#DC2626'
+  },
+  {
+    id: 'EA',
+    nameAr: 'الشؤون التنفيذية',
+    nameEn: 'Executive Affairs',
+    icon: 'briefcase',
+    color: '#2563EB'
+  },
+  {
+    id: 'MA',
+    nameAr: 'الشؤون العسكرية',
+    nameEn: 'Military Affairs',
+    icon: 'shield',
+    color: '#059669'
+  },
+  {
+    id: 'LA',
+    nameAr: 'شؤون التوطين',
+    nameEn: 'Localization Affairs',
+    icon: 'users',
+    color: '#7C3AED'
+  },
+  {
+    id: 'MNGDP',
+    nameAr: 'برنامج تطوير وزارة الحرس الوطني',
+    nameEn: 'MNGDP Stream',
+    icon: 'building-2',
+    color: '#006C35'
+  }
+];
+
 export const GATES_TEMPLATE = [
   {
     name: "البوابة الأولى",
