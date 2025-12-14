@@ -1,3 +1,4 @@
+import '../globals.css';
 import './global.css';
 
 export const metadata = {
@@ -8,7 +9,10 @@ export const metadata = {
 export default function RootLayout({children,}: { children: React.ReactNode; }) {
   return (
     <html lang="ar" dir="rtl">
-    <body className="h-screen flex flex-col bg-[#f8faf9] font-sans text-gray-800 overflow-hidden">
+    <head>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    </head>
+    <body className="min-h-screen flex flex-col bg-[#f8faf9] font-sans text-gray-800 overflow-y-auto">
     {children}
     </body>
     </html>
