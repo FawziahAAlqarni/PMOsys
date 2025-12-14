@@ -26,6 +26,25 @@ const initDatabase = async () => {
         data JSONB
       )
     `);
+    
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS lessons_learned (
+        id SERIAL PRIMARY KEY,
+        project_id INTEGER REFERENCES projects(id) ON DELETE CASCADE,
+        title VARCHAR(500) NOT NULL,
+        category VARCHAR(100),
+        description TEXT,
+        lesson_learned TEXT,
+        problem TEXT,
+        recommendation TEXT,
+        project_name VARCHAR(255),
+        phase VARCHAR(100),
+        status VARCHAR(50) DEFAULT 'نشط',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    
     console.log('✅ قاعدة البيانات جاهزة');
   } catch (error) {
     console.error('❌ خطأ في تهيئة قاعدة البيانات:', error);
@@ -97,6 +116,18 @@ const server = http.createServer(async (req, res) => {
                 <span class="method get">GET</span>
                 <span>/project-cards/:id</span>
                 <br><small>جلب مشروع محدد</small>
+              </div>
+              
+              <div class="endpoint">
+                <span class="method get">GET</span>
+                <a href="/lessons-learned" target="_blank">/lessons-learned</a>
+                <br><small>جلب جميع الدروس المستفادة</small>
+              </div>
+              
+              <div class="endpoint">
+                <span class="method post">POST</span>
+                <span>/lessons-learned</span>
+                <br><small>إضافة درس مستفاد جديد</small>
               </div>
               
               <div class="endpoint">
@@ -243,6 +274,125 @@ const server = http.createServer(async (req, res) => {
       } else {
         res.writeHead(404, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Project not found' }));
+      }
+      return;
+    }
+
+    // ========== Lessons Learned Endpoints ==========
+    
+    // GET جميع الدروس المستفادة
+    if (req.url === '/lessons-learned' && req.method === 'GET') {
+      const result = await pool.query(`
+        SELECT * FROM lessons_learned 
+        ORDER BY created_at DESC
+      `);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(result.rows));
+      console.log(`✓ تم جلب ${result.rows.length} درس مستفاد`);
+      return;
+    }
+
+    // POST إضافة درس مستفاد جديد
+    if (req.url === '/lessons-learned' && req.method === 'POST') {
+      let body = '';
+      req.on('data', chunk => body += chunk.toString());
+      req.on('end', async () => {
+        try {
+          const lesson = JSON.parse(body);
+          const result = await pool.query(`
+            INSERT INTO lessons_learned 
+            (project_id, title, category, description, lesson_learned, problem, recommendation, project_name, phase, status)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+            RETURNING *
+          `, [
+            lesson.project_id || null,
+            lesson.title,
+            lesson.category || 'عام',
+            lesson.description || '',
+            lesson.lessonLearned || lesson.lesson || '',
+            lesson.problem || '',
+            lesson.recommendation || '',
+            lesson.projectName || lesson.project_name || '',
+            lesson.phase || '',
+            lesson.status || 'نشط'
+          ]);
+          res.writeHead(201, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(result.rows[0]));
+          console.log(`✓ تم إضافة درس مستفاد: ${lesson.title}`);
+        } catch (error) {
+          console.error('خطأ في إضافة الدرس:', error);
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: error.message }));
+        }
+      });
+      return;
+    }
+
+    // POST إضافة دروس متعددة
+    if (req.url === '/lessons-learned/bulk' && req.method === 'POST') {
+      let body = '';
+      req.on('data', chunk => body += chunk.toString());
+      req.on('end', async () => {
+        try {
+          const { lessons, projectId, projectName } = JSON.parse(body);
+          const insertedLessons = [];
+          
+          for (const lesson of lessons) {
+            const result = await pool.query(`
+              INSERT INTO lessons_learned 
+              (project_id, title, category, description, lesson_learned, problem, recommendation, project_name, phase, status)
+              VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+              RETURNING *
+            `, [
+              projectId || null,
+              lesson.title || 'درس مستفاد',
+              lesson.category || 'عام',
+              lesson.description || '',
+              lesson.lesson || lesson.lessonLearned || '',
+              lesson.problem || '',
+              lesson.recommendation || lesson.impact || '',
+              projectName || '',
+              lesson.phase || '',
+              lesson.status || 'نشط'
+            ]);
+            insertedLessons.push(result.rows[0]);
+          }
+          
+          res.writeHead(201, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(insertedLessons));
+          console.log(`✓ تم إضافة ${insertedLessons.length} درس مستفاد`);
+        } catch (error) {
+          console.error('خطأ في إضافة الدروس:', error);
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: error.message }));
+        }
+      });
+      return;
+    }
+
+    // GET الدروس المستفادة لمشروع محدد
+    if (req.url.match(/^\/lessons-learned\/project\/\d+$/) && req.method === 'GET') {
+      const projectId = parseInt(req.url.split('/')[3]);
+      const result = await pool.query(
+        'SELECT * FROM lessons_learned WHERE project_id = $1 ORDER BY created_at DESC',
+        [projectId]
+      );
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(result.rows));
+      return;
+    }
+
+    // DELETE حذف درس مستفاد
+    if (req.url.match(/^\/lessons-learned\/\d+$/) && req.method === 'DELETE') {
+      const id = parseInt(req.url.split('/')[2]);
+      const result = await pool.query('DELETE FROM lessons_learned WHERE id = $1 RETURNING *', [id]);
+      if (result.rows.length > 0) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: 'Deleted', lesson: result.rows[0] }));
+        console.log(`✓ تم حذف الدرس المستفاد`);
+      } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Lesson not found' }));
       }
       return;
     }

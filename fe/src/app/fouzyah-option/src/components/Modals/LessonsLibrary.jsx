@@ -1,12 +1,52 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 
 const LessonsLibrary = ({ onSelect, onClose, selectedLessons = [] }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [localSelected, setLocalSelected] = useState(Array.isArray(selectedLessons) ? selectedLessons : []);
+  const [lessonsDatabase, setLessonsDatabase] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // مكتبة الدروس المستفادة - البيانات الأصلية بدون تعديل
-  const lessonsDatabase = [
+  // جلب الدروس المستفادة من قاعدة البيانات
+  useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch('http://localhost:3030/lessons-learned');
+        if (!response.ok) throw new Error('فشل في جلب الدروس المستفادة');
+        const data = await response.json();
+        
+        // تحويل البيانات من snake_case إلى camelCase
+        const formattedData = data.map(lesson => ({
+          id: lesson.id,
+          title: lesson.title,
+          category: lesson.category,
+          description: lesson.description,
+          lessonLearned: lesson.lesson_learned,
+          problem: lesson.problem,
+          recommendation: lesson.recommendation,
+          projectName: lesson.project_name,
+          phase: lesson.phase,
+          status: lesson.status
+        }));
+        
+        setLessonsDatabase(formattedData);
+      } catch (err) {
+        console.error('خطأ في جلب الدروس:', err);
+        setError(err.message);
+        setLessonsDatabase(defaultLessons); // استخدام البيانات الافتراضية في حالة الخطأ
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLessons();
+  }, []);
+
+  // البيانات الافتراضية في حالة فشل الاتصال
+  const defaultLessons = [
     // ========== CardId1: وضع خط الأساس لمؤشرات أداء مسار التوطين ==========
     {
       id: 1,
@@ -735,7 +775,18 @@ const LessonsLibrary = ({ onSelect, onClose, selectedLessons = [] }) => {
 
         {/* Lessons List */}
         <div className="overflow-y-auto p-4 flex-1">
-          {filteredLessons.length === 0 ? (
+          {loading ? (
+            <div className="text-center py-10">
+              <i className="fa-solid fa-spinner fa-spin text-4xl text-primary-600 mb-3"></i>
+              <p className="text-gray-600">جاري تحميل الدروس المستفادة...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-10 text-red-600">
+              <i className="fa-solid fa-exclamation-circle text-4xl mb-3"></i>
+              <p>{error}</p>
+              <p className="text-sm text-gray-500 mt-2">سيتم استخدام البيانات الافتراضية</p>
+            </div>
+          ) : filteredLessons.length === 0 ? (
             <div className="text-center py-10 text-gray-500">
               <p>لم يتم العثور على دروس مطابقة</p>
             </div>

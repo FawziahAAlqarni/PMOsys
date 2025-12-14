@@ -371,18 +371,49 @@ const GateControl = ({ project, onUpdate, currentGateView }) => {
       {activeModal === 'timeline' && <TimelineModal data={gate3Data} onClose={()=>setActiveModal(null)} onSave={(d)=>{updateGate3(d); setActiveModal(null);}} />}
       {activeModal === 'charter' && <CharterModal data={project.charter} project={project} onClose={()=>setActiveModal(null)} onSave={(d)=>{onUpdate({...project, charter:d}); setActiveModal(null);}} />}
       {activeModal === 'gate4Timeline' && <TimelineModal data={gate4Data.timeline.length ? gate4Data : gate3Data} onClose={()=>setActiveModal(null)} onSave={(d)=>{updateGate4(d); setActiveModal(null);}} />}
-      {activeModal === 'lessons' && <LessonsLearnedModal data={gate4Data.lessons} onClose={()=>setActiveModal(null)} onSave={(d)=>{
-        // حفظ الدروس في البوابة 4
-        updateGate4({lessons:d});
-        // إضافة الدروس الجديدة إلى السجل العام
-        const currentGlobalLessons = project.data?.lessonsLearned || [];
-        const existingIds = new Set(currentGlobalLessons.map(l => l.id));
-        const newLessons = d.filter(lesson => !existingIds.has(lesson.id));
-        if (newLessons.length > 0) {
-          const updatedGlobalLessons = [...currentGlobalLessons, ...newLessons];
-          onUpdate({...project, data: {...project.data, lessonsLearned: updatedGlobalLessons}});
+      {activeModal === 'lessons' && <LessonsLearnedModal data={gate4Data.lessons} onClose={()=>setActiveModal(null)} onSave={async (d)=>{
+        try {
+          // حفظ الدروس في البوابة 4
+          updateGate4({lessons:d});
+          
+          // حفظ الدروس الجديدة في قاعدة البيانات
+          const currentGlobalLessons = project.data?.lessonsLearned || [];
+          const existingIds = new Set(currentGlobalLessons.map(l => l.id));
+          const newLessons = d.filter(lesson => !existingIds.has(lesson.id));
+          
+          if (newLessons.length > 0) {
+            // إرسال الدروس إلى API
+            const response = await fetch('http://localhost:3030/lessons-learned/bulk', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                lessons: newLessons,
+                projectId: project.id,
+                projectName: project.name
+              })
+            });
+            
+            if (response.ok) {
+              const savedLessons = await response.json();
+              console.log('✓ تم حفظ الدروس في قاعدة البيانات:', savedLessons);
+              
+              // تحديث السجل المحلي
+              const updatedGlobalLessons = [...currentGlobalLessons, ...savedLessons];
+              onUpdate({...project, data: {...project.data, lessonsLearned: updatedGlobalLessons}});
+            } else {
+              console.error('خطأ في حفظ الدروس');
+              // حفظ محلياً فقط في حالة فشل API
+              const updatedGlobalLessons = [...currentGlobalLessons, ...newLessons];
+              onUpdate({...project, data: {...project.data, lessonsLearned: updatedGlobalLessons}});
+            }
+          }
+          setActiveModal(null);
+        } catch (error) {
+          console.error('خطأ في حفظ الدروس المستفادة:', error);
+          // في حالة الخطأ، احفظ محلياً فقط
+          updateGate4({lessons:d});
+          setActiveModal(null);
         }
-        setActiveModal(null);
       }} />}
       {activeModal === 'activation' && <ActivationPlanModal data={gate4Data.activationPlan} onClose={()=>setActiveModal(null)} onSave={(d)=>{updateGate4({activationPlan:d}); setActiveModal(null);}} />}
     </div>  
