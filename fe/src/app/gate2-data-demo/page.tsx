@@ -111,7 +111,7 @@ export default function Gate2DataDemo() {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px', marginBottom: '20px' }}>
                   {['internal', 'hybrid', 'outsourced'].map((opt) => {
                     const option = selectedProject.gate2Data.procurement.options?.[opt];
-                    const titles = {
+                    const titles: Record<string, string> = {
                       internal: 'التنفيذ الداخلي',
                       hybrid: 'التنفيذ الهجين',
                       outsourced: 'التنفيذ الخارجي'
