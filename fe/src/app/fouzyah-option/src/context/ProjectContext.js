@@ -6,6 +6,9 @@ export const ProjectProvider = ({ children }) => {
   const [projects, setProjects] = useState([]);
   
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://pmo-backend-dvy1.onrender.com/project-cards';
+  
+  console.log('🔧 Environment Variable NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+  console.log('🔧 Using API_URL:', API_URL);
 
   // تحويل البيانات من PostgreSQL إلى صيغة التطبيق
   const transformFromDB = (dbProject) => {
@@ -59,18 +62,24 @@ export const ProjectProvider = ({ children }) => {
       console.log('🔄 جاري جلب المشاريع من:', API_URL);
       const response = await fetch(API_URL);
       
+      console.log('📡 Response Status:', response.status);
+      
       if (response.ok) {
         const data = await response.json();
+        console.log('📦 Raw data from API:', data);
+        console.log('📦 Number of projects:', data.length);
+        
         const transformedProjects = data.map(transformFromDB);
-        console.log('✅ تم جلب المشاريع:', transformedProjects);
+        console.log('✅ تم جلب المشاريع:', transformedProjects.length, 'مشاريع');
+        console.log('✅ First project:', transformedProjects[0]);
         setProjects(transformedProjects);
       } else {
         console.error('❌ خطأ من السيرفر:', response.status, response.statusText);
         setProjects([]);
       }
     } catch (error) {
-      console.error("❌ فشل الاتصال بالسيرفر:", error.message);
-      console.warn('تأكد من أن الخادم يعمل على http://localhost:3030');
+      console.error("❌ فشل الاتصال بالسيرفر:", error);
+      console.error("❌ Error details:", error.message);
       setProjects([]);
     }
   };
