@@ -1,9 +1,6 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
-const Navbar = () => {
-  const navigate = useNavigate();
-
+const Navbar = ({ currentPage, onNavigate }) => {
   return (
     <nav className="bg-white shadow-sm z-10 border-b-4 border-secondary-gold h-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
@@ -24,15 +21,15 @@ const Navbar = () => {
           {/* الوسط: القوائم */}
           <div className="flex items-center gap-6">
             <button 
-                onClick={() => navigate('/')}
-                className="text-gray-700 hover:text-primary-600 font-semibold text-sm transition flex items-center gap-2"
+                onClick={() => onNavigate('dashboard')}
+                className={`font-semibold text-sm transition flex items-center gap-2 ${currentPage === 'dashboard' ? 'text-primary-600' : 'text-gray-700 hover:text-primary-600'}`}
             >
                 <i className="fa-solid fa-house"></i>
                 الرئيسية
             </button>
             <button 
-                onClick={() => navigate('/statistics')}
-                className="text-gray-700 hover:text-primary-600 font-semibold text-sm transition flex items-center gap-2"
+                onClick={() => onNavigate('statistics')}
+                className={`font-semibold text-sm transition flex items-center gap-2 ${currentPage === 'statistics' ? 'text-primary-600' : 'text-gray-700 hover:text-primary-600'}`}
             >
                 <i className="fa-solid fa-chart-line"></i>
                 الإحصائيات
@@ -45,8 +42,8 @@ const Navbar = () => {
                 الدعم والمساعدة
             </button>
             <button 
-                onClick={() => navigate('/contact')}
-                className="text-gray-700 hover:text-primary-600 font-semibold text-sm transition flex items-center gap-2"
+                onClick={() => onNavigate('contact')}
+                className={`font-semibold text-sm transition flex items-center gap-2 ${currentPage === 'contact' ? 'text-primary-600' : 'text-gray-700 hover:text-primary-600'}`}
             >
                 <i className="fa-solid fa-envelope"></i>
                 التواصل

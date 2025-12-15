@@ -1,6 +1,5 @@
 'use client'; 
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard/Dashboard';
 import ProjectView from './components/ProjectView/ProjectView';
@@ -9,6 +8,31 @@ import StatisticsPage from './components/StatisticsPage/StatisticsPage';
 import UserEmailPrompt from './components/UserEmailPrompt';
 
 function App() {
+  const [currentPage, setCurrentPage] = useState('dashboard');
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
+
+  const navigateTo = (page, projectId = null) => {
+    setCurrentPage(page);
+    if (projectId !== null) {
+      setSelectedProjectId(projectId);
+    }
+  };
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'dashboard':
+        return <Dashboard onNavigate={navigateTo} />;
+      case 'project':
+        return <ProjectView projectId={selectedProjectId} onNavigate={navigateTo} />;
+      case 'statistics':
+        return <StatisticsPage onNavigate={navigateTo} />;
+      case 'contact':
+        return <ContactPage onNavigate={navigateTo} />;
+      default:
+        return <Dashboard onNavigate={navigateTo} />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-right relative" dir="rtl">
       
@@ -27,24 +51,9 @@ function App() {
       
       {/* المحتوى الرئيسي */}
       <div className="relative z-10">
-        <Navbar /> 
+        <Navbar currentPage={currentPage} onNavigate={navigateTo} /> 
         <main className="p-8 max-w-7xl mx-auto fade-in pb-20">
-          <Routes>
-            {/* الصفحة الرئيسية: قائمة المشاريع */}
-            <Route path="/" element={<Dashboard />} />
-            
-            {/* صفحة تفاصيل المشروع والبوابات */}
-            <Route path="/project/:id/gate" element={<ProjectView />} />
-            
-            {/* صفحة الإحصائيات */}
-            <Route path="/statistics" element={<StatisticsPage />} />
-            
-            {/* صفحة التواصل */}
-            <Route path="/contact" element={<ContactPage />} />
-            
-            {/* توجيه أي رابط خاطئ للرئيسية */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+          {renderPage()}
         </main>
       </div>
     </div>
