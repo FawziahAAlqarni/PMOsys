@@ -5,10 +5,15 @@ import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard/Dashboard';
 import ProjectView from './components/ProjectView/ProjectView';
 import ContactPage from './components/ContactPage';
+import StatisticsPage from './components/StatisticsPage/StatisticsPage';
+import UserEmailPrompt from './components/UserEmailPrompt';
 
 function App() {
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-right relative" dir="rtl">
+      
+      {/* مطالبة البريد الإلكتروني */}
+      <UserEmailPrompt />
       
       {/* علامة مائية - شعار واحد في الوسط */}
       <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-0" style={{ opacity: 0.06 }}>
@@ -30,6 +35,9 @@ function App() {
             
             {/* صفحة تفاصيل المشروع والبوابات */}
             <Route path="/project/:id/gate" element={<ProjectView />} />
+            
+            {/* صفحة الإحصائيات */}
+            <Route path="/statistics" element={<StatisticsPage />} />
             
             {/* صفحة التواصل */}
             <Route path="/contact" element={<ContactPage />} />

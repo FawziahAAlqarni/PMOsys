@@ -697,12 +697,13 @@ const LessonsLibrary = ({ onSelect, onClose, selectedLessons = [] }) => {
   const filteredLessons = useMemo(() => {
     return lessonsDatabase.filter(lesson => {
       const matchesSearch = 
+        searchQuery === '' || 
         lesson.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
         lesson.description.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = selectedCategory === 'All' || lesson.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [searchQuery, selectedCategory]);
+  }, [searchQuery, selectedCategory, lessonsDatabase]);
 
   const toggleLesson = (lesson) => {
     console.log('Selecting lesson:', lesson.title);

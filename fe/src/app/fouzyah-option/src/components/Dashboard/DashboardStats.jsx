@@ -38,14 +38,6 @@ const DashboardStats = ({ projects }) => {
   return (
     <div className="mb-10 fade-in">
       
-      {/* العنوان */}
-      <div className="flex justify-between items-end mb-6">
-        <div>
-            <h2 className="text-2xl font-bold text-primary-900">لوحة المعلومات والإحصائيات</h2>
-            <p className="text-sm text-gray-500">نظرة شاملة على أداء المحفظة والمخاطر</p>
-        </div>
-      </div>
-
       {/* البطاقات الأربعة */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         
@@ -128,89 +120,65 @@ const DashboardStats = ({ projects }) => {
               </div>
           </div>
 
-          {/* توزيع البوابات (Bar Chart) */}
+          {/* توزيع المشاريع حسب البرامج */}
           <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
               <h4 className="font-bold text-primary-900 mb-6 text-right border-b pb-2 flex items-center gap-2">
-                  <i className="fa-solid fa-chart-bar text-secondary-gold"></i>
-                  توزيع المشاريع حسب البوابات
+                  <i className="fa-solid fa-briefcase text-secondary-gold"></i>
+                  توزيع المشاريع حسب البرامج
               </h4>
-              <div className="h-56 flex items-end justify-around gap-3 px-4 py-4 bg-gray-50 rounded-lg relative">
-                  {/* خطوط الشبكة الأفقية */}
-                  <div className="absolute inset-0 flex flex-col justify-between pointer-events-none px-4 py-4">
-                      {[0, 1, 2, 3, 4].map(i => (
-                          <div key={i} className="flex items-center w-full">
-                              <span className="text-[9px] text-gray-400 mr-1">{(4-i)*25}%</span>
-                              <div className="border-t border-gray-300 border-dashed flex-1 opacity-50"></div>
-                          </div>
-                      ))}
-                  </div>
-
-                  {gateCounts.map((count, index) => {
-                      const maxCount = Math.max(...gateCounts, 1);
-                      const height = (count / maxCount) * 85; // 85% من ارتفاع الحاوية
+              <div className="space-y-3 max-h-56 overflow-y-auto">
+                  {(() => {
+                      // حساب توزيع المشاريع حسب البرامج
+                      const programStats = {};
+                      projects.forEach(p => {
+                          const program = p.data?.projectInfo?.program || p.programName || 'غير محدد';
+                          programStats[program] = (programStats[program] || 0) + 1;
+                      });
                       
-                      const colors = {
-                          0: { bg: 'bg-blue-500', shadow: 'shadow-blue-200', border: 'border-blue-600' },
-                          1: { bg: 'bg-orange-500', shadow: 'shadow-orange-200', border: 'border-orange-600' },
-                          2: { bg: 'bg-secondary-gold', shadow: 'shadow-yellow-200', border: 'border-yellow-600' },
-                          3: { bg: 'bg-green-400', shadow: 'shadow-green-200', border: 'border-green-500' },
-                          4: { bg: 'bg-green-700', shadow: 'shadow-green-300', border: 'border-green-800' }
-                      };
+                      // ترتيب البرامج حسب عدد المشاريع
+                      const sortedPrograms = Object.entries(programStats)
+                          .sort((a, b) => b[1] - a[1])
+                          .slice(0, 8); // أعلى 8 برامج
                       
-                      const color = colors[index];
-                      const gateLabel = index === 4 ? 'مغلق' : `البوابة ${index + 1}`;
+                      const maxCount = Math.max(...sortedPrograms.map(([, count]) => count), 1);
                       
-                      return (
-                          <div key={index} className="flex flex-col items-center flex-1 z-10 group relative">
-                              {/* عدد المشاريع فوق العمود */}
-                              <div className="absolute -top-8 bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg shadow-lg transform scale-0 group-hover:scale-100 transition-transform">
-                                  <div className="font-bold">{count}</div>
-                                  <div className="text-[10px] opacity-80">مشروع</div>
-                              </div>
-                              
-                              {/* العمود */}
-                              <div className="relative w-full flex flex-col items-center">
-                                  <div className="text-sm font-bold text-gray-800 mb-1">{count}</div>
-                                  <div 
-                                    className={`w-full max-w-[50px] rounded-t-xl transition-all duration-700 ${color.bg} ${color.shadow} shadow-lg border-2 ${color.border} hover:scale-105 cursor-pointer relative`} 
-                                    style={{ height: height < 10 ? '10%' : `${height}%` }}
-                                  >
-                                      {/* تأثير اللمعان */}
-                                      <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white opacity-20 rounded-t-xl"></div>
+                      return sortedPrograms.map(([program, count], index) => {
+                          const percentage = (count / totalProjects * 100).toFixed(1);
+                          const barWidth = (count / maxCount * 100).toFixed(1);
+                          
+                          const colors = [
+                              'bg-primary-600',
+                              'bg-secondary-gold',
+                              'bg-blue-500',
+                              'bg-indigo-500',
+                              'bg-purple-500',
+                              'bg-pink-500',
+                              'bg-green-500',
+                              'bg-orange-500'
+                          ];
+                          
+                          const color = colors[index % colors.length];
+                          
+                          return (
+                              <div key={index} className="group">
+                                  <div className="flex items-center justify-between mb-1.5">
+                                      <span className="text-xs font-medium text-gray-700 truncate flex-1 ml-2">
+                                          {program}
+                                      </span>
+                                      <span className="text-xs font-bold text-gray-900 whitespace-nowrap">
+                                          {count} ({percentage}%)
+                                      </span>
+                                  </div>
+                                  <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                                      <div 
+                                          className={`${color} h-2.5 rounded-full transition-all duration-700 group-hover:opacity-80`}
+                                          style={{ width: `${barWidth}%` }}
+                                      ></div>
                                   </div>
                               </div>
-                              
-                              {/* التسمية */}
-                              <div className="text-xs text-gray-700 mt-3 font-bold text-center whitespace-nowrap">
-                                  {gateLabel}
-                              </div>
-                          </div>
-                      );
-                  })}
-              </div>
-              
-              {/* مفتاح الألوان */}
-              <div className="mt-4 pt-4 border-t flex flex-wrap justify-center gap-3">
-                  <div className="flex items-center gap-1.5">
-                      <div className="w-3 h-3 rounded bg-blue-500"></div>
-                      <span className="text-[10px] text-gray-600">البوابة 1</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                      <div className="w-3 h-3 rounded bg-orange-500"></div>
-                      <span className="text-[10px] text-gray-600">البوابة 2</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                      <div className="w-3 h-3 rounded bg-secondary-gold"></div>
-                      <span className="text-[10px] text-gray-600">البوابة 3</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                      <div className="w-3 h-3 rounded bg-green-400"></div>
-                      <span className="text-[10px] text-gray-600">البوابة 4</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                      <div className="w-3 h-3 rounded bg-green-700"></div>
-                      <span className="text-[10px] text-gray-600">مغلق</span>
-                  </div>
+                          );
+                      });
+                  })()}
               </div>
           </div>
 

@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { ProjectContext } from '../../context/ProjectContext';
 import LessonsLibrary from './LessonsLibrary';
 import UserSearchDropdown from '../UserSearchDropdown';
+import ProgramSearchDropdown from '../ProgramSearchDropdown';
 
 const NewProjectModal = ({ onClose, accessToken }) => {
   const { addProject } = useContext(ProjectContext);
@@ -14,6 +15,20 @@ const NewProjectModal = ({ onClose, accessToken }) => {
     const day = String(today.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
+
+  // الحصول على البريد الإلكتروني للمستخدم الحالي
+  const currentUserEmail = localStorage.getItem('userEmail') || '';
+
+  // تعيين تاريخ النهاية الافتراضي (سنة بعد تاريخ البداية)
+  useEffect(() => {
+    const startDate = new Date();
+    const endDate = new Date(startDate);
+    endDate.setFullYear(endDate.getFullYear() + 1);
+    const year = endDate.getFullYear();
+    const month = String(endDate.getMonth() + 1).padStart(2, '0');
+    const day = String(endDate.getDate()).padStart(2, '0');
+    setFormData(prev => ({ ...prev, endDate: `${year}-${month}-${day}` }));
+  }, []);
   
   // 1. حالة جميع البيانات التفصيلية (تمت إعادتها كاملة)
   const [formData, setFormData] = useState({
@@ -23,8 +38,8 @@ const NewProjectModal = ({ onClose, accessToken }) => {
     portfolio: '', 
     startDate: getTodayDate(), 
     endDate: '', 
-    manager: '', 
-    managerEmail: '',
+    manager: currentUserEmail, 
+    managerEmail: currentUserEmail,
     owner: '',
     ownerEmail: '',
     programManager: '', 
@@ -62,11 +77,29 @@ const NewProjectModal = ({ onClose, accessToken }) => {
     const name = e.target.name;
     const email = e.target.dataset?.email;
     
-    setFormData({ 
+    let updatedData = { 
       ...formData, 
       [name]: value,
       ...(email && { [`${name}Email`]: email })
-    });
+    };
+
+    // إذا تم تغيير تاريخ البداية، قم بتعيين تاريخ النهاية تلقائياً (سنة بعد)
+    if (name === 'startDate' && value) {
+      const startDate = new Date(value);
+      const endDate = new Date(startDate);
+      endDate.setFullYear(endDate.getFullYear() + 1);
+      const year = endDate.getFullYear();
+      const month = String(endDate.getMonth() + 1).padStart(2, '0');
+      const day = String(endDate.getDate()).padStart(2, '0');
+      updatedData.endDate = `${year}-${month}-${day}`;
+    }
+    
+    // طباعة البيانات للتأكد من حفظ البريد الإلكتروني
+    if (name === 'programManager' && email) {
+      console.log('✅ تم حفظ مدير البرنامج:', { name: value, email: email });
+    }
+    
+    setFormData(updatedData);
   };
 
   const handleAddRisk = (e) => {
@@ -112,7 +145,15 @@ const NewProjectModal = ({ onClose, accessToken }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    if (!formData.name) return alert("اسم المشروع مطلوب");
+    // التحقق من الحقول الإلزامية
+    if (!formData.name) return alert("⚠️ اسم المشروع مطلوب");
+    if (!formData.programName) return alert("⚠️ اسم البرنامج مطلوب");
+    if (!formData.manager) return alert("⚠️ مدير المشروع مطلوب");
+    if (!formData.programManager) return alert("⚠️ مدير البرنامج مطلوب");
+    if (!formData.budget) return alert("⚠️ الميزانية مطلوبة");
+    if (!formData.portfolio) return alert("⚠️ المحفظة مطلوبة");
+    if (!formData.startDate) return alert("⚠️ تاريخ البداية مطلوب");
+    if (!formData.endDate) return alert("⚠️ تاريخ النهاية مطلوب");
     if (addedRisks.length === 0) return alert("⚠️ شرط إلزامي: يجب تسجيل خطر واحد على الأقل.");
 
     // تحويل الموافقات إلى صيغة مصفوفة لحفظ في قاعدة البيانات
@@ -139,6 +180,12 @@ const NewProjectModal = ({ onClose, accessToken }) => {
         comment: ''
       }
     ];
+
+    // طباعة بيانات مدير البرنامج للتأكد
+    console.log('📋 بيانات المشروع قبل الحفظ:', {
+      programManager: formData.programManager,
+      programManagerEmail: formData.programManagerEmail
+    });
 
     const newProject = {
       name: formData.name,
@@ -234,69 +281,14 @@ const NewProjectModal = ({ onClose, accessToken }) => {
                             <label className="block text-xs font-bold text-primary-900 mb-1">اسم المشروع *</label>
                             <input name="name" onChange={handleChange} className="w-full p-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500 outline-none" />
                         </div>
-                        <div>
-                            <label className="block text-xs font-bold mb-1">البرنامج *</label>
-                            <select name="programName" onChange={handleChange} className="w-full p-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500 outline-none">
-                                <option value="">اختر البرنامج...</option>
-                                <option value="برنامج تطوير السياسات والإجراءات المتكاملة">برنامج تطوير السياسات والإجراءات المتكاملة</option>
-                                <option value="برنامج تحقيق التميز المؤسسي">برنامج تحقيق التميز المؤسسي</option>
-                                <option value="برنامج رفع كفاءة التحليل الاستراتيجي للوزارة والمواءمة مع منظومة الأمن والدفاع">برنامج رفع كفاءة التحليل الاستراتيجي للوزارة والمواءمة مع منظومة الأمن والدفاع</option>
-                                <option value="برنامج تطوير البنية التحتية لمراكز البيانات والتطبيقات">برنامج تطوير البنية التحتية لمراكز البيانات والتطبيقات</option>
-                                <option value="برنامج التحول الرقمي">برنامج التحول الرقمي</option>
-                                <option value="برنامج رفع كفاءة الخدمات الرقمية والتقنية">برنامج رفع كفاءة الخدمات الرقمية والتقنية</option>
-                                <option value="برنامج رفع كفاءة إدارة وحوكمة البيانات">برنامج رفع كفاءة إدارة وحوكمة البيانات</option>
-                                <option value="برنامج تطوير قدرات الاتصالات العسكرية">برنامج تطوير قدرات الاتصالات العسكرية</option>
-                                <option value="برنامج تطوير وإدارة الأصول السيبرانية">برنامج تطوير وإدارة الأصول السيبرانية</option>
-                                <option value="برنامج التميز في تقديم خدمات الأمن السيبراني">برنامج التميز في تقديم خدمات الأمن السيبراني</option>
-                                <option value="برنامج رفع كفاءة الوقاية من الحوادث السيبرانية والاستجابة لها">برنامج رفع كفاءة الوقاية من الحوادث السيبرانية والاستجابة لها</option>
-                                <option value="برنامج تعزيز الجاهزية للتحول">برنامج تعزيز الجاهزية للتحول</option>
-                                <option value="برنامج تعزيز قدرات التواصل الداخلي والإعلام">برنامج تعزيز قدرات التواصل الداخلي والإعلام</option>
-                                <option value="برنامج تطوير رأس المال البشري">برنامج تطوير رأس المال البشري</option>
-                                <option value="برنامج تطوير القدرات وتنمية المهارات">برنامج تطوير القدرات وتنمية المهارات</option>
-                                <option value="برنامج تمكين تحول وزارة الحرس الوطني">برنامج تمكين تحول وزارة الحرس الوطني</option>
-                                <option value="برنامج توطين الصناعات العسكرية ورفع مستوى المحتوى المحلي">برنامج توطين الصناعات العسكرية ورفع مستوى المحتوى المحلي</option>
-                                <option value="رفع مستوى اعتزاز ووعي منسوبي الوزارة">رفع مستوى اعتزاز ووعي منسوبي الوزارة</option>
-                                <option value="برنامج دراسة وتطوير البنية التحتية للشؤون التنفيذية">برنامج دراسة وتطوير البنية التحتية للشؤون التنفيذية</option>
-                                <option value="برنامج تطوير المشتريات والتسليح">برنامج تطوير المشتريات والتسليح</option>
-                                <option value="برنامج رفع كفاءة إدارة المحافظ والمشاريع">برنامج رفع كفاءة إدارة المحافظ والمشاريع</option>
-                                <option value="برنامج رفع كفاءة التخطيط المالي">برنامج رفع كفاءة التخطيط المالي</option>
-                                <option value="برنامج رفع فاعلية اتخاذ القرار">برنامج رفع فاعلية اتخاذ القرار</option>
-                                <option value="رفع كفاءة وجودة الخدمات الممكنة في وزارة الحرس الوطني">رفع كفاءة وجودة الخدمات الممكنة في وزارة الحرس الوطني</option>
-                                <option value="برنامج إدارة المخاطر والامتثال">برنامج إدارة المخاطر والامتثال</option>
-                                <option value="برنامج تأسيس وتطوير  البنية التحتية للرعاية الوقائية">برنامج تأسيس وتطوير  البنية التحتية للرعاية الوقائية</option>
-                                <option value="برنامج ازدهار  ورفاهية منسوبي الشؤون الصحية">برنامج ازدهار  ورفاهية منسوبي الشؤون الصحية</option>
-                                <option value="برامج رفع الجاهزية  الطبية ضد الكوارث">برامج رفع الجاهزية  الطبية ضد الكوارث</option>
-                                <option value="برنامج تفعيل الرعاية الوقائية">برنامج تفعيل الرعاية الوقائية</option>
-                                <option value="برنامج تحسين الوصول الى الرعاية الصحية">برنامج تحسين الوصول الى الرعاية الصحية</option>
-                                <option value="برنامج تعزيز جودة الرعاية الصحية">برنامج تعزيز جودة الرعاية الصحية</option>
-                                <option value="برنامج تحسين الكفاءة والاستدامة المالية">برنامج تحسين الكفاءة والاستدامة المالية</option>
-                                <option value="برنامج التحول المؤسسي">برنامج التحول المؤسسي</option>
-                                <option value="برنامج  التميز البحثي والابتكار">برنامج  التميز البحثي والابتكار</option>
-                                <option value="برنامج تطوير عمليات الموارد البشرية">برنامج تطوير عمليات الموارد البشرية</option>
-                                <option value="برنامج تنمية الكادر الإداري">برنامج تنمية الكادر الإداري</option>
-                                <option value="برنامج تعزيز قدرات الجمع والتحليل الاستخباراتي">برنامج تعزيز قدرات الجمع والتحليل الاستخباراتي</option>
-                                <option value="برنامج تأسيس وتطوير العقيدة والتدريب">برنامج تأسيس وتطوير العقيدة والتدريب</option>
-                                <option value="برنامج تحسين وتخطيط التدريب">برنامج تحسين وتخطيط التدريب</option>
-                                <option value="برنامج إدارة القوى البشرية">برنامج إدارة القوى البشرية</option>
-                                <option value="برنامج تعزيز قدرات الأمن والسلامة">برنامج تعزيز قدرات الأمن والسلامة</option>
-                                <option value="برنامج تعزيز قدرات الاتصالات">برنامج تعزيز قدرات الاتصالات</option>
-                                <option value="برنامج تطوير الأفواج">برنامج تطوير الأفواج</option>
-                                <option value="برنامج تعزيز التخطيط العملياتي">برنامج تعزيز التخطيط العملياتي</option>
-                                <option value="برنامج تطوير الخدمات اللوجستية">برنامج تطوير الخدمات اللوجستية</option>
-                                <option value="تطوير المنظومة القيادية في الجهاز العسكري">تطوير المنظومة القيادية في الجهاز العسكري</option>
-                                <option value="برنامج التميز المؤسسي العسكري">برنامج التميز المؤسسي العسكري</option>
-                                <option value="برنامج تعزيز قدرات الطب العسكري الميداني">برنامج تعزيز قدرات الطب العسكري الميداني</option>
-                                <option value="برنامج تطوير وتكامل القدرات">برنامج تطوير وتكامل القدرات</option>
-                                <option value="برنامج الكفاءة والتميز  للطب العسكري الميداني">برنامج الكفاءة والتميز  للطب العسكري الميداني</option>
-                                <option value="برنامج التكامل مع شركاء المنظومة">برنامج التكامل مع شركاء المنظومة</option>
-                                <option value="برنامج التميز العملياتي">برنامج التميز العملياتي</option>
-                                <option value="تعزيز الجاهزية والتفوق في تنفيذ المهام">تعزيز الجاهزية والتفوق في تنفيذ المهام</option>
-                                <option value="برنامج هيكلة وتموضع قوات وزارة الحرس الوطني">برنامج هيكلة وتموضع قوات وزارة الحرس الوطني</option>
-                                <option value="برنامج تعزيز كفاءة القوات">برنامج تعزيز كفاءة القوات</option>
-                                <option value="برنامج تطوير الكليات العسكرية">برنامج تطوير الكليات العسكرية</option>
-                            </select>
-                        </div>
-                        <div><label className="block text-xs font-bold mb-1">الميزانية المقدرة</label><input name="budget" type="number" onChange={handleChange} className="w-full p-2 border rounded-lg text-sm"/></div>
+                        <ProgramSearchDropdown
+                            name="programName"
+                            value={formData.programName}
+                            onChange={handleChange}
+                            label="البرنامج *"
+                            placeholder="ابحث عن البرنامج..."
+                        />
+                        <div><label className="block text-xs font-bold mb-1">الميزانية المقدرة *</label><input name="budget" type="number" onChange={handleChange} className="w-full p-2 border rounded-lg text-sm" required/></div>
                         <div>
                             <label className="block text-xs font-bold mb-1">المحفظة *</label>
                             <select name="portfolio" onChange={handleChange} className="w-full p-2 border rounded-lg text-sm focus:ring-2 focus:ring-primary-500 outline-none">
@@ -308,8 +300,8 @@ const NewProjectModal = ({ onClose, accessToken }) => {
                                 <option value="محفظة الشؤون التنفيذية">محفظة الشؤون التنفيذية</option>
                             </select>
                         </div>
-                        <div><label className="block text-xs font-bold mb-1">تاريخ البداية المتوقع</label><input name="startDate" type="date" value={formData.startDate} onChange={handleChange} className="w-full p-2 border rounded-lg text-sm"/></div>
-                        <div><label className="block text-xs font-bold mb-1">تاريخ النهاية المتوقع</label><input name="endDate" type="date" value={formData.endDate} onChange={handleChange} className="w-full p-2 border rounded-lg text-sm"/></div>
+                        <div><label className="block text-xs font-bold mb-1">تاريخ البداية المتوقع *</label><input name="startDate" type="date" value={formData.startDate} onChange={handleChange} className="w-full p-2 border rounded-lg text-sm" required/></div>
+                        <div><label className="block text-xs font-bold mb-1">تاريخ النهاية المتوقع *</label><input name="endDate" type="date" value={formData.endDate} onChange={handleChange} className="w-full p-2 border rounded-lg text-sm" required/></div>
                     </div>
                 </div>
 
@@ -323,7 +315,7 @@ const NewProjectModal = ({ onClose, accessToken }) => {
                             name="manager"
                             value={formData.manager}
                             onChange={handleChange}
-                            label="مدير المشروع"
+                            label="مدير المشروع *"
                             placeholder="ابحث عن مدير المشروع..."
                             accessToken={accessToken}
                         />
@@ -339,7 +331,7 @@ const NewProjectModal = ({ onClose, accessToken }) => {
                             name="programManager"
                             value={formData.programManager}
                             onChange={handleChange}
-                            label="مدير البرنامج"
+                            label="مدير البرنامج *"
                             placeholder="ابحث عن مدير البرنامج..."
                             accessToken={accessToken}
                         />
@@ -443,19 +435,25 @@ const NewProjectModal = ({ onClose, accessToken }) => {
                                     <option value="الاستراتيجية">الاستراتيجية</option>
                                     <option value="المالية">المالية</option>
                                     <option value="التشغيلية">التشغيلية</option>
-                                    <option value="التقنية">التقنية</option>
+                                    <option value="القدرات">القدرات</option>
+                                    <option value="الالتزام">الالتزام</option>
+                                    <option value="التقنية والبيانات">التقنية والبيانات</option>
                                     <option value="السمعة">السمعة</option>
+                                    <option value="الاشخاص">الاشخاص</option>
                                 </select>
                             </div>
                             <div>
                                 <label className="block text-[10px] font-bold text-gray-500 mb-1">النطاق الفرعي</label>
                                 <select value={initRisk.subImpactScope} onChange={(e) => setInitRisk({...initRisk, subImpactScope: e.target.value})} disabled={!initRisk.impactScope} className="w-full p-2 border rounded-lg text-sm disabled:bg-gray-100">
                                     <option value="">اختر...</option>
-                                    {initRisk.impactScope === 'الاستراتيجية' && (<><option value="الحوكمة">الحوكمة</option><option value="المستهدفات">المستهدفات</option></>)}
-                                    {initRisk.impactScope === 'المالية' && (<><option value="التكاليف">التكاليف</option><option value="السيولة">السيولة</option></>)}
-                                    {initRisk.impactScope === 'التشغيلية' && (<><option value="الإجراءات">الإجراءات</option><option value="الموارد">الموارد</option></>)}
-                                    {initRisk.impactScope === 'التقنية' && (<><option value="الأنظمة">الأنظمة</option><option value="البيانات">البيانات</option></>)}
-                                    {initRisk.impactScope === 'السمعة' && (<><option value="المصداقية">المصداقية</option><option value="العملاء">العملاء</option></>)}
+                                    {initRisk.impactScope === 'الاستراتيجية' && (<><option value="الحوكمة">الحوكمة</option><option value="المستهدفات">المستهدفات</option><option value="الثقافة">الثقافة</option></>)}
+                                    {initRisk.impactScope === 'المالية' && (<><option value="التكاليف التشغيلية">التكاليف التشغيلية</option><option value="التكاليف الرأسمالية">التكاليف الرأسمالية</option><option value="الإستثمار">الإستثمار</option><option value="السيولةالنقدية">السيولةالنقدية</option></>)}
+                                    {initRisk.impactScope === 'التشغيلية' && (<><option value="الإجراءات">الإجراءات</option><option value="ادارة الموردين">ادارة الموردين</option><option value="إدارة المشاريع">إدارة المشاريع</option><option value="الكوارث البيئية">الكوارث البيئية</option></>)}
+                                    {initRisk.impactScope === 'القدرات' && (<><option value="المنظمة">المنظمة</option><option value="التدريب">التدريب</option><option value="المنشأة">المنشأة</option><option value="القيادة">القيادة</option></>)}
+                                    {initRisk.impactScope === 'الالتزام' && (<><option value="التشريعات">التشريعات</option><option value="الاجراءات">الاجراءات</option></>)}
+                                    {initRisk.impactScope === 'التقنية والبيانات' && (<><option value="الاصول المعلوماتية والتقنية">الاصول المعلوماتية والتقنية</option><option value="تهديدات سيبرانية">تهديدات سيبرانية</option><option value="استمرارية الاعمال">استمرارية الاعمال</option><option value="انقطاع الخدمة">انقطاع الخدمة</option></>)}
+                                    {initRisk.impactScope === 'السمعة' && (<><option value="المصداقية">المصداقية</option><option value="الفساد">الفساد</option></>)}
+                                    {initRisk.impactScope === 'الاشخاص' && (<><option value="تعيين الموظفين">تعيين الموظفين</option><option value="انهاء الخدمة">انهاء الخدمة</option><option value="تطوير الموظفين">تطوير الموظفين</option><option value="اصحاب المصلحة">اصحاب المصلحة</option></>)}
                                 </select>
                             </div>
                             <div className="md:col-span-2">

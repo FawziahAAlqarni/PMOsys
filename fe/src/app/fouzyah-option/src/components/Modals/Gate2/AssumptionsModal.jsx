@@ -138,6 +138,14 @@ const AssumptionsModal = ({ data, onClose, onSave, onConvertToRisk }) => {
                                             <option value="لا">لا</option>
                                             <option value="نعم">نعم</option>
                                         </select>
+                                        {newRow.convertToRisk === 'نعم' && (
+                                            <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded flex items-start gap-2">
+                                                <i className="fa-solid fa-info-circle text-red-600 mt-0.5"></i>
+                                                <p className="text-xs text-red-700 font-semibold">
+                                                    عند اختيار "نعم" سيتم تسجيل هذا العنصر تلقائياً في سجل المخاطر
+                                                </p>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="flex gap-2 mt-4">

@@ -8,17 +8,20 @@ const CharterModal = ({ data, onClose, onSave, project }) => {
     const gate2Data = project?.gate2Data || project?.data?.gate2Data || {};
     const scopeData = gate2Data?.scope || {};
     
+    // قراءة المخرجات من النطاق إذا لم تكن موجودة في الميثاق
+    const deliverablesFromScope = scopeData?.deliverables || [];
+    
     const [localData, setLocalData] = useState(data || { 
         stratObj: strategyData.objective || '', 
         stratRes: strategyData.result || '', 
         budget: project?.estimatedBudget || '', 
-        scope: scopeData.workScope || scopeData.goal || '', 
+        scope: scopeData.workScope || scopeData.currentState || scopeData.targetState || scopeData.goal || '', 
         projectManager: teamData.projectManager || '',
         projectOwner: teamData.projectOwner || '',
         programManager: teamData.programManager || '', 
         portfolioManager: teamData.portfolioManager || '',
-        techCommittee: committeeData.length > 0 ? committeeData[0] : '',
-        deliverables: [], 
+        techCommittee: committeeData.length > 0 ? committeeData.map(c => c.name || c).join(', ') : '',
+        deliverables: deliverablesFromScope.length > 0 ? deliverablesFromScope : [], 
         stakeholders: []
     });
 
@@ -80,7 +83,13 @@ const CharterModal = ({ data, onClose, onSave, project }) => {
                 <div className="space-y-6">
                     {/* 1. التوافق الاستراتيجي */}
                     <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                        <h4 className="font-bold text-secondary-gold mb-4 border-b pb-2">1. التوافق الاستراتيجي</h4>
+                        <div className="flex items-start justify-between mb-4 border-b pb-2">
+                            <h4 className="font-bold text-secondary-gold">1. التوافق الاستراتيجي</h4>
+                            <div className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded flex items-center gap-1">
+                                <i className="fa-solid fa-info-circle"></i>
+                                <span>تم تعبئة البيانات من تسجيل المشروع</span>
+                            </div>
+                        </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-xs font-bold text-gray-700 mb-1">الهدف الاستراتيجي</label>
@@ -95,49 +104,67 @@ const CharterModal = ({ data, onClose, onSave, project }) => {
 
                     {/* 2. النطاق والمالية */}
                     <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                        <h4 className="font-bold text-secondary-gold mb-4 border-b pb-2">2. النطاق والمالية</h4>
+                        <div className="flex items-start justify-between mb-4 border-b pb-2">
+                            <h4 className="font-bold text-secondary-gold">2. النطاق والمالية</h4>
+                            <div className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded flex items-center gap-1">
+                                <i className="fa-solid fa-info-circle"></i>
+                                <span>تم تعبئة البيانات من تسجيل المشروع والنطاق</span>
+                            </div>
+                        </div>
                         <div className="space-y-4">
                             <div>
                                 <label className="block text-xs font-bold text-gray-700 mb-1">الميزانية المعتمدة (ر.س)</label>
-                                <input type="number" name="budget" value={localData.budget} onChange={handleChange} className="w-full p-2.5 border rounded-lg text-sm bg-white focus:ring-1 focus:ring-secondary-gold outline-none" />
+                                <input type="number" name="budget" value={localData.budget} onChange={handleChange} className="w-full p-2.5 border rounded-lg text-sm bg-white focus:ring-1 focus:ring-secondary-gold outline-none" placeholder="يمكنك التعديل هنا" />
                             </div>
                             <div>
                                 <label className="block text-xs font-bold text-gray-700 mb-1">نطاق العمل</label>
-                                <textarea name="scope" rows="4" value={localData.scope} onChange={handleChange} className="w-full p-2.5 border rounded-lg text-sm bg-white focus:ring-1 focus:ring-secondary-gold outline-none"></textarea>
+                                <textarea name="scope" rows="4" value={localData.scope} onChange={handleChange} className="w-full p-2.5 border rounded-lg text-sm bg-white focus:ring-1 focus:ring-secondary-gold outline-none" placeholder="يمكنك التعديل أو الإضافة هنا"></textarea>
                             </div>
                         </div>
                     </div>
 
                     {/* 3. الهيكل الإداري */}
                     <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                        <h4 className="font-bold text-secondary-gold mb-4 border-b pb-2">3. الهيكل الإداري</h4>
+                        <div className="flex items-start justify-between mb-4 border-b pb-2">
+                            <h4 className="font-bold text-secondary-gold">3. الهيكل الإداري</h4>
+                            <div className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded flex items-center gap-1">
+                                <i className="fa-solid fa-info-circle"></i>
+                                <span>تم تعبئة البيانات من تسجيل المشروع</span>
+                            </div>
+                        </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-xs font-bold text-gray-700 mb-1">مدير المشروع</label>
-                                <input name="projectManager" value={localData.projectManager} onChange={handleChange} className="w-full p-2.5 border rounded-lg text-sm bg-white focus:ring-1 focus:ring-secondary-gold outline-none" />
+                                <input name="projectManager" value={localData.projectManager} onChange={handleChange} className="w-full p-2.5 border rounded-lg text-sm bg-white focus:ring-1 focus:ring-secondary-gold outline-none" placeholder="يمكنك التعديل هنا" />
                             </div>
                             <div>
                                 <label className="block text-xs font-bold text-gray-700 mb-1">مالك المشروع</label>
-                                <input name="projectOwner" value={localData.projectOwner} onChange={handleChange} className="w-full p-2.5 border rounded-lg text-sm bg-white focus:ring-1 focus:ring-secondary-gold outline-none" />
+                                <input name="projectOwner" value={localData.projectOwner} onChange={handleChange} className="w-full p-2.5 border rounded-lg text-sm bg-white focus:ring-1 focus:ring-secondary-gold outline-none" placeholder="يمكنك التعديل هنا" />
                             </div>
                             <div>
                                 <label className="block text-xs font-bold text-gray-700 mb-1">مدير البرنامج</label>
-                                <input name="programManager" value={localData.programManager} onChange={handleChange} className="w-full p-2.5 border rounded-lg text-sm bg-white focus:ring-1 focus:ring-secondary-gold outline-none" />
+                                <input name="programManager" value={localData.programManager} onChange={handleChange} className="w-full p-2.5 border rounded-lg text-sm bg-white focus:ring-1 focus:ring-secondary-gold outline-none" placeholder="يمكنك التعديل هنا" />
                             </div>
                             <div>
                                 <label className="block text-xs font-bold text-gray-700 mb-1">مدير المحفظة</label>
-                                <input name="portfolioManager" value={localData.portfolioManager} onChange={handleChange} className="w-full p-2.5 border rounded-lg text-sm bg-white focus:ring-1 focus:ring-secondary-gold outline-none" />
+                                <input name="portfolioManager" value={localData.portfolioManager} onChange={handleChange} className="w-full p-2.5 border rounded-lg text-sm bg-white focus:ring-1 focus:ring-secondary-gold outline-none" placeholder="يمكنك التعديل هنا" />
                             </div>
                             <div className="col-span-2">
                                 <label className="block text-xs font-bold text-gray-700 mb-1">اللجنة الفنية</label>
-                                <input name="techCommittee" value={localData.techCommittee} onChange={handleChange} className="w-full p-2.5 border rounded-lg text-sm bg-white focus:ring-1 focus:ring-secondary-gold outline-none" />
+                                <input name="techCommittee" value={localData.techCommittee} onChange={handleChange} className="w-full p-2.5 border rounded-lg text-sm bg-white focus:ring-1 focus:ring-secondary-gold outline-none" placeholder="يمكنك التعديل هنا" />
                             </div>
                         </div>
                     </div>
 
                     {/* 4. المخرجات */}
                     <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                        <h4 className="font-bold text-secondary-gold mb-4 border-b pb-2">4. المخرجات</h4>
+                        <div className="flex items-start justify-between mb-4 border-b pb-2">
+                            <h4 className="font-bold text-secondary-gold">4. المخرجات</h4>
+                            <div className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded flex items-center gap-1">
+                                <i className="fa-solid fa-info-circle"></i>
+                                <span>تم تعبئة البيانات من النطاق</span>
+                            </div>
+                        </div>
                         
                         <div className="overflow-x-auto border rounded">
                             <table className="w-full">

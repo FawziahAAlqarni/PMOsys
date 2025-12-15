@@ -23,6 +23,7 @@ const ProjectView = () => {
             project={project} 
             onUpdate={updateProject} 
             currentGateView={Number(gateNumber)} // تمرير رقم البوابة للعرض
+            currentUserEmail={localStorage.getItem('userEmail') || ''} // البريد الإلكتروني للمستخدم الحالي
          />
       </div>
     </div>

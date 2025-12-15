@@ -31,6 +31,13 @@ const Navbar = () => {
                 الرئيسية
             </button>
             <button 
+                onClick={() => navigate('/statistics')}
+                className="text-gray-700 hover:text-primary-600 font-semibold text-sm transition flex items-center gap-2"
+            >
+                <i className="fa-solid fa-chart-line"></i>
+                الإحصائيات
+            </button>
+            <button 
                 onClick={() => window.open('https://tickets.mngdp.com/', '_blank')}
                 className="text-gray-700 hover:text-primary-600 font-semibold text-sm transition flex items-center gap-2"
             >

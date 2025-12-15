@@ -7,7 +7,12 @@ const ScopeModal = ({ data, onClose, onSave }) => {
         const activities = localData.activities || [];
         setLocalData({ 
             ...localData, 
-            activities: [...activities, { activity: '', result: '', type: 'استراتيجي', id: Date.now() }] 
+            activities: [...activities, { 
+                activity: '', 
+                result: '', 
+                type: 'استراتيجي', 
+                id: Date.now() 
+            }] 
         });
     };
 
@@ -22,7 +27,13 @@ const ScopeModal = ({ data, onClose, onSave }) => {
         const deliverables = localData.deliverables || [];
         setLocalData({ 
             ...localData, 
-            deliverables: [...deliverables, { type: '', deliverable: '', measures: '', stakeholder: '', id: Date.now() }] 
+            deliverables: [...deliverables, { 
+                name: '',
+                deliveryDate: '',
+                description: '',
+                responsibilities: '',
+                id: Date.now() 
+            }] 
         });
     };
 

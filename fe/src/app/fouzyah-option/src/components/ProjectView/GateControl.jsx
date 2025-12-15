@@ -12,7 +12,7 @@ import CharterModal from '../Modals/Gate3/CharterModal';
 import LessonsLearnedModal from '../Modals/Gate4/LessonsLearnedModal';
 import ActivationPlanModal from '../Modals/Gate4/ActivationPlanModal';
 
-const GateControl = ({ project, onUpdate, currentGateView }) => {
+const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -84,12 +84,32 @@ const GateControl = ({ project, onUpdate, currentGateView }) => {
   const [activeModal, setActiveModal] = useState(null); 
 
   // ================= 4. منطق الموافقات (البوابة 1) =================
+  // مسار الموافقات الثابت (يظهر مدير البرنامج دائماً حتى لو لم يتم إدخاله)
   const approvalWorkflow = [
-    { id: 'progMgr', role: 'مدير البرنامج', order: 1 },
-    { id: 'planning', role: 'إدارة التخطيط', order: 2 },
-    { id: 'governance', role: 'إدارة الحوكمة/المخاطر', order: 3 },
-    { id: 'portfolio', role: 'مدير الإدارة العامة للمحافظ', order: 4 }
+    { id: 'progMgr', role: 'مدير البرنامج', order: 1, email: project.data?.team?.programManager || '' },
+    { id: 'planning', role: 'إدارة التخطيط', order: 2, email: 'planning@mngdp.com' },
+    { id: 'governance', role: 'إدارة الحوكمة/المخاطر', order: 3, email: 'risk@mngdp.com' },
+    { id: 'portfolio', role: 'مدير الإدارة العامة للمحافظ', order: 4, email: project.data?.team?.portfolioManagerEmail || 'pmo@mngdp.com' }
   ];
+
+  // قائمة الأدمن (لهم صلاحية كاملة على جميع الموافقات)
+  const adminEmails = [
+    'admin@mngdp.com'
+  ];
+
+  // دالة للتحقق من صلاحية المستخدم للموافقة على مرحلة معينة
+  const canUserApprove = (stepEmail) => {
+    if (!currentUserEmail) return false;
+    
+    // الأدمن لهم صلاحية على جميع المراحل
+    if (adminEmails.some(adminEmail => adminEmail.toLowerCase() === currentUserEmail.toLowerCase())) {
+      return true;
+    }
+    
+    // التحقق من المستخدم العادي
+    if (!stepEmail) return false;
+    return currentUserEmail.toLowerCase() === stepEmail.toLowerCase();
+  };
 
   const handleApprovalAction = async (roleId, action) => {
     let nextOrder = project.currentApproverOrder || 1;
@@ -150,7 +170,7 @@ const GateControl = ({ project, onUpdate, currentGateView }) => {
 
   // ================= 5. مكون واجهة البطاقة (Requirement Item) =================
   const RequirementItem = ({ title, status, icon, btnText, onClick, btnColor = "bg-primary-600", subText }) => (
-      <div className={`p-6 rounded-xl border-2 shadow-md hover:shadow-lg transition flex justify-between items-center mb-4 group ${status === 'done' ? 'bg-green-50 border-green-200' : 'bg-white border-gray-200'}`}>
+      <div className={`p-6 rounded-xl border-2 shadow-md hover:shadow-2xl transition-all duration-300 flex justify-between items-center mb-4 group hover:-translate-y-2 hover:scale-[1.02] cursor-pointer ${status === 'done' ? 'bg-green-50 border-green-200' : 'bg-white border-gray-200'}`}>
           <div className="flex items-center gap-4">
               <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-2xl transition-colors shadow-sm ${status === 'done' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-500 group-hover:bg-primary-100 group-hover:text-primary-700'}`}>
                   {status === 'done' ? <i className="fa-solid fa-check"></i> : <i className={`fa-solid ${icon}`}></i>}
@@ -239,11 +259,23 @@ const GateControl = ({ project, onUpdate, currentGateView }) => {
                                           <p className="text-[10px] text-gray-500 mt-1">{statusText}</p>
                                       </div>
                                       
-                                      {/* Action Buttons (Only for current step) */}
-                                      {isCurrent && status !== 'approved' && (
+                                      {/* Action Buttons (Only for current step and authorized user) */}
+                                      {isCurrent && status !== 'approved' && canUserApprove(step.email) && (
                                           <div className="flex gap-2">
                                               <button onClick={() => handleApprovalAction(step.id, 'approve')} className="bg-green-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-green-700 shadow-sm flex items-center gap-1"><i className="fa-solid fa-check"></i> اعتماد</button>
                                               <button onClick={() => handleApprovalAction(step.id, 'reject')} className="bg-white text-red-600 border border-red-200 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-red-50 flex items-center gap-1"><i className="fa-solid fa-xmark"></i> رفض</button>
+                                          </div>
+                                      )}
+                                      {isCurrent && status !== 'approved' && !canUserApprove(step.email) && (
+                                          <div className="text-xs text-gray-500 italic">
+                                              <i className="fa-solid fa-clock ml-1"></i>
+                                              في انتظار {step.role}
+                                          </div>
+                                      )}
+                                      {isCurrent && status !== 'approved' && canUserApprove(step.email) && adminEmails.some(adminEmail => adminEmail.toLowerCase() === currentUserEmail?.toLowerCase()) && (
+                                          <div className="text-[10px] bg-red-50 text-red-600 px-2 py-1 rounded-full font-bold mt-2">
+                                              <i className="fa-solid fa-shield-halved ml-1"></i>
+                                              صلاحيات الأدمن
                                           </div>
                                       )}
                                   </div>
@@ -284,7 +316,7 @@ const GateControl = ({ project, onUpdate, currentGateView }) => {
           <div className="text-center mb-10"><h3 className="text-2xl font-bold text-primary-900">البوابة الثانية: التفصيل</h3></div>
 
           <div className="space-y-4">
-              <RequirementItem title="نطاق المشروع التفصيلي" subText="تحديد الأهداف، المخرجات، والاعتمادات" icon="fa-bullseye" btnText="تحديد النطاق" btnColor="bg-secondary-gold" status={gate2Data.scope.directGoal || gate2Data.scope.goal ? 'done' : ''} onClick={() => setActiveModal('scope')} />
+              <RequirementItem title="نطاق المشروع التفصيلي" subText="تحديد الأهداف، المخرجات، والاعتمادات" icon="fa-bullseye" btnText="تحديد النطاق" btnColor="bg-secondary-gold" status={(gate2Data.scope.currentState || gate2Data.scope.targetState || gate2Data.scope.workScope || gate2Data.scope.directGoal || gate2Data.scope.goal) ? 'done' : ''} onClick={() => setActiveModal('scope')} />
               <RequirementItem title="خطة المشتريات وتحليل الخيارات" subText="مقارنة الخيارات (داخلي/خارجي) والتكاليف" icon="fa-shopping-cart" btnText="تحليل الخيارات" btnColor="bg-primary-600" status={gate2Data.procurement.options.internal.cost ? 'done' : ''} onClick={() => setActiveModal('procurement')} />
               <RequirementItem title="سجل الافتراضات والقيود" subText="توثيق الافتراضات وتأثيرها" icon="fa-list-check" btnText="فتح السجل" btnColor="bg-yellow-600" status={gate2Data.assumptions.length > 0 ? 'done' : ''} onClick={() => setActiveModal('assumptions')} />
               <RequirementItem title="بطاقة التغيير (Change Card)" subText="إدارة التغيير وأصحاب المصلحة" icon="fa-exchange-alt" btnText="إعداد البطاقة" btnColor="bg-gray-600" status={gate2Data.changeCard.changeRisks.length > 0 ? 'done' : ''} onClick={() => setActiveModal('change')} />

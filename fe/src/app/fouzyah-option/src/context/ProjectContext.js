@@ -15,6 +15,13 @@ export const ProjectProvider = ({ children }) => {
     // نزيل id من projectData لأننا نريد استخدام id من قاعدة البيانات فقط
     const { id: _, ...restProjectData } = projectData;
     
+    console.log('🔄 تحويل المشروع من DB:', {
+      projectName: dbProject.name,
+      hasData: !!dbProject.data,
+      programManagerEmail: projectData.data?.team?.programManagerEmail,
+      currentApproverOrder: projectData.currentApproverOrder
+    });
+    
     return {
       // نستخدم id من قاعدة البيانات فقط (SERIAL)
       id: dbProject.id,
@@ -76,6 +83,13 @@ export const ProjectProvider = ({ children }) => {
   // 2. دالة إضافة مشروع جديد (POST)
   const addProject = async (newProject) => {
     try {
+      console.log('📤 إرسال مشروع جديد:', {
+        name: newProject.name,
+        programManagerEmail: newProject.data?.team?.programManagerEmail,
+        currentApproverOrder: newProject.currentApproverOrder,
+        fullData: newProject
+      });
+      
       const projectToSave = transformToDB(newProject);
       
       const response = await fetch(API_URL, {

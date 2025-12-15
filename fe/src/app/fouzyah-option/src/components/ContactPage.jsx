@@ -24,25 +24,29 @@ const ContactPage = () => {
     setSending(true);
 
     try {
-      // إرسال البريد الإلكتروني
+      // إنشاء رابط mailto
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...formData,
-          to: 'falqarmi@mngdp.sa'
-        }),
+        body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
+      const data = await response.json();
+      
+      if (response.ok && data.mailtoLink) {
+        // فتح تطبيق البريد الإلكتروني
+        window.location.href = data.mailtoLink;
+        
+        // عرض رسالة النجاح
         setSuccess(true);
         setFormData({ name: '', email: '', subject: '', message: '' });
         setTimeout(() => setSuccess(false), 5000);
       }
     } catch (error) {
-      console.error('Error sending email:', error);
+      console.error('Error generating email:', error);
+      alert('حدث خطأ أثناء إنشاء البريد الإلكتروني');
     } finally {
       setSending(false);
     }
