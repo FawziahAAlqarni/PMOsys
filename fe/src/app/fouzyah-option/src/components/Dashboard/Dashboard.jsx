@@ -1,16 +1,14 @@
 import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // للتنقل بين الصفحات
 import { ProjectContext } from '../../context/ProjectContext'; // لجلب البيانات
 import ProjectCard from './ProjectCard'; // بطاقة المشروع
 import NewProjectModal from '../Modals/NewProjectModal'; // نافذة التسجيل
 import { useAccessToken } from '../../hooks/useAccessToken'; // للحصول على Microsoft token
 
-const Dashboard = () => {
+const Dashboard = ({ onNavigate }) => {
   const { projects, deleteProject } = useContext(ProjectContext);
   const [showModal, setShowModal] = useState(false);
   const [filterMode, setFilterMode] = useState('all'); // all, myApprovals, myProjects
   const { accessToken } = useAccessToken();
-  const navigate = useNavigate();
 
   // الحصول على البريد الإلكتروني للمستخدم الحالي
   const currentUserEmail = localStorage.getItem('userEmail') || '';
@@ -85,7 +83,7 @@ const Dashboard = () => {
 
   // دالة لفتح المشروع عند الضغط عليه
   const handleCardClick = (projectId) => {
-    navigate(`/project/${projectId}/gate`);
+    onNavigate('project', projectId);
   };
 
   return (

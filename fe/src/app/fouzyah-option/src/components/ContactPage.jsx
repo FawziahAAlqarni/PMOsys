@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-const ContactPage = () => {
-  const navigate = useNavigate();
+const ContactPage = ({ onNavigate }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
