@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 
 export default function Gate2DataDemo() {
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedProject, setSelectedProject] = useState<any>(null);
 
   useEffect(() => {
     fetchProjects();
