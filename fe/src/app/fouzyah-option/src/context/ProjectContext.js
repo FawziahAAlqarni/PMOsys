@@ -5,7 +5,7 @@ export const ProjectContext = createContext();
 export const ProjectProvider = ({ children }) => {
   const [projects, setProjects] = useState([]);
   
-  const API_URL = 'http://localhost:3030/project-cards';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://pmo-backend-dvy1.onrender.com/project-cards';
 
   // تحويل البيانات من PostgreSQL إلى صيغة التطبيق
   const transformFromDB = (dbProject) => {
