@@ -1,11 +1,9 @@
 import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ProjectContext } from '../../context/ProjectContext';
 import DashboardStats from '../Dashboard/DashboardStats';
 
-const StatisticsPage = () => {
+const StatisticsPage = ({ onNavigate }) => {
   const { projects } = useContext(ProjectContext);
-  const navigate = useNavigate();
 
   // حساب إحصائيات إضافية
   const completedProjects = projects.filter(p => p.stage === 5 || p.status === 'completed').length;
@@ -48,7 +46,7 @@ const StatisticsPage = () => {
             <p className="text-gray-600">نظرة شاملة على أداء المحفظة والمخاطر</p>
           </div>
           <button
-            onClick={() => navigate('/')}
+            onClick={() => onNavigate('dashboard')}
             className="bg-white hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-lg border border-gray-200 font-semibold transition flex items-center gap-2 shadow-sm"
           >
             <i className="fa-solid fa-arrow-right"></i>

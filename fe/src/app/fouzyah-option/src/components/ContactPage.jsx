@@ -56,7 +56,7 @@ const ContactPage = ({ onNavigate }) => {
         {/* Header */}
         <div className="mb-8">
           <button 
-            onClick={() => navigate(-1)}
+            onClick={() => onNavigate('dashboard')}
             className="mb-4 flex items-center gap-2 text-gray-600 hover:text-primary-600 transition"
           >
             <i className="fa-solid fa-arrow-left"></i>

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 
 // استيراد النوافذ المنبثقة
 import RiskRegisterModal from '../Modals/RiskRegisterModal';
@@ -13,8 +12,7 @@ import LessonsLearnedModal from '../Modals/Gate4/LessonsLearnedModal';
 import ActivationPlanModal from '../Modals/Gate4/ActivationPlanModal';
 
 const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) => {
-  const navigate = useNavigate();
-  const { id } = useParams();
+  const id = project.id;
 
   // تحديد البوابة المعروضة (من الرابط أو البوابة الحالية للمشروع)
   const viewGate = currentGateView || project.stage;
@@ -128,7 +126,7 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
             nextOrder = 5; 
             nextStage = 2;
             alert(`✅ تم الاعتماد النهائي. انتقل المشروع إلى البوابة الثانية.`);
-            navigate(`/project/${id}/gate/2`);
+            // سيتم تحديث البوابة تلقائياً بعد إعادة التحميل
         }
     } else {
         const reason = prompt(`الرجاء كتابة سبب الرفض (${step.role}):`);
@@ -157,7 +155,7 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
       if(window.confirm(`هل أنت متأكد من اكتمال المتطلبات والانتقال للبوابة ${nextGate}؟`)) {
           try {
             await onUpdate({ ...project, stage: nextGate });
-            navigate(`/project/${id}/gate/${nextGate}`);
+            // سيتم تحديث البوابة تلقائياً
             window.scrollTo(0,0);
             console.log(`✅ تم الانتقال إلى البوابة ${nextGate}`);
           } catch (error) {
@@ -201,7 +199,7 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
               </div>
               <h3 className="text-xl font-bold text-gray-600 mb-2">هذه البوابة مغلقة حالياً</h3>
               <p className="text-gray-500 text-sm mb-6">يجب إكمال متطلبات البوابة {project.stage} واعتمادها أولاً.</p>
-              <button onClick={() => navigate(`/project/${id}/gate/${project.stage}`)} className="text-primary-600 font-bold hover:underline">
+              <button onClick={() => window.location.reload()} className="text-primary-600 font-bold hover:underline">
                   الذهاب للبوابة الحالية <i className="fa-solid fa-arrow-left mr-1"></i>
               </button>
           </div>
