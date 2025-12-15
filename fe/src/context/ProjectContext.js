@@ -5,8 +5,8 @@ export const ProjectContext = createContext();
 export const ProjectProvider = ({ children }) => {
   const [projects, setProjects] = useState([]);
   
-  // رابط الباك اند - يستخدم NEXT_PUBLIC_API_URL من متغيرات البيئة أو localhost
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3030/project-cards';
+  // رابط الباك اند - يستخدم NEXT_PUBLIC_API_URL من متغيرات البيئة أو Render
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://pmo-backend-dvy1.onrender.com/project-cards';
 
   // 1. دالة جلب البيانات من السيرفر عند فتح الموقع
   const fetchProjects = async () => {
