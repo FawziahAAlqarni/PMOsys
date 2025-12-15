@@ -1,21 +1,11 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import App from './src/App'; 
-import { ProjectProvider } from './src/context/ProjectContext';
-
 export default function Page() {
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => { setIsClient(true); }, []);
-
-  if (!isClient) return null;
-
   return (
-    <ProjectProvider>
-      {/* هنا التعديل المهم: تحديد المسار الأساسي */}
-      <BrowserRouter basename="/fouzyah-option">
-        <App />
-      </BrowserRouter>
-    </ProjectProvider>
+    <div style={{ padding: '50px', textAlign: 'center' }}>
+      <h1>نظام إدارة المشاريع</h1>
+      <p>قريباً...</p>
+      <a href="https://pmo-backend-dvy1.onrender.com/project-cards" target="_blank" rel="noopener noreferrer">
+        اختبار Backend API
+      </a>
+    </div>
   );
 }
