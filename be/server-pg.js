@@ -1,13 +1,10 @@
 const http = require('http');
 const { Pool } = require('pg');
 
-// إعداد الاتصال بـ PostgreSQL
+// إعداد الاتصال بـ PostgreSQL - استخدام DATABASE_URL من متغيرات البيئة أو localhost
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'project_management',
-  password: 'postgres',
-  port: 5432,
+  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/project_management',
+  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
 });
 
 // إنشاء الجداول إذا لم تكن موجودة
@@ -407,8 +404,9 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-const PORT = 3030;
+const PORT = process.env.PORT || 3030;
 server.listen(PORT, () => {
   console.log(`🚀 الخادم يعمل على http://localhost:${PORT}`);
-  console.log(`📊 متصل بـ PostgreSQL: project_management`);
+  console.log(`📊 متصل بـ PostgreSQL`);
+  console.log(`🌍 البيئة: ${process.env.NODE_ENV || 'development'}`);
 });
