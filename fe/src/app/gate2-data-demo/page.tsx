@@ -26,7 +26,7 @@ export default function Gate2DataDemo() {
     }
   };
 
-  const showProjectData = (project) => {
+  const showProjectData = (project: any) => {
     // تحويل البيانات من PostgreSQL
     const projectData = project.data || {};
     setSelectedProject({

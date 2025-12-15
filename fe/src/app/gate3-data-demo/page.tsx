@@ -26,7 +26,7 @@ export default function Gate3DataDemo() {
     }
   };
 
-  const showProjectData = (project) => {
+  const showProjectData = (project: any) => {
     const projectData = project.data || {};
     setSelectedProject({
       id: project.id,
