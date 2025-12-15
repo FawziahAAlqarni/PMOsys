@@ -1,11 +1,11 @@
 {
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "deploy": "vercel --prod"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  }
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://your-backend-url.onrender.com/:path*"
+    }
+  ]
 }

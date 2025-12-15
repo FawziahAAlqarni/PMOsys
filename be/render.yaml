@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: pmo-backend
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: node server-pg.js
+    healthCheckPath: /project-cards
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3030
+      - key: DATABASE_URL
+        sync: false  # يتم إضافته يدوياً من Render Dashboard
+      - key: CORS_ORIGIN
+        sync: false  # يتم إضافته يدوياً
