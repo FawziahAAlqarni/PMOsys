@@ -5,7 +5,9 @@ export const ProjectContext = createContext();
 export const ProjectProvider = ({ children }) => {
   const [projects, setProjects] = useState([]);
   
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://pmo-backend-dvy1.onrender.com/project-cards';
+  // إضافة /project-cards إذا لم يكن موجوداً في المتغير
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://pmo-backend-dvy1.onrender.com';
+  const API_URL = baseUrl.endsWith('/project-cards') ? baseUrl : `${baseUrl}/project-cards`;
   
   console.log('🔧 Environment Variable NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
   console.log('🔧 Using API_URL:', API_URL);
