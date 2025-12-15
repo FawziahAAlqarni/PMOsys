@@ -10,6 +10,10 @@ const pool = new Pool({
 // إنشاء الجداول إذا لم تكن موجودة
 const initDatabase = async () => {
   try {
+    // اختبار الاتصال أولاً
+    await pool.query('SELECT NOW()');
+    console.log('✅ متصل بقاعدة البيانات');
+    
     await pool.query(`
       CREATE TABLE IF NOT EXISTS projects (
         id SERIAL PRIMARY KEY,
@@ -44,10 +48,12 @@ const initDatabase = async () => {
     
     console.log('✅ قاعدة البيانات جاهزة');
   } catch (error) {
-    console.error('❌ خطأ في تهيئة قاعدة البيانات:', error);
+    console.error('❌ خطأ في تهيئة قاعدة البيانات:', error.message);
+    console.error('تأكد من DATABASE_URL في متغيرات البيئة');
   }
 };
 
+// استدعاء initDatabase بعد بدء السيرفر
 initDatabase();
 
 const server = http.createServer(async (req, res) => {
@@ -407,6 +413,10 @@ const server = http.createServer(async (req, res) => {
 const PORT = process.env.PORT || 3030;
 server.listen(PORT, () => {
   console.log(`🚀 الخادم يعمل على http://localhost:${PORT}`);
-  console.log(`📊 متصل بـ PostgreSQL`);
   console.log(`🌍 البيئة: ${process.env.NODE_ENV || 'development'}`);
+  if (process.env.DATABASE_URL) {
+    console.log(`📊 يستخدم DATABASE_URL من متغيرات البيئة`);
+  } else {
+    console.log(`📊 يستخدم PostgreSQL المحلي`);
+  }
 });
