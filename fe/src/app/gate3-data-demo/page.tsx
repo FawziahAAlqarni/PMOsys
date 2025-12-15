@@ -109,7 +109,7 @@ export default function Gate3DataDemo() {
                     </tr>
                   </thead>
                   <tbody>
-                    {selectedProject.gate3Data.timeline.map((item, idx) => (
+                    {selectedProject.gate3Data.timeline.map((item: any, idx: number) => (
                       <tr key={idx}>
                         <td style={{ padding: '10px', border: '1px solid #e5e7eb' }}>{item.phase || '-'}</td>
                         <td style={{ padding: '10px', border: '1px solid #e5e7eb' }}>{item.startDate || '-'}</td>

@@ -187,7 +187,7 @@ export default function Gate2DataDemo() {
             
             {selectedProject.risks?.length > 0 ? (
               <ul style={{ fontSize: '13px', listStyle: 'none', padding: 0 }}>
-                {selectedProject.risks.map((risk, idx) => (
+                {selectedProject.risks.map((risk: any, idx: number) => (
                   <li key={idx} style={{ padding: '10px', marginBottom: '10px', backgroundColor: '#fef2f2', borderRadius: '6px', border: '1px solid #fca5a5' }}>
                     <strong>{risk.title || risk.description}</strong>
                     {risk.probability && <span style={{ marginLeft: '10px', color: '#666' }}>احتمالية: {risk.probability}</span>}

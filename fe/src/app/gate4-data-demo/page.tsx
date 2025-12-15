@@ -108,7 +108,7 @@ export default function Gate4DataDemo() {
                     </tr>
                   </thead>
                   <tbody>
-                    {selectedProject.gate4Data.timeline.map((item, idx) => (
+                    {selectedProject.gate4Data.timeline.map((item: any, idx: number) => (
                       <tr key={idx}>
                         <td style={{ padding: '10px', border: '1px solid #e5e7eb', fontWeight: 'bold' }}>{item.phase || '-'}</td>
                         <td style={{ padding: '10px', border: '1px solid #e5e7eb' }}>{item.plannedDate || '-'}</td>
@@ -139,7 +139,7 @@ export default function Gate4DataDemo() {
             
             {selectedProject.gate4Data?.lessons?.length > 0 ? (
               <div style={{ display: 'grid', gap: '15px' }}>
-                {selectedProject.gate4Data.lessons.map((lesson, idx) => (
+                {selectedProject.gate4Data.lessons.map((lesson: any, idx: number) => (
                   <div key={idx} style={{ 
                     padding: '15px', 
                     backgroundColor: '#f0fdf4', 
@@ -194,7 +194,7 @@ export default function Gate4DataDemo() {
                     </tr>
                   </thead>
                   <tbody>
-                    {selectedProject.gate4Data.activationPlan.map((item, idx) => (
+                    {selectedProject.gate4Data.activationPlan.map((item: any, idx: number) => (
                       <tr key={idx}>
                         <td style={{ padding: '10px', border: '1px solid #e5e7eb' }}>{item.activity || '-'}</td>
                         <td style={{ padding: '10px', border: '1px solid #e5e7eb' }}>{item.responsible || '-'}</td>

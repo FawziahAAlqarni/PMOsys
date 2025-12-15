@@ -200,7 +200,7 @@ export default function Gate1DataDemo() {
             
             {selectedProject.approvals && selectedProject.approvals.length > 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                {selectedProject.approvals.map((approval, idx) => (
+                {selectedProject.approvals.map((approval: any, idx: number) => (
                   <div 
                     key={idx} 
                     style={{ 
@@ -276,7 +276,7 @@ export default function Gate1DataDemo() {
             
             {selectedProject.risks && selectedProject.risks.length > 0 ? (
               <div style={{ display: 'grid', gap: '15px' }}>
-                {selectedProject.risks.map((risk, idx) => (
+                {selectedProject.risks.map((risk: any, idx: number) => (
                   <div 
                     key={idx} 
                     style={{ 
