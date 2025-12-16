@@ -25,17 +25,17 @@ const PMOView = ({ onNavigate }) => {
     if (!project) return null;
 
     return (
-      <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl shadow-2xl p-8 max-w-7xl mx-auto">
+      <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg shadow-lg p-4 max-w-7xl mx-auto">
         {/* Header مع خلفية متدرجة */}
-        <div className="bg-gradient-to-r from-primary-600 via-primary-800 to-[#003d1f] rounded-t-xl -mx-8 -mt-8 px-8 py-6 mb-8 text-white">
+        <div className="bg-gradient-to-r from-primary-600 via-primary-800 to-[#003d1f] rounded-t-lg -mx-4 -mt-4 px-4 py-3 mb-4 text-white">
           <div className="flex justify-between items-start">
             <div>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="bg-white/20 backdrop-blur-sm p-3 rounded-lg">
-                  <i className="fa-solid fa-folder-open text-2xl"></i>
+              <div className="flex items-center gap-2 mb-2">
+                <div className="bg-white/20 backdrop-blur-sm p-2 rounded-lg">
+                  <i className="fa-solid fa-folder-open text-lg"></i>
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold mb-1">{project.name}</h2>
+                  <h2 className="text-xl font-bold mb-1">{project.name}</h2>
                   <div className="flex gap-3 text-sm opacity-90">
                     <span className="flex items-center gap-1">
                       <i className="fa-solid fa-hashtag"></i>
@@ -72,76 +72,76 @@ const PMOView = ({ onNavigate }) => {
         </div>
 
         {/* معلومات المشروع الأساسية */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="bg-primary-600 bg-opacity-10 p-2 rounded-lg">
-              <i className="fa-solid fa-info-circle text-primary-600 text-xl"></i>
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="bg-primary-600 bg-opacity-10 p-1.5 rounded-lg">
+              <i className="fa-solid fa-info-circle text-primary-600 text-sm"></i>
             </div>
-            <h3 className="text-xl font-bold text-primary-900">المعلومات الأساسية</h3>
+            <h3 className="text-base font-bold text-primary-900">المعلومات الأساسية</h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-gradient-to-br from-primary-50 to-green-50 border-l-4 border-primary-600 p-4 rounded-lg hover:shadow-md transition">
-              <div className="flex items-center gap-2 text-primary-800 font-semibold mb-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+            <div className="bg-gradient-to-br from-primary-50 to-green-50 border-l-4 border-primary-600 p-2 rounded-lg hover:shadow-md transition">
+              <div className="flex items-center gap-1 text-primary-800 font-semibold mb-1 text-xs">
                 <i className="fa-solid fa-briefcase"></i>
                 <span>المحفظة</span>
               </div>
-              <p className="text-gray-900 font-medium">{project.data?.projectInfo?.portfolio || 'غير محدد'}</p>
+              <p className="text-gray-900 font-medium text-sm">{project.data?.projectInfo?.portfolio || 'غير محدد'}</p>
             </div>
-            <div className="bg-gradient-to-br from-amber-50 to-yellow-50 border-l-4 border-secondary-gold p-4 rounded-lg hover:shadow-md transition">
-              <div className="flex items-center gap-2 text-yellow-800 font-semibold mb-2">
+            <div className="bg-gradient-to-br from-amber-50 to-yellow-50 border-l-4 border-secondary-gold p-2 rounded-lg hover:shadow-md transition">
+              <div className="flex items-center gap-1 text-yellow-800 font-semibold mb-1 text-xs">
                 <i className="fa-solid fa-layer-group"></i>
                 <span>البرنامج</span>
               </div>
               <p className="text-gray-900 font-medium text-sm">{project.data?.projectInfo?.program || 'غير محدد'}</p>
             </div>
-            <div className="bg-gradient-to-br from-emerald-50 to-green-50 border-l-4 border-emerald-600 p-4 rounded-lg hover:shadow-md transition">
-              <div className="flex items-center gap-2 text-emerald-700 font-semibold mb-2">
+            <div className="bg-gradient-to-br from-emerald-50 to-green-50 border-l-4 border-emerald-600 p-2 rounded-lg hover:shadow-md transition">
+              <div className="flex items-center gap-1 text-emerald-700 font-semibold mb-1 text-xs">
                 <i className="fa-solid fa-dollar-sign"></i>
                 <span>الميزانية المقدرة</span>
               </div>
-              <p className="text-gray-900 font-bold text-lg">{Number(project.estimatedBudget || 0).toLocaleString()} <span className="text-sm font-normal">ريال</span></p>
+              <p className="text-gray-900 font-bold text-sm">{Number(project.estimatedBudget || 0).toLocaleString()} <span className="text-xs font-normal">ريال</span></p>
             </div>
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 border-l-4 border-purple-500 p-4 rounded-lg">
-              <div className="flex items-center gap-2 text-purple-700 font-semibold mb-2">
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 border-l-4 border-purple-500 p-2 rounded-lg">
+              <div className="flex items-center gap-1 text-purple-700 font-semibold mb-1 text-xs">
                 <i className="fa-solid fa-clock"></i>
                 <span>المدة</span>
               </div>
-              <p className="text-gray-900 font-bold text-lg">{project.durationInWeeks || 0} <span className="text-sm font-normal">أسبوع</span></p>
+              <p className="text-gray-900 font-bold text-sm">{project.durationInWeeks || 0} <span className="text-xs font-normal">أسبوع</span></p>
             </div>
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 border-l-4 border-orange-500 p-4 rounded-lg">
-              <div className="flex items-center gap-2 text-orange-700 font-semibold mb-2">
+            <div className="bg-gradient-to-br from-orange-50 to-orange-100 border-l-4 border-orange-500 p-2 rounded-lg">
+              <div className="flex items-center gap-1 text-orange-700 font-semibold mb-1 text-xs">
                 <i className="fa-solid fa-calendar-plus"></i>
                 <span>تاريخ البداية</span>
               </div>
-              <p className="text-gray-900 font-medium">{project.data?.dates?.projectStartDate || 'غير محدد'}</p>
+              <p className="text-gray-900 font-medium text-sm">{project.data?.dates?.projectStartDate || 'غير محدد'}</p>
             </div>
-            <div className="bg-gradient-to-br from-red-50 to-red-100 border-l-4 border-red-500 p-4 rounded-lg">
-              <div className="flex items-center gap-2 text-red-700 font-semibold mb-2">
+            <div className="bg-gradient-to-br from-red-50 to-red-100 border-l-4 border-red-500 p-2 rounded-lg">
+              <div className="flex items-center gap-1 text-red-700 font-semibold mb-1 text-xs">
                 <i className="fa-solid fa-calendar-check"></i>
                 <span>تاريخ النهاية</span>
               </div>
-              <p className="text-gray-900 font-medium">{project.data?.dates?.projectEndDate || 'غير محدد'}</p>
+              <p className="text-gray-900 font-medium text-sm">{project.data?.dates?.projectEndDate || 'غير محدد'}</p>
             </div>
           </div>
         </div>
 
         {/* فريق العمل */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="bg-purple-100 p-2 rounded-lg">
-              <i className="fa-solid fa-users text-purple-600 text-xl"></i>
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="bg-purple-100 p-1.5 rounded-lg">
+              <i className="fa-solid fa-users text-purple-600 text-sm"></i>
             </div>
-            <h3 className="text-xl font-bold text-gray-800">فريق العمل</h3>
+            <h3 className="text-base font-bold text-gray-800">فريق العمل</h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-white border-2 border-gray-200 rounded-xl p-5 hover:shadow-lg transition">
-              <div className="flex items-start gap-3">
-                <div className="bg-cyan-100 p-3 rounded-full">
-                  <i className="fa-solid fa-user-tie text-cyan-600 text-xl"></i>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div className="bg-white border border-gray-200 rounded-lg p-2 hover:shadow-md transition">
+              <div className="flex items-start gap-2">
+                <div className="bg-cyan-100 p-1.5 rounded-full">
+                  <i className="fa-solid fa-user-tie text-cyan-600 text-xs"></i>
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-gray-500 text-sm font-semibold mb-1">مدير المشروع</h4>
-                  <p className="text-gray-900 font-medium">{project.data?.team?.projectManagerEmail || 'غير محدد'}</p>
+                  <h4 className="text-gray-500 text-xs font-semibold mb-0.5">مدير المشروع</h4>
+                  <p className="text-gray-900 font-medium text-xs">{project.data?.team?.projectManagerEmail || 'غير محدد'}</p>
                 </div>
               </div>
             </div>
@@ -182,88 +182,78 @@ const PMOView = ({ onNavigate }) => {
         </div>
 
         {/* الاستراتيجية */}
-        {(project.data?.strategy?.objective || project.data?.strategy?.result) && (
-          <div className="mb-6">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="bg-amber-100 p-2 rounded-lg">
-                <i className="fa-solid fa-bullseye text-amber-600 text-xl"></i>
-              </div>
-              <h3 className="text-xl font-bold text-gray-800">الاستراتيجية</h3>
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="bg-amber-100 p-1.5 rounded-lg">
+              <i className="fa-solid fa-bullseye text-amber-600 text-sm"></i>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {project.data?.strategy?.objective && (
-                <div className="bg-gradient-to-br from-amber-50 to-yellow-50 border-l-4 border-amber-500 rounded-xl p-5">
-                  <div className="flex items-center gap-2 text-amber-700 font-semibold mb-3">
-                    <i className="fa-solid fa-target"></i>
-                    <span>الهدف الاستراتيجي</span>
-                  </div>
-                  <p className="text-gray-900 leading-relaxed">{project.data.strategy.objective}</p>
-                </div>
-              )}
-              {project.data?.strategy?.result && (
-                <div className="bg-gradient-to-br from-emerald-50 to-green-50 border-l-4 border-emerald-500 rounded-xl p-5">
-                  <div className="flex items-center gap-2 text-emerald-700 font-semibold mb-3">
-                    <i className="fa-solid fa-trophy"></i>
-                    <span>النتيجة الاستراتيجية</span>
-                  </div>
-                  <p className="text-gray-900 leading-relaxed">{project.data.strategy.result}</p>
-                </div>
-              )}
+            <h3 className="text-base font-bold text-gray-800">الاستراتيجية</h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div className="bg-gradient-to-br from-amber-50 to-yellow-50 border-l-4 border-amber-500 rounded-lg p-2">
+              <div className="flex items-center gap-1 text-amber-700 font-semibold mb-1 text-xs">
+                <i className="fa-solid fa-target"></i>
+                <span>الهدف الاستراتيجي</span>
+              </div>
+              <p className="text-gray-900 text-xs leading-relaxed">{project.data?.strategy?.objective || 'غير محدد'}</p>
+            </div>
+            <div className="bg-gradient-to-br from-emerald-50 to-green-50 border-l-4 border-emerald-500 rounded-lg p-2">
+              <div className="flex items-center gap-1 text-emerald-700 font-semibold mb-1 text-xs">
+                <i className="fa-solid fa-trophy"></i>
+                <span>النتيجة الاستراتيجية</span>
+              </div>
+              <p className="text-gray-900 text-xs leading-relaxed">{project.data?.strategy?.result || 'غير محدد'}</p>
             </div>
           </div>
-        )}
+        </div>
 
         {/* المخاطر */}
-        {project.risks && project.risks.length > 0 && (
-          <div className="mb-6">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="bg-red-100 p-2 rounded-lg">
-                <i className="fa-solid fa-triangle-exclamation text-red-600 text-xl"></i>
-              </div>
-              <h3 className="text-xl font-bold text-gray-800">المخاطر</h3>
-              <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-bold">
-                {project.risks.length} مخاطر
-              </span>
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="bg-red-100 p-1.5 rounded-lg">
+              <i className="fa-solid fa-triangle-exclamation text-red-600 text-sm"></i>
             </div>
-            <div className="bg-white rounded-xl border-2 border-gray-200 overflow-hidden">
+            <h3 className="text-base font-bold text-gray-800">المخاطر</h3>
+            <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-bold">
+              {project.risks?.length || 0} مخاطر
+            </span>
+          </div>
+          {project.risks && project.risks.length > 0 ? (
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="bg-gradient-to-r from-gray-50 to-gray-100">
-                      <th className="px-4 py-3 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">العنوان</th>
-                      <th className="px-4 py-3 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">النوع</th>
-                      <th className="px-4 py-3 text-center text-sm font-bold text-gray-700 border-b-2 border-gray-200">الاحتمالية</th>
-                      <th className="px-4 py-3 text-center text-sm font-bold text-gray-700 border-b-2 border-gray-200">التأثير</th>
-                      <th className="px-4 py-3 text-right text-sm font-bold text-gray-700 border-b-2 border-gray-200">الحالة</th>
+                      <th className="px-2 py-2 text-right text-xs font-bold text-gray-700 border-b border-gray-200">العنوان</th>
+                      <th className="px-2 py-2 text-right text-xs font-bold text-gray-700 border-b border-gray-200">النوع</th>
+                      <th className="px-2 py-2 text-center text-xs font-bold text-gray-700 border-b border-gray-200">الاحتمالية</th>
+                      <th className="px-2 py-2 text-center text-xs font-bold text-gray-700 border-b border-gray-200">التأثير</th>
+                      <th className="px-2 py-2 text-right text-xs font-bold text-gray-700 border-b border-gray-200">الحالة</th>
                     </tr>
                   </thead>
                   <tbody>
                     {project.risks.map((risk, idx) => (
                       <tr key={idx} className="hover:bg-gray-50 transition border-b border-gray-100">
-                        <td className="px-4 py-3 font-medium text-gray-900">{risk.title || 'غير محدد'}</td>
-                        <td className="px-4 py-3">
-                          <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${
+                        <td className="px-2 py-1.5 font-medium text-gray-900 text-xs">{risk.title || 'غير محدد'}</td>
+                        <td className="px-2 py-1.5">
+                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${
                             risk.category === 'threat' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
                           }`}>
-                            {risk.category === 'threat' ? (
-                              <><i className="fa-solid fa-exclamation-triangle"></i> تهديد</>
-                            ) : (
-                              <><i className="fa-solid fa-lightbulb"></i> فرصة</>
-                            )}
+                            {risk.category === 'threat' ? 'تهديد' : 'فرصة'}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-center">
-                          <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-bold">
+                        <td className="px-2 py-1.5 text-center">
+                          <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full text-xs font-bold">
                             {risk.prob || '-'}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-center">
-                          <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm font-bold">
+                        <td className="px-2 py-1.5 text-center">
+                          <span className="bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full text-xs font-bold">
                             {risk.impact || '-'}
                           </span>
                         </td>
-                        <td className="px-4 py-3">
-                          <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
+                        <td className="px-2 py-1.5">
+                          <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
                             risk.status === 'نشط' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-700'
                           }`}>
                             {risk.status || 'نشط'}
@@ -275,19 +265,23 @@ const PMOView = ({ onNavigate }) => {
                 </table>
               </div>
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="bg-gray-50 rounded-lg p-3 text-center text-gray-500 text-xs">
+              لا توجد مخاطر مسجلة
+            </div>
+          )}
+        </div>
 
         {/* حالة الموافقات */}
-        {project.approvals && Object.keys(project.approvals).length > 0 && (
-          <div className="mb-6">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="bg-emerald-100 p-2 rounded-lg">
-                <i className="fa-solid fa-check-circle text-emerald-600 text-xl"></i>
-              </div>
-              <h3 className="text-xl font-bold text-gray-800">حالة الموافقات</h3>
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="bg-emerald-100 p-1.5 rounded-lg">
+              <i className="fa-solid fa-check-circle text-emerald-600 text-sm"></i>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <h3 className="text-base font-bold text-gray-800">حالة الموافقات</h3>
+          </div>
+          {project.approvals && Object.keys(project.approvals).length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               {Object.entries(project.approvals).map(([role, status]) => {
                 const roleNames = {
                   progMgr: 'مدير البرنامج',
@@ -326,22 +320,26 @@ const PMOView = ({ onNavigate }) => {
                 };
                 const info = statusInfo[status] || statusInfo['pending'];
                 return (
-                  <div key={role} className={`${info.bg} border-2 ${info.border} rounded-xl p-5 hover:shadow-lg transition`}>
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="text-sm font-bold text-gray-700">{roleNames[role] || role}</div>
-                      <div className={`${info.iconBg} p-2 rounded-lg`}>
-                        <i className={`fa-solid ${info.icon} ${info.iconColor}`}></i>
+                  <div key={role} className={`${info.bg} border ${info.border} rounded-lg p-2 hover:shadow-md transition`}>
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="text-xs font-bold text-gray-700">{roleNames[role] || role}</div>
+                      <div className={`${info.iconBg} p-1 rounded-lg`}>
+                        <i className={`fa-solid ${info.icon} ${info.iconColor} text-xs`}></i>
                       </div>
                     </div>
-                    <div className={`text-xl font-bold ${info.textColor}`}>
+                    <div className={`text-sm font-bold ${info.textColor}`}>
                       {info.label}
                     </div>
                   </div>
                 );
               })}
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="bg-gray-50 rounded-lg p-3 text-center text-gray-500 text-xs">
+              لا توجد بيانات موافقات
+            </div>
+          )}
+        </div>
       </div>
     );
   };
@@ -349,76 +347,75 @@ const PMOView = ({ onNavigate }) => {
   return (
     <div className="fade-in p-6">
       {/* Header */}
-      <div className="mb-6 flex justify-between items-center bg-gradient-to-r from-primary-600 to-primary-800 text-white rounded-xl p-6 shadow-lg">
+      <div className="mb-4 flex justify-between items-center bg-gradient-to-r from-primary-600 to-primary-800 text-white rounded-lg p-3 shadow-lg">
         <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
+          <h1 className="text-lg font-bold mb-1 flex items-center gap-2">
             <i className="fa-solid fa-chart-line"></i>
             واجهة PMO - عرض المشاريع
           </h1>
-          <p className="text-green-100">عرض تفصيلي لجميع بيانات المشاريع (للقراءة فقط)</p>
+          <p className="text-green-100 text-xs">عرض تفصيلي لجميع بيانات المشاريع (للقراءة فقط)</p>
         </div>
         <button
           onClick={() => onNavigate('dashboard')}
-          className="flex items-center gap-2 bg-white text-primary-800 hover:bg-secondary-gold hover:text-primary-900 px-5 py-2.5 rounded-lg transition font-bold shadow-md"
+          className="flex items-center gap-1 bg-white text-primary-800 hover:bg-secondary-gold hover:text-primary-900 px-3 py-1.5 rounded-lg transition font-bold shadow-md text-sm"
         >
           <i className="fa-solid fa-arrow-left"></i>
-          العودة للرئيسية
+          العودة
         </button>
       </div>
 
       {/* إحصائيات سريعة */}
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
-        <div className="bg-gradient-to-br from-primary-600 to-primary-800 rounded-xl shadow-lg p-5 text-center text-white hover:scale-105 transition">
-          <div className="text-4xl font-bold">{projects.length}</div>
-          <div className="text-sm mt-2 text-green-100">إجمالي المشاريع</div>
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-2 mb-4">
+        <div className="bg-gradient-to-br from-primary-600 to-primary-800 rounded-lg shadow p-3 text-center text-white hover:scale-105 transition">
+          <div className="text-2xl font-bold">{projects.length}</div>
+          <div className="text-xs mt-1 text-green-100">إجمالي المشاريع</div>
         </div>
-        <div className="bg-white rounded-xl border-2 border-primary-600 shadow p-4 text-center hover:shadow-lg transition">
-          <div className="text-3xl font-bold text-primary-600">{projects.filter(p => p.stage === 1).length}</div>
-          <div className="text-sm text-gray-600 mt-1">المرحلة 1</div>
+        <div className="bg-white rounded-lg border-2 border-primary-600 shadow p-2 text-center hover:shadow-lg transition">
+          <div className="text-xl font-bold text-primary-600">{projects.filter(p => p.stage === 1).length}</div>
+          <div className="text-xs text-gray-600 mt-0.5">المرحلة 1</div>
         </div>
-        <div className="bg-white rounded-xl border-2 border-emerald-500 shadow p-4 text-center hover:shadow-lg transition">
-          <div className="text-3xl font-bold text-emerald-600">{projects.filter(p => p.stage === 2).length}</div>
-          <div className="text-sm text-gray-600 mt-1">المرحلة 2</div>
+        <div className="bg-white rounded-lg border-2 border-emerald-500 shadow p-2 text-center hover:shadow-lg transition">
+          <div className="text-xl font-bold text-emerald-600">{projects.filter(p => p.stage === 2).length}</div>
+          <div className="text-xs text-gray-600 mt-0.5">المرحلة 2</div>
         </div>
-        <div className="bg-white rounded-xl border-2 border-amber-500 shadow p-4 text-center hover:shadow-lg transition">
-          <div className="text-3xl font-bold text-amber-600">{projects.filter(p => p.stage === 3).length}</div>
-          <div className="text-sm text-gray-600 mt-1">المرحلة 3</div>
+        <div className="bg-white rounded-lg border-2 border-amber-500 shadow p-2 text-center hover:shadow-lg transition">
+          <div className="text-xl font-bold text-amber-600">{projects.filter(p => p.stage === 3).length}</div>
+          <div className="text-xs text-gray-600 mt-0.5">المرحلة 3</div>
         </div>
-        <div className="bg-white rounded-xl border-2 border-green-600 shadow p-4 text-center hover:shadow-lg transition">
-          <div className="text-3xl font-bold text-green-700">{projects.filter(p => p.stage === 4).length}</div>
-          <div className="text-sm text-gray-600 mt-1">المرحلة 4</div>
+        <div className="bg-white rounded-lg border-2 border-green-600 shadow p-2 text-center hover:shadow-lg transition">
+          <div className="text-xl font-bold text-green-700">{projects.filter(p => p.stage === 4).length}</div>
+          <div className="text-xs text-gray-600 mt-0.5">المرحلة 4</div>
         </div>
-        <div className="bg-gradient-to-br from-amber-100 to-yellow-100 rounded-xl border-2 border-secondary-gold shadow p-4 text-center hover:shadow-lg transition">
-          <div className="text-3xl font-bold text-yellow-800">{projects.filter(p => p.stage === 5).length}</div>
-          <div className="text-sm text-gray-700 mt-1 font-semibold">المرحلة 5</div>
+        <div className="bg-gradient-to-br from-amber-100 to-yellow-100 rounded-lg border-2 border-secondary-gold shadow p-2 text-center hover:shadow-lg transition">
+          <div className="text-xl font-bold text-yellow-800">{projects.filter(p => p.stage === 5).length}</div>
+          <div className="text-xs text-gray-700 mt-0.5 font-semibold">المرحلة 5</div>
         </div>
       </div>
 
       {/* فلتر المراحل */}
-      <div className="bg-gradient-to-r from-gray-50 to-green-50 rounded-xl shadow-md p-5 mb-6 border border-primary-200">
-        <div className="flex items-center gap-2 mb-3">
-          <i className="fa-solid fa-filter text-primary-600"></i>
-          <h3 className="font-bold text-primary-900">تصفية حسب المرحلة</h3>
+      <div className="bg-gradient-to-r from-gray-50 to-green-50 rounded-lg shadow p-3 mb-4 border border-primary-200">
+        <div className="flex items-center gap-1 mb-2">
+          <i className="fa-solid fa-filter text-primary-600 text-xs"></i>
+          <h3 className="font-bold text-primary-900 text-sm">تصفية حسب المرحلة</h3>
         </div>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-1 flex-wrap">
           <button
             onClick={() => setFilterStage('all')}
-            className={`px-5 py-2.5 rounded-lg font-bold transition shadow-sm ${
-              filterStage === 'all' ? 'bg-primary-600 text-white shadow-lg scale-105' : 'bg-white text-gray-700 hover:bg-primary-50 hover:text-primary-800 border border-gray-200'
+            className={`px-3 py-1.5 rounded-lg font-bold transition text-xs ${
+              filterStage === 'all' ? 'bg-primary-600 text-white shadow-md' : 'bg-white text-gray-700 hover:bg-primary-50 hover:text-primary-800 border border-gray-200'
             }`}
           >
-            <i className="fa-solid fa-list mr-1"></i>
             الكل ({projects.length})
           </button>
           {[1, 2, 3, 4, 5].map(stage => (
             <button
               key={stage}
               onClick={() => setFilterStage(stage.toString())}
-              className={`px-5 py-2.5 rounded-lg font-bold transition shadow-sm ${
-                filterStage === stage.toString() ? 'bg-secondary-gold text-primary-900 shadow-lg scale-105' : 'bg-white text-gray-700 hover:bg-amber-50 hover:text-amber-900 border border-gray-200'
+              className={`px-3 py-1.5 rounded-lg font-bold transition text-xs ${
+                filterStage === stage.toString() ? 'bg-secondary-gold text-primary-900 shadow-md' : 'bg-white text-gray-700 hover:bg-amber-50 hover:text-amber-900 border border-gray-200'
               }`}
             >
-              {stageNames[stage]} ({projects.filter(p => p.stage === stage).length})
+              م{stage} ({projects.filter(p => p.stage === stage).length})
             </button>
           ))}
         </div>
