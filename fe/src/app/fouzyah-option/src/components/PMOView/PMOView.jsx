@@ -209,79 +209,284 @@ const PMOView = ({ onNavigate }) => {
 
               {/* بيانات المراحل المختلفة */}
               <div className="space-y-4">
-                {/* أزرار عرض المراحل */}
-                <div className="flex gap-2 flex-wrap justify-center border-t pt-4">
-                  {[1, 2, 3, 4, 5].map(stage => {
-                    if (project.stage < stage) return null; // لا تعرض مراحل لم يصل لها المشروع
-                    return (
-                      <button
-                        key={stage}
-                        onClick={() => setExpandedStage(expandedStage === stage ? null : stage)}
-                        className={`px-4 py-2 rounded-lg font-bold text-sm transition ${
-                          expandedStage === stage
-                            ? 'bg-secondary-gold text-primary-900 shadow-lg'
-                            : 'bg-gray-100 text-gray-700 hover:bg-primary-50'
-                        }`}
-                      >
-                        {stageNames[stage]}
-                        <i className={`fa-solid fa-chevron-${expandedStage === stage ? 'up' : 'down'} mr-2`}></i>
-                      </button>
-                    );
-                  })}
+                {/* تبويبات المراحل */}
+                <div className="border-t pt-4">
+                  <h4 className="text-center text-sm font-bold text-gray-600 mb-3">
+                    <i className="fa-solid fa-layer-group ml-2"></i>
+                    النماذج التفصيلية للمراحل
+                  </h4>
+                  <div className="flex gap-2 flex-wrap justify-center">
+                    {[1, 2, 3, 4, 5].map(stage => {
+                      if (project.stage < stage) return null;
+                      return (
+                        <button
+                          key={stage}
+                          onClick={() => setExpandedStage(expandedStage === stage ? null : stage)}
+                          className={`px-5 py-2.5 rounded-lg font-bold text-sm transition-all ${
+                            expandedStage === stage
+                              ? 'bg-gradient-to-r from-secondary-gold to-yellow-500 text-primary-900 shadow-lg scale-105'
+                              : 'bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700 hover:from-primary-50 hover:to-primary-100 hover:text-primary-800 border border-gray-200'
+                          }`}
+                        >
+                          <i className={`fa-solid fa-${
+                            stage === 1 ? 'flag' : 
+                            stage === 2 ? 'clipboard-list' : 
+                            stage === 3 ? 'tasks' : 
+                            stage === 4 ? 'flag-checkered' : 'rocket'
+                          } ml-2`}></i>
+                          المرحلة {stage}
+                          <i className={`fa-solid fa-chevron-${expandedStage === stage ? 'up' : 'down'} mr-2 text-xs`}></i>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
+
+                {/* المرحلة الأولى - معروضة بالأعلى بالفعل */}
+                {expandedStage === 1 && (
+                  <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-5 rounded-xl border-2 border-green-200 shadow-md">
+                    <h3 className="text-green-800 font-bold mb-4 border-b-2 border-green-300 pb-2 flex items-center gap-2">
+                      <i className="fa-solid fa-flag text-secondary-gold text-lg"></i>
+                      المرحلة الأولى: التأسيس - النماذج المكتملة
+                    </h3>
+                    <div className="bg-white p-4 rounded-lg">
+                      <p className="text-sm text-gray-600 mb-3">جميع نماذج المرحلة الأولى معروضة في الأقسام أعلاه:</p>
+                      <ul className="space-y-2 text-sm">
+                        <li className="flex items-center gap-2 text-green-700">
+                          <i className="fa-solid fa-check-circle"></i>
+                          <span className="font-bold">المعلومات الأساسية والنطاق</span>
+                        </li>
+                        <li className="flex items-center gap-2 text-green-700">
+                          <i className="fa-solid fa-check-circle"></i>
+                          <span className="font-bold">فريق العمل</span>
+                        </li>
+                        <li className="flex items-center gap-2 text-green-700">
+                          <i className="fa-solid fa-check-circle"></i>
+                          <span className="font-bold">الاستراتيجية والأهداف</span>
+                        </li>
+                        <li className="flex items-center gap-2 text-green-700">
+                          <i className="fa-solid fa-check-circle"></i>
+                          <span className="font-bold">المخاطر المسجلة</span>
+                        </li>
+                        <li className="flex items-center gap-2 text-green-700">
+                          <i className="fa-solid fa-check-circle"></i>
+                          <span className="font-bold">حالة الموافقات</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
 
                 {/* عرض بيانات المرحلة الثانية */}
                 {expandedStage === 2 && gate2Data && (
-                  <div className="bg-purple-50 p-5 rounded-xl border border-purple-100">
-                    <h3 className="text-purple-800 font-bold mb-4 border-b border-purple-200 pb-2">
-                      <i className="fa-solid fa-clipboard-list text-secondary-gold ml-2"></i>
-                      المرحلة الثانية: التخطيط
+                  <div className="bg-gradient-to-br from-purple-50 to-indigo-50 p-5 rounded-xl border-2 border-purple-200 shadow-md">
+                    <h3 className="text-purple-800 font-bold mb-4 border-b-2 border-purple-300 pb-2 flex items-center gap-2">
+                      <i className="fa-solid fa-clipboard-list text-secondary-gold text-lg"></i>
+                      المرحلة الثانية: التخطيط - النماذج التفصيلية
                     </h3>
                     
-                    {/* النطاق */}
+                    {/* 1. نموذج النطاق */}
                     {gate2Data.scope && (
-                      <div className="mb-4 bg-white p-4 rounded-lg">
-                        <h4 className="font-bold text-sm mb-3 text-purple-700">النطاق والأهداف</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                          <div>
-                            <label className="font-bold text-gray-600">الوصف العام:</label>
-                            <p className="text-gray-800 mt-1">{gate2Data.scope.generalDescription || '-'}</p>
+                      <div className="mb-4 bg-white p-5 rounded-lg shadow-sm border border-purple-100">
+                        <h4 className="font-bold text-base mb-4 text-purple-700 flex items-center gap-2 border-b pb-2">
+                          <i className="fa-solid fa-bullseye text-secondary-gold"></i>
+                          نموذج النطاق والأهداف
+                        </h4>
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="bg-purple-50 p-3 rounded-lg">
+                              <label className="font-bold text-gray-700 text-xs mb-2 block">الوصف العام للمشروع:</label>
+                              <p className="text-gray-800 text-sm leading-relaxed">{gate2Data.scope.generalDescription || 'غير محدد'}</p>
+                            </div>
+                            <div className="bg-purple-50 p-3 rounded-lg">
+                              <label className="font-bold text-gray-700 text-xs mb-2 block">الهدف المباشر:</label>
+                              <p className="text-gray-800 text-sm leading-relaxed">{gate2Data.scope.directGoal || 'غير محدد'}</p>
+                            </div>
+                            <div className="bg-purple-50 p-3 rounded-lg">
+                              <label className="font-bold text-gray-700 text-xs mb-2 block">الوضع المستهدف:</label>
+                              <p className="text-gray-800 text-sm leading-relaxed">{gate2Data.scope.targetState || 'غير محدد'}</p>
+                            </div>
+                            <div className="bg-purple-50 p-3 rounded-lg">
+                              <label className="font-bold text-gray-700 text-xs mb-2 block">الوضع الحالي:</label>
+                              <p className="text-gray-800 text-sm leading-relaxed">{gate2Data.scope.currentState || 'غير محدد'}</p>
+                            </div>
                           </div>
-                          <div>
-                            <label className="font-bold text-gray-600">الهدف المباشر:</label>
-                            <p className="text-gray-800 mt-1">{gate2Data.scope.directGoal || '-'}</p>
+                          <div className="bg-purple-50 p-3 rounded-lg">
+                            <label className="font-bold text-gray-700 text-xs mb-2 block">نطاق العمل:</label>
+                            <p className="text-gray-800 text-sm leading-relaxed">{gate2Data.scope.workScope || 'غير محدد'}</p>
                           </div>
-                          <div>
-                            <label className="font-bold text-gray-600">الوضع المستهدف:</label>
-                            <p className="text-gray-800 mt-1">{gate2Data.scope.targetState || '-'}</p>
-                          </div>
-                          <div>
-                            <label className="font-bold text-gray-600">الوضع الحالي:</label>
-                            <p className="text-gray-800 mt-1">{gate2Data.scope.currentState || '-'}</p>
+                          {gate2Data.scope.activities && gate2Data.scope.activities.length > 0 && (
+                            <div className="bg-purple-50 p-3 rounded-lg">
+                              <label className="font-bold text-gray-700 text-xs mb-2 block">النشاطات الرئيسية:</label>
+                              <div className="flex flex-wrap gap-2 mt-2">
+                                {gate2Data.scope.activities.map((activity, idx) => (
+                                  <span key={idx} className="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-xs font-bold">
+                                    {activity}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          {gate2Data.scope.deliverables && gate2Data.scope.deliverables.length > 0 && (
+                            <div className="bg-purple-50 p-3 rounded-lg">
+                              <label className="font-bold text-gray-700 text-xs mb-2 block">المخرجات المتوقعة ({gate2Data.scope.deliverables.length}):</label>
+                              <div className="space-y-2 mt-2">
+                                {gate2Data.scope.deliverables.map((del, idx) => (
+                                  <div key={idx} className="bg-white p-3 rounded border border-purple-200">
+                                    <div className="flex justify-between items-start">
+                                      <span className="font-bold text-sm text-purple-900">{del.name}</span>
+                                      <span className="text-xs text-gray-500">{del.deliveryDate}</span>
+                                    </div>
+                                    <p className="text-xs text-gray-600 mt-1">{del.description}</p>
+                                    <p className="text-xs text-gray-500 mt-1">
+                                      <i className="fa-solid fa-user ml-1"></i>
+                                      {del.responsibilities}
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          {gate2Data.scope.stakeholders && gate2Data.scope.stakeholders.length > 0 && (
+                            <div className="bg-purple-50 p-3 rounded-lg">
+                              <label className="font-bold text-gray-700 text-xs mb-2 block">أصحاب المصلحة ({gate2Data.scope.stakeholders.length}):</label>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                                {gate2Data.scope.stakeholders.map((stakeholder, idx) => (
+                                  <div key={idx} className="bg-white p-2 rounded border border-purple-200">
+                                    <div className="font-bold text-sm text-purple-900">{stakeholder.name}</div>
+                                    <div className="text-xs text-gray-600">{stakeholder.position}</div>
+                                    <div className="text-xs text-gray-500">{stakeholder.email}</div>
+                                    <div className="text-xs text-gray-500">{stakeholder.phone}</div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 2. نموذج المشتريات */}
+                    {gate2Data.procurement && (
+                      <div className="mb-4 bg-white p-5 rounded-lg shadow-sm border border-purple-100">
+                        <h4 className="font-bold text-base mb-4 text-purple-700 flex items-center gap-2 border-b pb-2">
+                          <i className="fa-solid fa-cart-shopping text-secondary-gold"></i>
+                          نموذج خيارات التنفيذ والمشتريات
+                        </h4>
+                        <div className="space-y-4">
+                          {gate2Data.procurement.options && (
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                              {Object.entries(gate2Data.procurement.options).map(([key, option]) => (
+                                <div key={key} className={`p-4 rounded-lg border-2 ${
+                                  gate2Data.procurement.selectedOption?.includes(key === 'internal' ? 'الداخلي' : key === 'hybrid' ? 'الهجين' : 'الخارجي')
+                                    ? 'border-purple-500 bg-purple-50'
+                                    : 'border-gray-200 bg-gray-50'
+                                }`}>
+                                  <div className="font-bold text-sm mb-2 text-purple-900">
+                                    {key === 'internal' ? 'التنفيذ الداخلي' : key === 'hybrid' ? 'التنفيذ الهجين' : 'التنفيذ الخارجي'}
+                                  </div>
+                                  <p className="text-xs text-gray-700 mb-2">{option.description}</p>
+                                  <div className="text-xs space-y-1">
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">التكلفة:</span>
+                                      <span className="font-bold text-purple-700">{option.cost}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">المدة:</span>
+                                      <span className="font-bold text-purple-700">{option.duration}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          <div className="bg-purple-50 p-4 rounded-lg">
+                            <label className="font-bold text-gray-700 text-sm mb-2 block flex items-center gap-2">
+                              <i className="fa-solid fa-check-circle text-green-600"></i>
+                              الخيار المختار:
+                            </label>
+                            <p className="text-gray-800 text-sm font-bold mb-3">{gate2Data.procurement.selectedOption || 'غير محدد'}</p>
+                            {gate2Data.procurement.selectedOptionAnalysis && (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                                <div className="bg-green-50 p-3 rounded border border-green-200">
+                                  <div className="font-bold text-xs text-green-800 mb-2">
+                                    <i className="fa-solid fa-thumbs-up ml-1"></i>
+                                    الإيجابيات:
+                                  </div>
+                                  <p className="text-xs text-gray-700">{gate2Data.procurement.selectedOptionAnalysis.pros}</p>
+                                </div>
+                                <div className="bg-red-50 p-3 rounded border border-red-200">
+                                  <div className="font-bold text-xs text-red-800 mb-2">
+                                    <i className="fa-solid fa-thumbs-down ml-1"></i>
+                                    السلبيات:
+                                  </div>
+                                  <p className="text-xs text-gray-700">{gate2Data.procurement.selectedOptionAnalysis.cons}</p>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
                     )}
 
-                    {/* المشتريات */}
-                    {gate2Data.procurement && gate2Data.procurement.selectedOption && (
-                      <div className="mb-4 bg-white p-4 rounded-lg">
-                        <h4 className="font-bold text-sm mb-2 text-purple-700">خيار التنفيذ</h4>
-                        <p className="text-xs text-gray-800">
-                          <span className="font-bold">الخيار المختار:</span> {gate2Data.procurement.selectedOption}
-                        </p>
+                    {/* 3. نموذج الافتراضات */}
+                    {gate2Data.assumptions && gate2Data.assumptions.length > 0 && (
+                      <div className="mb-4 bg-white p-5 rounded-lg shadow-sm border border-purple-100">
+                        <h4 className="font-bold text-base mb-4 text-purple-700 flex items-center gap-2 border-b pb-2">
+                          <i className="fa-solid fa-lightbulb text-secondary-gold"></i>
+                          نموذج الافتراضات ({gate2Data.assumptions.length})
+                        </h4>
+                        <div className="space-y-2">
+                          {gate2Data.assumptions.map((assumption, idx) => (
+                            <div key={idx} className="bg-purple-50 p-3 rounded-lg flex items-start gap-3">
+                              <div className="bg-purple-200 text-purple-800 rounded-full w-6 h-6 flex items-center justify-center font-bold text-xs flex-shrink-0">
+                                {idx + 1}
+                              </div>
+                              <p className="text-sm text-gray-800 flex-1">{assumption.text || assumption}</p>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
 
-                    {/* الافتراضات */}
-                    {gate2Data.assumptions && gate2Data.assumptions.length > 0 && (
-                      <div className="mb-4 bg-white p-4 rounded-lg">
-                        <h4 className="font-bold text-sm mb-2 text-purple-700">الافتراضات ({gate2Data.assumptions.length})</h4>
-                        <ul className="list-disc list-inside text-xs text-gray-800 space-y-1">
-                          {gate2Data.assumptions.map((assumption, idx) => (
-                            <li key={idx}>{assumption.text || assumption}</li>
-                          ))}
-                        </ul>
+                    {/* 4. نموذج بطاقة التغيير */}
+                    {gate2Data.changeCard && (
+                      <div className="mb-4 bg-white p-5 rounded-lg shadow-sm border border-purple-100">
+                        <h4 className="font-bold text-base mb-4 text-purple-700 flex items-center gap-2 border-b pb-2">
+                          <i className="fa-solid fa-exchange-alt text-secondary-gold"></i>
+                          نموذج بطاقة التغيير
+                        </h4>
+                        <div className="space-y-4">
+                          <div className="bg-purple-50 p-3 rounded-lg">
+                            <label className="font-bold text-gray-700 text-xs mb-2 block">المبرر:</label>
+                            <p className="text-sm text-gray-800">{gate2Data.changeCard.justification || 'غير محدد'}</p>
+                          </div>
+                          <div className="bg-green-50 p-3 rounded-lg border border-green-200">
+                            <label className="font-bold text-green-700 text-xs mb-2 block">
+                              <i className="fa-solid fa-chart-line ml-1"></i>
+                              الفوائد المتوقعة:
+                            </label>
+                            <p className="text-sm text-gray-800">{gate2Data.changeCard.benefit || 'غير محدد'}</p>
+                          </div>
+                          {gate2Data.changeCard.changeRisks && gate2Data.changeCard.changeRisks.length > 0 && (
+                            <div className="bg-red-50 p-3 rounded-lg border border-red-200">
+                              <label className="font-bold text-red-700 text-xs mb-2 block">
+                                <i className="fa-solid fa-exclamation-triangle ml-1"></i>
+                                مخاطر التغيير:
+                              </label>
+                              <div className="space-y-2">
+                                {gate2Data.changeCard.changeRisks.map((risk, idx) => (
+                                  <div key={idx} className="bg-white p-2 rounded text-xs">
+                                    <div className="font-bold text-red-800">{risk.risk}</div>
+                                    <div className="text-gray-600 mt-1">
+                                      <span className="font-bold">التخفيف:</span> {risk.mitigation}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -289,26 +494,107 @@ const PMOView = ({ onNavigate }) => {
 
                 {/* عرض بيانات المرحلة الثالثة */}
                 {expandedStage === 3 && gate3Data && (
-                  <div className="bg-indigo-50 p-5 rounded-xl border border-indigo-100">
-                    <h3 className="text-indigo-800 font-bold mb-4 border-b border-indigo-200 pb-2">
-                      <i className="fa-solid fa-tasks text-secondary-gold ml-2"></i>
-                      المرحلة الثالثة: التنفيذ
+                  <div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-5 rounded-xl border-2 border-indigo-200 shadow-md">
+                    <h3 className="text-indigo-800 font-bold mb-4 border-b-2 border-indigo-300 pb-2 flex items-center gap-2">
+                      <i className="fa-solid fa-tasks text-secondary-gold text-lg"></i>
+                      المرحلة الثالثة: التنفيذ - النماذج التفصيلية
                     </h3>
                     
-                    {/* الجدول الزمني */}
+                    {/* 1. نموذج الجدول الزمني */}
                     {gate3Data.timeline && gate3Data.timeline.length > 0 && (
-                      <div className="bg-white p-4 rounded-lg">
-                        <h4 className="font-bold text-sm mb-3 text-indigo-700">الجدول الزمني ({gate3Data.timeline.length} مهام)</h4>
-                        <div className="space-y-2">
-                          {gate3Data.timeline.slice(0, 5).map((task, idx) => (
-                            <div key={idx} className="flex justify-between items-center text-xs bg-gray-50 p-2 rounded">
-                              <span className="font-bold">{task.task || task.name}</span>
-                              <span className="text-gray-600">{task.date || task.deadline}</span>
+                      <div className="bg-white p-5 rounded-lg shadow-sm border border-indigo-100 mb-4">
+                        <h4 className="font-bold text-base mb-4 text-indigo-700 flex items-center gap-2 border-b pb-2">
+                          <i className="fa-solid fa-calendar-alt text-secondary-gold"></i>
+                          نموذج الجدول الزمني ({gate3Data.timeline.length} مهمة)
+                        </h4>
+                        <div className="space-y-3">
+                          {gate3Data.timeline.map((task, idx) => (
+                            <div key={idx} className="bg-indigo-50 p-4 rounded-lg border border-indigo-200 hover:shadow-md transition">
+                              <div className="flex justify-between items-start mb-2">
+                                <div className="flex items-center gap-3 flex-1">
+                                  <div className="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">
+                                    {idx + 1}
+                                  </div>
+                                  <div className="flex-1">
+                                    <h5 className="font-bold text-sm text-indigo-900">{task.task || task.name}</h5>
+                                    <p className="text-xs text-gray-600 mt-1">
+                                      <i className="fa-solid fa-layer-group ml-1"></i>
+                                      المرحلة: {task.phase}
+                                    </p>
+                                  </div>
+                                </div>
+                                <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                                  task.status === 'مكتمل' ? 'bg-green-100 text-green-700' :
+                                  task.status === 'جاري' ? 'bg-yellow-100 text-yellow-700' :
+                                  'bg-gray-100 text-gray-700'
+                                }`}>
+                                  {task.status || 'غير محدد'}
+                                </span>
+                              </div>
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs mt-3">
+                                <div className="bg-white p-2 rounded">
+                                  <div className="text-gray-500 mb-1">تاريخ البداية:</div>
+                                  <div className="font-bold text-indigo-700">{task.startDate || task.date}</div>
+                                </div>
+                                <div className="bg-white p-2 rounded">
+                                  <div className="text-gray-500 mb-1">تاريخ النهاية:</div>
+                                  <div className="font-bold text-indigo-700">{task.endDate || task.deadline}</div>
+                                </div>
+                                <div className="bg-white p-2 rounded">
+                                  <div className="text-gray-500 mb-1">المدة:</div>
+                                  <div className="font-bold text-indigo-700">{task.duration || '-'}</div>
+                                </div>
+                                <div className="bg-white p-2 rounded">
+                                  <div className="text-gray-500 mb-1">المسؤول:</div>
+                                  <div className="font-bold text-indigo-700">{task.responsible || '-'}</div>
+                                </div>
+                              </div>
+                              {task.progress !== undefined && (
+                                <div className="mt-3">
+                                  <div className="flex justify-between items-center mb-1">
+                                    <span className="text-xs text-gray-600">نسبة الإنجاز:</span>
+                                    <span className="text-xs font-bold text-indigo-700">{task.progress}%</span>
+                                  </div>
+                                  <div className="w-full bg-gray-200 rounded-full h-2">
+                                    <div 
+                                      className="bg-gradient-to-r from-indigo-500 to-indigo-600 h-2 rounded-full transition-all"
+                                      style={{ width: `${task.progress}%` }}
+                                    ></div>
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           ))}
-                          {gate3Data.timeline.length > 5 && (
-                            <p className="text-xs text-gray-500 text-center">... و {gate3Data.timeline.length - 5} مهام أخرى</p>
-                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 2. نموذج ميثاق المشروع */}
+                    {gate3Data.charter && (
+                      <div className="bg-white p-5 rounded-lg shadow-sm border border-indigo-100">
+                        <h4 className="font-bold text-base mb-4 text-indigo-700 flex items-center gap-2 border-b pb-2">
+                          <i className="fa-solid fa-file-contract text-secondary-gold"></i>
+                          نموذج ميثاق المشروع
+                        </h4>
+                        <div className="space-y-3">
+                          <div className="bg-indigo-50 p-3 rounded-lg">
+                            <label className="font-bold text-gray-700 text-xs mb-2 block">النطاق:</label>
+                            <p className="text-sm text-gray-800">{gate3Data.charter.scope || 'غير محدد'}</p>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div className="bg-indigo-50 p-3 rounded-lg">
+                              <label className="font-bold text-gray-700 text-xs mb-2 block">الميزانية:</label>
+                              <p className="text-sm text-gray-800 font-bold">{gate3Data.charter.budget || 'غير محدد'} ريال</p>
+                            </div>
+                            <div className="bg-indigo-50 p-3 rounded-lg">
+                              <label className="font-bold text-gray-700 text-xs mb-2 block">الهدف الاستراتيجي:</label>
+                              <p className="text-sm text-gray-800">{gate3Data.charter.stratObj || 'غير محدد'}</p>
+                            </div>
+                          </div>
+                          <div className="bg-indigo-50 p-3 rounded-lg">
+                            <label className="font-bold text-gray-700 text-xs mb-2 block">النتيجة الاستراتيجية:</label>
+                            <p className="text-sm text-gray-800">{gate3Data.charter.stratRes || 'غير محدد'}</p>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -317,21 +603,60 @@ const PMOView = ({ onNavigate }) => {
 
                 {/* عرض بيانات المرحلة الرابعة */}
                 {expandedStage === 4 && gate4Data && (
-                  <div className="bg-orange-50 p-5 rounded-xl border border-orange-100">
-                    <h3 className="text-orange-800 font-bold mb-4 border-b border-orange-200 pb-2">
-                      <i className="fa-solid fa-flag-checkered text-secondary-gold ml-2"></i>
-                      المرحلة الرابعة: الإغلاق
+                  <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-5 rounded-xl border-2 border-orange-200 shadow-md">
+                    <h3 className="text-orange-800 font-bold mb-4 border-b-2 border-orange-300 pb-2 flex items-center gap-2">
+                      <i className="fa-solid fa-flag-checkered text-secondary-gold text-lg"></i>
+                      المرحلة الرابعة: الإغلاق - النماذج التفصيلية
                     </h3>
                     
-                    {/* الدروس المستفادة */}
+                    {/* نموذج الدروس المستفادة */}
                     {gate4Data.lessons && gate4Data.lessons.length > 0 && (
-                      <div className="bg-white p-4 rounded-lg">
-                        <h4 className="font-bold text-sm mb-3 text-orange-700">الدروس المستفادة ({gate4Data.lessons.length})</h4>
-                        <div className="space-y-2">
+                      <div className="bg-white p-5 rounded-lg shadow-sm border border-orange-100">
+                        <h4 className="font-bold text-base mb-4 text-orange-700 flex items-center gap-2 border-b pb-2">
+                          <i className="fa-solid fa-graduation-cap text-secondary-gold"></i>
+                          نموذج الدروس المستفادة ({gate4Data.lessons.length} درس)
+                        </h4>
+                        <div className="space-y-4">
                           {gate4Data.lessons.map((lesson, idx) => (
-                            <div key={idx} className="text-xs bg-gray-50 p-3 rounded">
-                              <p className="font-bold text-gray-800">{lesson.title || lesson.lesson}</p>
-                              <p className="text-gray-600 mt-1">{lesson.description || lesson.details}</p>
+                            <div key={idx} className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+                              <div className="flex items-start gap-3 mb-3">
+                                <div className="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">
+                                  {idx + 1}
+                                </div>
+                                <div className="flex-1">
+                                  <h5 className="font-bold text-base text-orange-900 mb-2">{lesson.lesson || lesson.title}</h5>
+                                  <div className="space-y-2">
+                                    <div className="bg-white p-3 rounded">
+                                      <div className="text-xs font-bold text-red-700 mb-1">
+                                        <i className="fa-solid fa-exclamation-circle ml-1"></i>
+                                        المشكلة:
+                                      </div>
+                                      <p className="text-sm text-gray-800">{lesson.problem || 'غير محدد'}</p>
+                                    </div>
+                                    <div className="bg-white p-3 rounded">
+                                      <div className="text-xs font-bold text-yellow-700 mb-1">
+                                        <i className="fa-solid fa-chart-line ml-1"></i>
+                                        التأثير:
+                                      </div>
+                                      <p className="text-sm text-gray-800">{lesson.impact || 'غير محدد'}</p>
+                                    </div>
+                                    <div className="bg-white p-3 rounded">
+                                      <div className="text-xs font-bold text-green-700 mb-1">
+                                        <i className="fa-solid fa-lightbulb ml-1"></i>
+                                        التوصية:
+                                      </div>
+                                      <p className="text-sm text-gray-800">{lesson.recommendation || 'غير محدد'}</p>
+                                    </div>
+                                    {lesson.category && (
+                                      <div className="flex justify-end">
+                                        <span className="bg-orange-200 text-orange-800 px-3 py-1 rounded-full text-xs font-bold">
+                                          {lesson.category}
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -342,34 +667,90 @@ const PMOView = ({ onNavigate }) => {
 
                 {/* عرض بيانات المرحلة الخامسة */}
                 {expandedStage === 5 && gate5Data && (
-                  <div className="bg-teal-50 p-5 rounded-xl border border-teal-100">
-                    <h3 className="text-teal-800 font-bold mb-4 border-b border-teal-200 pb-2">
-                      <i className="fa-solid fa-rocket text-secondary-gold ml-2"></i>
-                      المرحلة الخامسة: ما بعد التسليم
+                  <div className="bg-gradient-to-br from-teal-50 to-cyan-50 p-5 rounded-xl border-2 border-teal-200 shadow-md">
+                    <h3 className="text-teal-800 font-bold mb-4 border-b-2 border-teal-300 pb-2 flex items-center gap-2">
+                      <i className="fa-solid fa-rocket text-secondary-gold text-lg"></i>
+                      المرحلة الخامسة: ما بعد التسليم - النماذج التفصيلية
                     </h3>
                     
-                    {/* خطة التفعيل */}
+                    {/* 1. نموذج خطة التفعيل */}
                     {gate5Data.activationPlan && gate5Data.activationPlan.length > 0 && (
-                      <div className="bg-white p-4 rounded-lg mb-4">
-                        <h4 className="font-bold text-sm mb-3 text-teal-700">خطة التفعيل ({gate5Data.activationPlan.length} عناصر)</h4>
-                        <div className="space-y-2">
+                      <div className="bg-white p-5 rounded-lg shadow-sm border border-teal-100 mb-4">
+                        <h4 className="font-bold text-base mb-4 text-teal-700 flex items-center gap-2 border-b pb-2">
+                          <i className="fa-solid fa-list-check text-secondary-gold"></i>
+                          نموذج خطة التفعيل ({gate5Data.activationPlan.length} نشاط)
+                        </h4>
+                        <div className="space-y-3">
                           {gate5Data.activationPlan.map((item, idx) => (
-                            <div key={idx} className="text-xs bg-gray-50 p-2 rounded">
-                              <p className="font-bold">{item.activity || item.title}</p>
+                            <div key={idx} className="bg-teal-50 p-4 rounded-lg border border-teal-200">
+                              <div className="flex items-start gap-3">
+                                <div className="bg-teal-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">
+                                  {idx + 1}
+                                </div>
+                                <div className="flex-1">
+                                  <div className="flex justify-between items-start mb-2">
+                                    <h5 className="font-bold text-sm text-teal-900">{item.activity || item.title}</h5>
+                                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                                      item.status === 'جاري' ? 'bg-yellow-100 text-yellow-700' :
+                                      item.status === 'مكتمل' ? 'bg-green-100 text-green-700' :
+                                      'bg-blue-100 text-blue-700'
+                                    }`}>
+                                      {item.status || 'مجدول'}
+                                    </span>
+                                  </div>
+                                  <p className="text-sm text-gray-700 mb-2">{item.description}</p>
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                                    <div className="bg-white p-2 rounded">
+                                      <span className="text-gray-500">المسؤول:</span>
+                                      <span className="font-bold text-teal-700 mr-2">{item.responsible}</span>
+                                    </div>
+                                    <div className="bg-white p-2 rounded">
+                                      <span className="text-gray-500">تاريخ البداية:</span>
+                                      <span className="font-bold text-teal-700 mr-2">{item.startDate}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           ))}
                         </div>
                       </div>
                     )}
 
-                    {/* الدروس المستفادة النهائية */}
+                    {/* 2. نموذج الدروس المستفادة النهائية */}
                     {gate5Data.lessons && gate5Data.lessons.length > 0 && (
-                      <div className="bg-white p-4 rounded-lg">
-                        <h4 className="font-bold text-sm mb-3 text-teal-700">الدروس المستفادة النهائية ({gate5Data.lessons.length})</h4>
-                        <div className="space-y-2">
+                      <div className="bg-white p-5 rounded-lg shadow-sm border border-teal-100">
+                        <h4 className="font-bold text-base mb-4 text-teal-700 flex items-center gap-2 border-b pb-2">
+                          <i className="fa-solid fa-book text-secondary-gold"></i>
+                          نموذج الدروس المستفادة النهائية ({gate5Data.lessons.length})
+                        </h4>
+                        <div className="space-y-3">
                           {gate5Data.lessons.map((lesson, idx) => (
-                            <div key={idx} className="text-xs bg-gray-50 p-2 rounded">
-                              {lesson.lesson || lesson.title || lesson}
+                            <div key={idx} className="bg-teal-50 p-4 rounded-lg border border-teal-200">
+                              <div className="flex items-start gap-3">
+                                <div className="bg-teal-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">
+                                  {idx + 1}
+                                </div>
+                                <div className="flex-1">
+                                  <h5 className="font-bold text-base text-teal-900 mb-2">{lesson.lesson || lesson.title}</h5>
+                                  <div className="space-y-2">
+                                    <div className="bg-white p-3 rounded">
+                                      <div className="text-xs font-bold text-teal-700 mb-1">
+                                        <i className="fa-solid fa-info-circle ml-1"></i>
+                                        التفاصيل:
+                                      </div>
+                                      <p className="text-sm text-gray-800">{lesson.details || 'غير محدد'}</p>
+                                    </div>
+                                    <div className="bg-white p-3 rounded">
+                                      <div className="text-xs font-bold text-green-700 mb-1">
+                                        <i className="fa-solid fa-arrow-right ml-1"></i>
+                                        التوصية للمستقبل:
+                                      </div>
+                                      <p className="text-sm text-gray-800">{lesson.recommendation || 'غير محدد'}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           ))}
                         </div>
