@@ -6,7 +6,13 @@ export const ProjectProvider = ({ children }) => {
   const [projects, setProjects] = useState([]);
   
   // رابط الباك اند - يستخدم NEXT_PUBLIC_API_URL من متغيرات البيئة أو Render
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://pmo-backend-dvy1.onrender.com/project-cards';
+  //const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://pmo-backend-dvy1.onrender.com/project-cards';
+
+  axios.get('https://pmo-backend-dvy1.onrender.com/project-cards')
+  .then(response => {
+     console.log(response.data); // للتأكد أن البيانات وصلت
+     setProjects(response.data);
+  });
 
   // 1. دالة جلب البيانات من السيرفر عند فتح الموقع
   const fetchProjects = async () => {
