@@ -1,15 +1,15 @@
 import React, { useContext, useState } from 'react';
 import { ProjectContext } from '../../context/ProjectContext';
 import ProjectCard from '../Dashboard/ProjectCard';
-import RiskRegisterModal from '../Modals/RiskRegisterModal';
-import ScopeModal from '../Modals/Gate2/ScopeModal';
-import ProcurementModal from '../Modals/Gate2/ProcurementModal';
-import AssumptionsModal from '../Modals/Gate2/AssumptionsModal';
-import ChangeCardModal from '../Modals/Gate2/ChangeCardModal';
-import CharterModal from '../Modals/Gate3/CharterModal';
-import TimelineModal from '../Modals/Gate3/TimelineModal';
-import LessonsLearnedModal from '../Modals/Gate4/LessonsLearnedModal';
-import ActivationPlanModal from '../Modals/Gate4/ActivationPlanModal';
+import RiskRegisterModal from '../Modals/ReadOnly/RiskRegisterModalReadOnly';
+import ScopeModal from '../Modals/ReadOnly/ScopeModalReadOnly';
+import ProcurementModal from '../Modals/ReadOnly/ProcurementModalReadOnly';
+import AssumptionsModal from '../Modals/ReadOnly/AssumptionsModalReadOnly';
+import ChangeCardModal from '../Modals/ReadOnly/ChangeCardModalReadOnly';
+import CharterModal from '../Modals/ReadOnly/CharterModalReadOnly';
+import TimelineModal from '../Modals/ReadOnly/TimelineModalReadOnly';
+import LessonsLearnedModal from '../Modals/ReadOnly/LessonsLearnedModalReadOnly';
+import ActivationPlanModal from '../Modals/ReadOnly/ActivationPlanModalReadOnly';
 
 const PMOView = ({ onNavigate }) => {
   const { projects } = useContext(ProjectContext);
@@ -755,92 +755,64 @@ const PMOView = ({ onNavigate }) => {
         <>
           {showRiskModal && (
             <RiskRegisterModal
-              isOpen={showRiskModal}
+              data={selectedProject.risks || []}
               onClose={() => setShowRiskModal(false)}
-              project={selectedProject}
-              risks={selectedProject.risks || []}
-              onSaveRisks={() => {}}
-              readOnly={true}
             />
           )}
 
           {showScopeModal && (
             <ScopeModal
-              isOpen={showScopeModal}
+              data={selectedProject.gate2Data?.scope || {}}
               onClose={() => setShowScopeModal(false)}
-              scopeData={selectedProject.gate2Data?.scope || {}}
-              onSave={() => {}}
-              readOnly={true}
             />
           )}
 
           {showProcurementModal && (
             <ProcurementModal
-              isOpen={showProcurementModal}
+              data={selectedProject.gate2Data?.procurement || {}}
               onClose={() => setShowProcurementModal(false)}
-              procurementData={selectedProject.gate2Data?.procurement || {}}
-              onSave={() => {}}
-              readOnly={true}
             />
           )}
 
           {showAssumptionsModal && (
             <AssumptionsModal
-              isOpen={showAssumptionsModal}
+              data={selectedProject.gate2Data?.assumptions || []}
               onClose={() => setShowAssumptionsModal(false)}
-              assumptions={selectedProject.gate2Data?.assumptions || []}
-              onSave={() => {}}
-              readOnly={true}
             />
           )}
 
           {showChangeCardModal && (
             <ChangeCardModal
-              isOpen={showChangeCardModal}
+              data={selectedProject.gate2Data?.changeCard || {}}
               onClose={() => setShowChangeCardModal(false)}
-              changeCardData={selectedProject.gate2Data?.changeCard || {}}
-              onSave={() => {}}
-              readOnly={true}
             />
           )}
 
           {showCharterModal && (
             <CharterModal
-              isOpen={showCharterModal}
+              data={selectedProject.gate3Data?.charter || {}}
               onClose={() => setShowCharterModal(false)}
-              charterData={selectedProject.gate3Data?.charter || {}}
-              onSave={() => {}}
-              readOnly={true}
             />
           )}
 
           {showTimelineModal && (
             <TimelineModal
-              isOpen={showTimelineModal}
+              data={selectedProject.gate3Data?.timeline || selectedProject.gate4Data?.timeline || []}
               onClose={() => setShowTimelineModal(false)}
-              timeline={selectedProject.gate3Data?.timeline || selectedProject.gate4Data?.timeline || []}
-              onSave={() => {}}
-              readOnly={true}
             />
           )}
 
           {showLessonsModal && (
             <LessonsLearnedModal
-              isOpen={showLessonsModal}
+              data={selectedProject.gate4Data?.lessons || selectedProject.gate5Data?.lessons || []}
               onClose={() => setShowLessonsModal(false)}
-              lessons={selectedProject.gate4Data?.lessons || selectedProject.gate5Data?.lessons || []}
-              onSave={() => {}}
-              readOnly={true}
             />
           )}
 
           {showActivationModal && (
             <ActivationPlanModal
-              isOpen={showActivationModal}
+              data={selectedProject.gate5Data?.activationPlan || []}
               onClose={() => setShowActivationModal(false)}
-              activationPlan={selectedProject.gate5Data?.activationPlan || []}
-              onSave={() => {}}
-              readOnly={true}
             />
           )}
         </>
