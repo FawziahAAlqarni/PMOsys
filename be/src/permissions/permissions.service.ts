@@ -48,9 +48,9 @@ export class PermissionsService {
     const permission = await this.findOne(id);
 
     // Check if email is being changed and if it already exists
-    if (updatePermissionDto.email && updatePermissionDto.email !== permission.email) {
+    if (updatePermissionDto['email'] && updatePermissionDto['email'] !== permission.email) {
       const existing = await this.permissionsRepository.findOne({
-        where: { email: updatePermissionDto.email }
+        where: { email: updatePermissionDto['email'] }
       });
       if (existing) {
         throw new ConflictException('هذا الإيميل مسجل مسبقاً في النظام');
