@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 
 const ScopeModal = ({ data, onClose, onSave }) => {
     const [localData, setLocalData] = useState(data);

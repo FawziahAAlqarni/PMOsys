@@ -1,22 +1,22 @@
-import React from 'react';
+﻿import React from 'react';
 
 const ProjectHeader = ({ project, onBack }) => {
   // تحديث مسميات البوابات لتكون كاملة
   const gates = [
-    { id: 1, title: 'البوابة 1: التأسيس' },
-    { id: 2, title: 'البوابة 2: التفصيل' },
-    { id: 3, title: 'البوابة 3: التخطيط' },
-    { id: 4, title: 'البوابة 4: التنفيذ والإغلاق' }
+    { id: 1, title: 'المرحلة 1: التأسيس' },
+    { id: 2, title: 'المرحلة 2: التفصيل' },
+    { id: 3, title: 'المرحلة 3: التخطيط' },
+    { id: 4, title: 'المرحلة 4: التنفيذ والإغلاق' }
   ];
 
   // تحديد حالة المشروع الديناميكية
   const getProjectStatus = () => {
-    // إذا كان المشروع مغلق (البوابة 5)
+    // إذا كان المشروع مغلق (المرحلة 5)
     if (project.stage === 5) {
       return { text: 'مكتمل', color: 'bg-green-100 text-green-700', icon: 'fa-check-circle' };
     }
 
-    // إذا كان في البوابة 1 (مسار الموافقات)
+    // إذا كان في المرحلة 1 (مسار الموافقات)
     if (project.stage === 1) {
       const approvalWorkflow = [
         { order: 1, role: 'مدير البرنامج' },
@@ -38,9 +38,9 @@ const ProjectHeader = ({ project, onBack }) => {
     // إذا كان في البوابات 2, 3, 4
     if (project.stage >= 2 && project.stage <= 4) {
       const gateNames = {
-        2: 'البوابة 2',
-        3: 'البوابة 3',
-        4: 'البوابة 4'
+        2: 'المرحلة 2',
+        3: 'المرحلة 3',
+        4: 'المرحلة 4'
       };
       return { 
         text: `في انتظار اعتماد ${gateNames[project.stage]}`, 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 
 const TimelineModal = ({ data, onClose, onSave }) => {
     const [timeline, setTimeline] = useState(data.timeline || []);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 
 const CharterModal = ({ data, onClose, onSave, project }) => {
     // التأكد من وجود البيانات وتحميل بيانات الفريق من المشروع

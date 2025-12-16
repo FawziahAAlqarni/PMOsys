@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import RiskModal from '../Modals/RiskModal';
 
 const RiskRegister = ({ risks, onUpdate }) => {

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+﻿import React, { useState, useContext, useEffect } from 'react';
 import { ProjectContext } from '../../context/ProjectContext';
 import LessonsLibrary from './LessonsLibrary';
 import UserSearchDropdown from '../UserSearchDropdown';
@@ -262,7 +262,7 @@ const NewProjectModal = ({ onClose, accessToken }) => {
         <div className="flex justify-between items-center p-5 border-b bg-gray-50 rounded-t-xl">
             <h2 className="text-xl font-bold text-primary-900 flex items-center gap-2">
                 <i className="fa-solid fa-folder-plus text-secondary-gold"></i>
-                تسجيل مشروع جديد (البوابة الأولى)
+                تسجيل مشروع جديد (المرحلة الأولى)
             </h2>
             <button onClick={onClose} className="text-gray-400 hover:text-red-600 transition"><i className="fa-solid fa-xmark text-xl"></i></button>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 
 const AssumptionsModal = ({ data, onClose, onSave, onConvertToRisk }) => {
     const [assumptions, setAssumptions] = useState(data || []);

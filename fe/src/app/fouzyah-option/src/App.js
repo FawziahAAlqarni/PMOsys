@@ -1,4 +1,4 @@
-'use client'; 
+﻿'use client'; 
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard/Dashboard';

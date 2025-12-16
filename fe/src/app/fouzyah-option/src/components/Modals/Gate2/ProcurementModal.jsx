@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 
 const ProcurementModal = ({ data, onClose, onSave }) => {
     // نضمن وجود قيم افتراضية لكل الحقول حتى لا تتحول المدخلات بين uncontrolled/controlled

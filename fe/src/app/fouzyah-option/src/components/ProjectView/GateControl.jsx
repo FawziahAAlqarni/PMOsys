@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 
 // استيراد النوافذ المنبثقة
 import RiskRegisterModal from '../Modals/RiskRegisterModal';
@@ -14,7 +14,7 @@ import ActivationPlanModal from '../Modals/Gate4/ActivationPlanModal';
 const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) => {
   const id = project.id;
 
-  // تحديد البوابة المعروضة (من الرابط أو البوابة الحالية للمشروع)
+  // تحديد المرحلة المعروضة (من الرابط أو المرحلة الحالية للمشروع)
   const viewGate = currentGateView || project.stage;
 
   // ================= 1. تهيئة البيانات =================
@@ -81,7 +81,7 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
   // ================= 3. إدارة النوافذ =================
   const [activeModal, setActiveModal] = useState(null); 
 
-  // ================= 4. منطق الموافقات (البوابة 1) =================
+  // ================= 4. منطق الموافقات (المرحلة 1) =================
   // مسار الموافقات الثابت (يظهر مدير البرنامج دائماً حتى لو لم يتم إدخاله)
   const approvalWorkflow = [
     { id: 'progMgr', role: 'مدير البرنامج', order: 1, email: project.data?.team?.programManager || '' },
@@ -125,8 +125,8 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
         } else {
             nextOrder = 5; 
             nextStage = 2;
-            alert(`✅ تم الاعتماد النهائي. انتقل المشروع إلى البوابة الثانية.`);
-            // سيتم تحديث البوابة تلقائياً بعد إعادة التحميل
+            alert(`✅ تم الاعتماد النهائي. انتقل المشروع إلى المرحلة الثانية.`);
+            // سيتم تحديث المرحلة تلقائياً بعد إعادة التحميل
         }
     } else {
         const reason = prompt(`الرجاء كتابة سبب الرفض (${step.role}):`);
@@ -155,9 +155,9 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
       if(window.confirm(`هل أنت متأكد من اكتمال المتطلبات والانتقال للبوابة ${nextGate}؟`)) {
           try {
             await onUpdate({ ...project, stage: nextGate });
-            // سيتم تحديث البوابة تلقائياً
+            // سيتم تحديث المرحلة تلقائياً
             window.scrollTo(0,0);
-            console.log(`✅ تم الانتقال إلى البوابة ${nextGate}`);
+            console.log(`✅ تم الانتقال إلى المرحلة ${nextGate}`);
           } catch (error) {
             console.error('❌ خطأ في الانتقال للبوابة:', error);
             alert('حدث خطأ أثناء الانتقال. يرجى المحاولة مرة أخرى.');
@@ -197,8 +197,8 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
               <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mb-4 text-gray-400">
                   <i className="fa-solid fa-lock text-4xl"></i>
               </div>
-              <h3 className="text-xl font-bold text-gray-600 mb-2">هذه البوابة مغلقة حالياً</h3>
-              <p className="text-gray-500 text-sm mb-6">يجب إكمال متطلبات البوابة {project.stage} واعتمادها أولاً.</p>
+              <h3 className="text-xl font-bold text-gray-600 mb-2">هذه المرحلة مغلقة حالياً</h3>
+              <p className="text-gray-500 text-sm mb-6">يجب إكمال متطلبات المرحلة {project.stage} واعتمادها أولاً.</p>
               <button onClick={() => window.location.reload()} className="text-primary-600 font-bold hover:underline">
                   الذهاب للبوابة الحالية <i className="fa-solid fa-arrow-left mr-1"></i>
               </button>
@@ -206,11 +206,11 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
       );
   }
 
-  // --- البوابة 1: التأسيس (مسار الموافقات) ---
+  // --- المرحلة 1: التأسيس (مسار الموافقات) ---
   const renderGate1 = () => (
       <div className="max-w-4xl mx-auto py-6">
           <div className="text-center mb-10">
-              <h3 className="text-2xl font-bold text-primary-900">البوابة الأولى: التأسيس</h3>
+              <h3 className="text-2xl font-bold text-primary-900">المرحلة الأولى: التأسيس</h3>
               <span className="inline-block mt-2 px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold">
                   حالة المسار: {project.currentApproverOrder > 4 ? 'مكتمل' : 'قيد الموافقات'}
               </span>
@@ -308,10 +308,10 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
       </div>
   );
 
-  // --- البوابة 2: التفصيل ---
+  // --- المرحلة 2: التفصيل ---
   const renderGate2 = () => (
       <div className="max-w-4xl mx-auto py-6">
-          <div className="text-center mb-10"><h3 className="text-2xl font-bold text-primary-900">البوابة الثانية: التفصيل</h3></div>
+          <div className="text-center mb-10"><h3 className="text-2xl font-bold text-primary-900">المرحلة الثانية: التفصيل</h3></div>
 
           <div className="space-y-4">
               <RequirementItem title="نطاق المشروع التفصيلي" subText="تحديد الأهداف، المخرجات، والاعتمادات" icon="fa-bullseye" btnText="تحديد النطاق" btnColor="bg-secondary-gold" status={(gate2Data.scope.currentState || gate2Data.scope.targetState || gate2Data.scope.workScope || gate2Data.scope.directGoal || gate2Data.scope.goal) ? 'done' : ''} onClick={() => setActiveModal('scope')} />
@@ -329,10 +329,10 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
       </div>
   );
 
-  // --- البوابة 3: التخطيط ---
+  // --- المرحلة 3: التخطيط ---
   const renderGate3 = () => (
       <div className="max-w-4xl mx-auto py-6">
-          <div className="text-center mb-10"><h3 className="text-2xl font-bold text-primary-900">البوابة الثالثة: التخطيط</h3></div>
+          <div className="text-center mb-10"><h3 className="text-2xl font-bold text-primary-900">المرحلة الثالثة: التخطيط</h3></div>
 
           <div className="space-y-4">
               <RequirementItem title="ميثاق المشروع (Charter)" subText="الوثيقة المرجعية المعتمدة للمشروع" icon="fa-file-contract" btnText="تعبئة الميثاق" btnColor="bg-yellow-600" status={project.charter?.budget?.consult ? 'done' : ''} onClick={() => setActiveModal('charter')} />
@@ -348,16 +348,16 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
       </div>
   );
 
-  // --- البوابة 4: التنفيذ والإغلاق ---
+  // --- المرحلة 4: التنفيذ والإغلاق ---
   const renderGate4 = () => (
       <div className="max-w-4xl mx-auto py-6">
-          <div className="text-center mb-10"><h3 className="text-2xl font-bold text-primary-900">البوابة الرابعة: التنفيذ والإغلاق</h3></div>
+          <div className="text-center mb-10"><h3 className="text-2xl font-bold text-primary-900">المرحلة الرابعة: التنفيذ والإغلاق</h3></div>
 
           <div className="space-y-4">
               <RequirementItem 
                   title="تحديث الجدول الزمني (متابعة الإنجاز)" subText="تحديث حالة المهام ونسب الإنجاز" icon="fa-calendar-check" btnText="تحديث الجدول" btnColor="bg-blue-700" status={gate4Data.timeline.length > 0 ? 'done' : ''} 
                   onClick={() => {
-                      // نسخ الجدول من البوابة 3 إذا كان فارغاً عند أول دخول
+                      // نسخ الجدول من المرحلة 3 إذا كان فارغاً عند أول دخول
                       if (!gate4Data.timeline.length && gate3Data.timeline.length) { updateGate4({ timeline: gate3Data.timeline }); }
                       setActiveModal('gate4Timeline');
                   }} 
@@ -403,7 +403,7 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
       {activeModal === 'gate4Timeline' && <TimelineModal data={gate4Data.timeline.length ? gate4Data : gate3Data} onClose={()=>setActiveModal(null)} onSave={(d)=>{updateGate4(d); setActiveModal(null);}} />}
       {activeModal === 'lessons' && <LessonsLearnedModal data={gate4Data.lessons} onClose={()=>setActiveModal(null)} onSave={async (d)=>{
         try {
-          // حفظ الدروس في البوابة 4
+          // حفظ الدروس في المرحلة 4
           updateGate4({lessons:d});
           
           // حفظ الدروس الجديدة في قاعدة البيانات
