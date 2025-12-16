@@ -40,7 +40,7 @@ export class PermissionsService {
     return permission;
   }
 
-  async findByEmail(email: string): Promise<Permission> {
+  async findByEmail(email: string): Promise<Permission | null> {
     return await this.permissionsRepository.findOne({ where: { email } });
   }
 
