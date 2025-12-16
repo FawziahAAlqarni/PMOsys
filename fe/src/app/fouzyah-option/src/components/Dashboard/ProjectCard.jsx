@@ -75,6 +75,77 @@ const ProjectCard = ({ project, onClick, needsMyApproval }) => {
         </div>
       </div>
 
+      {/* مسار الموافقات */}
+      <div className="mb-3 bg-gray-50 p-3 rounded-lg border border-gray-100">
+        <div className="text-[10px] font-bold text-gray-700 mb-2 flex items-center gap-1">
+          <i className="fa-solid fa-route text-blue-600"></i>
+          مسار الموافقات
+        </div>
+        <div className="flex items-center justify-between gap-1 text-[9px]">
+          {/* مدير البرنامج */}
+          <div className={`flex flex-col items-center gap-0.5 ${
+            project.approvals?.programManager === 'approved' ? 'text-green-600' :
+            project.approvals?.programManager === 'rejected' ? 'text-red-600' :
+            project.approvals?.programManager === 'pending' ? 'text-yellow-600' : 'text-gray-400'
+          }`}>
+            <i className={`fa-solid ${
+              project.approvals?.programManager === 'approved' ? 'fa-circle-check' :
+              project.approvals?.programManager === 'rejected' ? 'fa-circle-xmark' :
+              project.approvals?.programManager === 'pending' ? 'fa-clock' : 'fa-circle'
+            } text-sm`}></i>
+            <span className="font-bold whitespace-nowrap">مدير برنامج</span>
+          </div>
+          
+          <i className="fa-solid fa-chevron-left text-gray-300"></i>
+          
+          {/* مكتب التخطيط */}
+          <div className={`flex flex-col items-center gap-0.5 ${
+            project.approvals?.planning === 'approved' ? 'text-green-600' :
+            project.approvals?.planning === 'rejected' ? 'text-red-600' :
+            project.approvals?.planning === 'pending' ? 'text-yellow-600' : 'text-gray-400'
+          }`}>
+            <i className={`fa-solid ${
+              project.approvals?.planning === 'approved' ? 'fa-circle-check' :
+              project.approvals?.planning === 'rejected' ? 'fa-circle-xmark' :
+              project.approvals?.planning === 'pending' ? 'fa-clock' : 'fa-circle'
+            } text-sm`}></i>
+            <span className="font-bold whitespace-nowrap">مكتب تخطيط</span>
+          </div>
+          
+          <i className="fa-solid fa-chevron-left text-gray-300"></i>
+          
+          {/* مدير المحفظة */}
+          <div className={`flex flex-col items-center gap-0.5 ${
+            project.approvals?.portfolio === 'approved' ? 'text-green-600' :
+            project.approvals?.portfolio === 'rejected' ? 'text-red-600' :
+            project.approvals?.portfolio === 'pending' ? 'text-yellow-600' : 'text-gray-400'
+          }`}>
+            <i className={`fa-solid ${
+              project.approvals?.portfolio === 'approved' ? 'fa-circle-check' :
+              project.approvals?.portfolio === 'rejected' ? 'fa-circle-xmark' :
+              project.approvals?.portfolio === 'pending' ? 'fa-clock' : 'fa-circle'
+            } text-sm`}></i>
+            <span className="font-bold whitespace-nowrap">مدير محفظة</span>
+          </div>
+          
+          <i className="fa-solid fa-chevron-left text-gray-300"></i>
+          
+          {/* الحوكمة */}
+          <div className={`flex flex-col items-center gap-0.5 ${
+            project.approvals?.governance === 'approved' ? 'text-green-600' :
+            project.approvals?.governance === 'rejected' ? 'text-red-600' :
+            project.approvals?.governance === 'pending' ? 'text-yellow-600' : 'text-gray-400'
+          }`}>
+            <i className={`fa-solid ${
+              project.approvals?.governance === 'approved' ? 'fa-circle-check' :
+              project.approvals?.governance === 'rejected' ? 'fa-circle-xmark' :
+              project.approvals?.governance === 'pending' ? 'fa-clock' : 'fa-circle'
+            } text-sm`}></i>
+            <span className="font-bold whitespace-nowrap">حوكمة</span>
+          </div>
+        </div>
+      </div>
+
       {/* التواريخ والمخاطر */}
       <div className="flex justify-between items-center text-[10px] text-gray-400 border-t pt-3">
         <div className="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded font-mono">

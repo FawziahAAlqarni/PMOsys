@@ -6,6 +6,8 @@ const PMOView = ({ onNavigate }) => {
   const { projects } = useContext(ProjectContext);
   const [selectedProject, setSelectedProject] = useState(null);
   const [filterStage, setFilterStage] = useState('all');
+  const [filterPortfolio, setFilterPortfolio] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [expandedStage, setExpandedStage] = useState(null);
 
   const stageNames = {
@@ -17,10 +19,20 @@ const PMOView = ({ onNavigate }) => {
     6: 'مكتمل'
   };
 
-  // فلترة المشاريع حسب المرحلة
-  const filteredProjects = filterStage === 'all' 
-    ? projects 
-    : projects.filter(p => p.stage === Number(filterStage));
+  // استخراج المحافظ الفريدة
+  const portfolios = [...new Set(projects.map(p => p.portfolio || p.data?.projectInfo?.portfolio).filter(Boolean))];
+
+  // فلترة المشاريع حسب المرحلة والمحفظة والبحث
+  const filteredProjects = projects.filter(p => {
+    const matchesStage = filterStage === 'all' || p.stage === Number(filterStage);
+    const matchesPortfolio = filterPortfolio === 'all' || 
+      p.portfolio === filterPortfolio || 
+      p.data?.projectInfo?.portfolio === filterPortfolio;
+    const matchesSearch = searchQuery === '' || 
+      p.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.description?.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesStage && matchesPortfolio && matchesSearch;
+  });
 
   // عرض تفاصيل المشروع بنفس واجهة GateControl (للقراءة فقط)
   const ProjectDetails = ({ project }) => {
@@ -89,6 +101,141 @@ const PMOView = ({ onNavigate }) => {
             >
               <i className="fa-solid fa-xmark text-2xl"></i>
             </button>
+          </div>
+
+          {/* مسار الموافقات التفصيلي */}
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 border-b">
+            <h3 className="text-sm font-bold text-gray-700 mb-4 flex items-center gap-2">
+              <i className="fa-solid fa-route text-blue-600"></i>
+              مسار الموافقات
+            </h3>
+            <div className="flex items-center justify-between gap-2">
+              {/* مدير البرنامج */}
+              <div className="flex-1">
+                <div className={`p-4 rounded-xl border-2 shadow-sm transition-all ${
+                  project.approvals?.programManager === 'approved' ? 'bg-green-50 border-green-400' :
+                  project.approvals?.programManager === 'rejected' ? 'bg-red-50 border-red-400' :
+                  project.approvals?.programManager === 'pending' ? 'bg-yellow-50 border-yellow-400 animate-pulse' :
+                  'bg-white border-gray-300'
+                }`}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-bold text-gray-700">مدير البرنامج</span>
+                    <i className={`fa-solid text-lg ${
+                      project.approvals?.programManager === 'approved' ? 'fa-circle-check text-green-600' :
+                      project.approvals?.programManager === 'rejected' ? 'fa-circle-xmark text-red-600' :
+                      project.approvals?.programManager === 'pending' ? 'fa-clock text-yellow-600' :
+                      'fa-circle text-gray-300'
+                    }`}></i>
+                  </div>
+                  {project.approvals?.programManager === 'pending' && (
+                    <div className="flex gap-2 mt-3">
+                      <button className="flex-1 bg-green-500 hover:bg-green-600 text-white text-xs font-bold py-2 rounded-lg transition">
+                        <i className="fa-solid fa-check"></i> موافقة
+                      </button>
+                      <button className="flex-1 bg-red-500 hover:bg-red-600 text-white text-xs font-bold py-2 rounded-lg transition">
+                        <i className="fa-solid fa-xmark"></i> رفض
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <i className="fa-solid fa-chevron-left text-gray-400 text-xl mx-2"></i>
+
+              {/* مكتب التخطيط */}
+              <div className="flex-1">
+                <div className={`p-4 rounded-xl border-2 shadow-sm transition-all ${
+                  project.approvals?.planning === 'approved' ? 'bg-green-50 border-green-400' :
+                  project.approvals?.planning === 'rejected' ? 'bg-red-50 border-red-400' :
+                  project.approvals?.planning === 'pending' ? 'bg-yellow-50 border-yellow-400 animate-pulse' :
+                  'bg-white border-gray-300'
+                }`}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-bold text-gray-700">مكتب التخطيط</span>
+                    <i className={`fa-solid text-lg ${
+                      project.approvals?.planning === 'approved' ? 'fa-circle-check text-green-600' :
+                      project.approvals?.planning === 'rejected' ? 'fa-circle-xmark text-red-600' :
+                      project.approvals?.planning === 'pending' ? 'fa-clock text-yellow-600' :
+                      'fa-circle text-gray-300'
+                    }`}></i>
+                  </div>
+                  {project.approvals?.planning === 'pending' && (
+                    <div className="flex gap-2 mt-3">
+                      <button className="flex-1 bg-green-500 hover:bg-green-600 text-white text-xs font-bold py-2 rounded-lg transition">
+                        <i className="fa-solid fa-check"></i> موافقة
+                      </button>
+                      <button className="flex-1 bg-red-500 hover:bg-red-600 text-white text-xs font-bold py-2 rounded-lg transition">
+                        <i className="fa-solid fa-xmark"></i> رفض
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <i className="fa-solid fa-chevron-left text-gray-400 text-xl mx-2"></i>
+
+              {/* مدير المحفظة */}
+              <div className="flex-1">
+                <div className={`p-4 rounded-xl border-2 shadow-sm transition-all ${
+                  project.approvals?.portfolio === 'approved' ? 'bg-green-50 border-green-400' :
+                  project.approvals?.portfolio === 'rejected' ? 'bg-red-50 border-red-400' :
+                  project.approvals?.portfolio === 'pending' ? 'bg-yellow-50 border-yellow-400 animate-pulse' :
+                  'bg-white border-gray-300'
+                }`}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-bold text-gray-700">مدير المحفظة</span>
+                    <i className={`fa-solid text-lg ${
+                      project.approvals?.portfolio === 'approved' ? 'fa-circle-check text-green-600' :
+                      project.approvals?.portfolio === 'rejected' ? 'fa-circle-xmark text-red-600' :
+                      project.approvals?.portfolio === 'pending' ? 'fa-clock text-yellow-600' :
+                      'fa-circle text-gray-300'
+                    }`}></i>
+                  </div>
+                  {project.approvals?.portfolio === 'pending' && (
+                    <div className="flex gap-2 mt-3">
+                      <button className="flex-1 bg-green-500 hover:bg-green-600 text-white text-xs font-bold py-2 rounded-lg transition">
+                        <i className="fa-solid fa-check"></i> موافقة
+                      </button>
+                      <button className="flex-1 bg-red-500 hover:bg-red-600 text-white text-xs font-bold py-2 rounded-lg transition">
+                        <i className="fa-solid fa-xmark"></i> رفض
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <i className="fa-solid fa-chevron-left text-gray-400 text-xl mx-2"></i>
+
+              {/* الحوكمة */}
+              <div className="flex-1">
+                <div className={`p-4 rounded-xl border-2 shadow-sm transition-all ${
+                  project.approvals?.governance === 'approved' ? 'bg-green-50 border-green-400' :
+                  project.approvals?.governance === 'rejected' ? 'bg-red-50 border-red-400' :
+                  project.approvals?.governance === 'pending' ? 'bg-yellow-50 border-yellow-400 animate-pulse' :
+                  'bg-white border-gray-300'
+                }`}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-bold text-gray-700">الحوكمة</span>
+                    <i className={`fa-solid text-lg ${
+                      project.approvals?.governance === 'approved' ? 'fa-circle-check text-green-600' :
+                      project.approvals?.governance === 'rejected' ? 'fa-circle-xmark text-red-600' :
+                      project.approvals?.governance === 'pending' ? 'fa-clock text-yellow-600' :
+                      'fa-circle text-gray-300'
+                    }`}></i>
+                  </div>
+                  {project.approvals?.governance === 'pending' && (
+                    <div className="flex gap-2 mt-3">
+                      <button className="flex-1 bg-green-500 hover:bg-green-600 text-white text-xs font-bold py-2 rounded-lg transition">
+                        <i className="fa-solid fa-check"></i> موافقة
+                      </button>
+                      <button className="flex-1 bg-red-500 hover:bg-red-600 text-white text-xs font-bold py-2 rounded-lg transition">
+                        <i className="fa-solid fa-xmark"></i> رفض
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Tabs للمراحل */}
@@ -474,36 +621,93 @@ const PMOView = ({ onNavigate }) => {
         </button>
       </div>
 
-      {/* فلتر المراحل */}
-      <div className="bg-white rounded-xl shadow-md p-4 mb-6 border-l-4 border-primary-600">
+      {/* حقل البحث */}
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6 border-l-4 border-secondary-gold">
         <div className="flex items-center gap-2 mb-3">
-          <i className="fa-solid fa-filter text-primary-600"></i>
-          <h3 className="font-bold text-primary-900">تصفية حسب المرحلة</h3>
+          <i className="fa-solid fa-search text-secondary-gold"></i>
+          <h3 className="font-bold text-primary-900">البحث عن مشروع</h3>
         </div>
-        <div className="flex gap-2 flex-wrap">
-          <button
-            onClick={() => setFilterStage('all')}
-            className={`px-4 py-2 rounded-lg font-bold transition ${
-              filterStage === 'all' 
-                ? 'bg-primary-600 text-white shadow-lg' 
-                : 'bg-gray-100 text-gray-700 hover:bg-primary-50 hover:text-primary-800'
-            }`}
-          >
-            الكل ({projects.length})
-          </button>
-          {[1, 2, 3, 4, 5].map(stage => (
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="ابحث باسم المشروع أو الوصف..."
+          className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-secondary-gold focus:outline-none text-right"
+        />
+      </div>
+
+      {/* الفلاتر */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* فلتر المراحل */}
+        <div className="bg-white rounded-xl shadow-md p-4 border-l-4 border-primary-600">
+          <div className="flex items-center gap-2 mb-3">
+            <i className="fa-solid fa-layer-group text-primary-600"></i>
+            <h3 className="font-bold text-primary-900">تصفية حسب المرحلة</h3>
+          </div>
+          <div className="flex gap-2 flex-wrap">
             <button
-              key={stage}
-              onClick={() => setFilterStage(stage.toString())}
-              className={`px-4 py-2 rounded-lg font-bold transition ${
-                filterStage === stage.toString() 
-                  ? 'bg-secondary-gold text-primary-900 shadow-lg' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-amber-50'
+              onClick={() => setFilterStage('all')}
+              className={`px-3 py-2 rounded-lg font-bold text-sm transition ${
+                filterStage === 'all' 
+                  ? 'bg-primary-600 text-white shadow-lg' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-primary-50 hover:text-primary-800'
               }`}
             >
-              المرحلة {stage} ({projects.filter(p => p.stage === stage).length})
+              الكل ({projects.length})
             </button>
-          ))}
+            {[1, 2, 3, 4, 5, 6].map(stage => (
+              <button
+                key={stage}
+                onClick={() => setFilterStage(stage.toString())}
+                className={`px-3 py-2 rounded-lg font-bold text-sm transition ${
+                  filterStage === stage.toString() 
+                    ? 'bg-secondary-gold text-primary-900 shadow-lg' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-amber-50'
+                }`}
+              >
+                {stage === 6 ? 'مكتمل' : `${stage} - ${stageNames[stage]?.split(': ')[1] || stageNames[stage]}`} ({projects.filter(p => p.stage === stage).length})
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* فلتر المحفظة */}
+        <div className="bg-white rounded-xl shadow-md p-4 border-l-4 border-purple-600">
+          <div className="flex items-center gap-2 mb-3">
+            <i className="fa-solid fa-briefcase text-purple-600"></i>
+            <h3 className="font-bold text-primary-900">تصفية حسب المحفظة</h3>
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            <button
+              onClick={() => setFilterPortfolio('all')}
+              className={`px-3 py-2 rounded-lg font-bold text-sm transition ${
+                filterPortfolio === 'all' 
+                  ? 'bg-purple-600 text-white shadow-lg' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-purple-50 hover:text-purple-800'
+              }`}
+            >
+              كل المحافظ ({projects.length})
+            </button>
+            {portfolios.map(portfolio => (
+              <button
+                key={portfolio}
+                onClick={() => setFilterPortfolio(portfolio)}
+                className={`px-3 py-2 rounded-lg font-bold text-sm transition ${
+                  filterPortfolio === portfolio 
+                    ? 'bg-purple-600 text-white shadow-lg' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-purple-50 hover:text-purple-800'
+                }`}
+              >
+                {portfolio} ({projects.filter(p => 
+                  p.portfolio === portfolio || 
+                  p.data?.projectInfo?.portfolio === portfolio
+                ).length})
+              </button>
+            ))}
+            {portfolios.length === 0 && (
+              <span className="text-gray-500 text-sm">لا توجد محافظ متاحة</span>
+            )}
+          </div>
         </div>
       </div>
 
