@@ -233,7 +233,8 @@ const NewProjectModal = ({ onClose, accessToken }) => {
         },
         gate2Data: null,
         gate3Data: null,
-        gate4Data: null
+        gate4Data: null,
+        gate5Data: null
       }
     };
 

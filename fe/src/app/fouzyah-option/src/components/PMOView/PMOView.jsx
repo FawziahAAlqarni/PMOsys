@@ -385,6 +385,10 @@ const PMOView = ({ onNavigate }) => {
           <div className="text-3xl font-bold text-pink-600">{projects.filter(p => p.stage === 4).length}</div>
           <div className="text-sm text-gray-600 mt-1">المرحلة 4</div>
         </div>
+        <div className="bg-white rounded-xl p-6 border-2 border-purple-200 hover:shadow-lg transition text-center">
+          <div className="text-3xl font-bold text-purple-600">{projects.filter(p => p.stage === 5).length}</div>
+          <div className="text-sm text-gray-600 mt-1">المرحلة 5</div>
+        </div>
       </div>
 
       {/* فلتر المراحل */}

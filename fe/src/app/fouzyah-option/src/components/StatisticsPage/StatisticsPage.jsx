@@ -14,9 +14,10 @@ const StatisticsPage = ({ onNavigate }) => {
   // توزيع المشاريع حسب البوابات
   const gateDistribution = [
     { gate: 'المرحلة 1', count: projects.filter(p => p.stage === 1).length, color: 'bg-blue-500' },
-    { gate: 'المرحلة 2', count: projects.filter(p => p.stage === 2).length, color: 'bg-indigo-500' },
-    { gate: 'المرحلة 3', count: projects.filter(p => p.stage === 3).length, color: 'bg-purple-500' },
+    { gate: 'المرحلة 2', count: projects.filter(p => p.stage === 2).length, color: 'bg-green-500' },
+    { gate: 'المرحلة 3', count: projects.filter(p => p.stage === 3).length, color: 'bg-yellow-500' },
     { gate: 'المرحلة 4', count: projects.filter(p => p.stage === 4).length, color: 'bg-pink-500' },
+    { gate: 'المرحلة 5', count: projects.filter(p => p.stage === 5).length, color: 'bg-purple-500' },
     { gate: 'مكتمل', count: completedProjects, color: 'bg-green-500' }
   ];
 

@@ -6,13 +6,14 @@ const ProjectHeader = ({ project, onBack }) => {
     { id: 1, title: 'المرحلة 1: التأسيس' },
     { id: 2, title: 'المرحلة 2: التفصيل' },
     { id: 3, title: 'المرحلة 3: التخطيط' },
-    { id: 4, title: 'المرحلة 4: التنفيذ والإغلاق' }
+    { id: 4, title: 'المرحلة 4: التنفيذ' },
+    { id: 5, title: 'المرحلة 5: التفعيل' }
   ];
 
   // تحديد حالة المشروع الديناميكية
   const getProjectStatus = () => {
-    // إذا كان المشروع مغلق (المرحلة 5)
-    if (project.stage === 5) {
+    // إذا كان المشروع مغلق (المرحلة 6)
+    if (project.stage === 6) {
       return { text: 'مكتمل', color: 'bg-green-100 text-green-700', icon: 'fa-check-circle' };
     }
 

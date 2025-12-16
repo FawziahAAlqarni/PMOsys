@@ -5,8 +5,8 @@ const DashboardStats = ({ projects }) => {
   // 1. الحسابات
   const totalProjects = projects.length;
   
-  // المشروع مكتمل فقط عند إغلاقه (stage === 5)
-  const completedProjects = projects.filter(p => p.stage === 5).length;
+  // المشروع مكتمل فقط عند إغلاقه (stage === 6)
+  const completedProjects = projects.filter(p => p.stage === 6).length;
   const activeProjects = totalProjects - completedProjects;
   
   // حساب المخاطر
@@ -22,9 +22,9 @@ const DashboardStats = ({ projects }) => {
   });
 
   // توزيع البوابات (للبار تشارت)
-  const gateCounts = [0, 0, 0, 0, 0]; // [Gate1, Gate2, Gate3, Gate4, Closed]
+  const gateCounts = [0, 0, 0, 0, 0, 0]; // [Gate1, Gate2, Gate3, Gate4, Gate5, Closed]
   projects.forEach(p => {
-    if(p.stage >= 1 && p.stage <= 5) {
+    if(p.stage >= 1 && p.stage <= 6) {
         gateCounts[p.stage - 1]++;
     }
   });

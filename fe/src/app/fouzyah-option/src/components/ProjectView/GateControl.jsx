@@ -47,7 +47,8 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
 
   const gate2Data = ensureGate2Data();
   const gate3Data = project.gate3Data || { timeline: [] };
-  const gate4Data = project.gate4Data || { timeline: [], lessons: [], activationPlan: [] };
+  const gate4Data = project.gate4Data || { timeline: [] };
+  const gate5Data = project.gate5Data || { lessons: [], activationPlan: [] };
   const projectRisks = project.risks || [];
 
   // ================= 2. دوال التحديث (مع الحفظ التلقائي) =================
@@ -69,6 +70,7 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
   
   const updateGate3 = async (newData) => await updateProjectData('gate3Data', { ...gate3Data, ...newData });
   const updateGate4 = async (newData) => await updateProjectData('gate4Data', { ...gate4Data, ...newData });
+  const updateGate5 = async (newData) => await updateProjectData('gate5Data', { ...gate5Data, ...newData });
   const updateRisks = async (newRisks) => {
     try {
       await onUpdate({ ...project, risks: newRisks });
@@ -348,10 +350,10 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
       </div>
   );
 
-  // --- المرحلة 4: التنفيذ والإغلاق ---
+  // --- المرحلة 4: التنفيذ ---
   const renderGate4 = () => (
       <div className="max-w-4xl mx-auto py-6">
-          <div className="text-center mb-10"><h3 className="text-2xl font-bold text-primary-900">المرحلة الرابعة: التنفيذ والإغلاق</h3></div>
+          <div className="text-center mb-10"><h3 className="text-2xl font-bold text-primary-900">المرحلة الرابعة: التنفيذ</h3></div>
 
           <div className="space-y-4">
               <RequirementItem 
@@ -362,13 +364,30 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
                       setActiveModal('gate4Timeline');
                   }} 
               />
-              <RequirementItem title="خطة التفعيل (Activation Plan)" subText="خطة تسليم المنتج وتشغيله" icon="fa-rocket" btnText="إعداد الخطة" btnColor="bg-purple-600" status={gate4Data.activationPlan?.length > 0 ? 'done' : ''} onClick={() => setActiveModal('activation')} />
-              <RequirementItem title="الدروس المستفادة" subText="توثيق الدروس للمشاريع المستقبلية" icon="fa-book-open" btnText="توثيق الدروس" btnColor="bg-yellow-600" status={gate4Data.lessons?.length > 0 ? 'done' : ''} onClick={() => setActiveModal('lessons')} />
-              <RequirementItem title="تحديث سجل المخاطر النهائي" subText="إغلاق المخاطر المتبقية" icon="fa-shield-virus" btnText="تحديث السجل" btnColor="bg-red-600" status={projectRisks.length > 0 ? 'done' : ''} onClick={() => setActiveModal('risks')} />
+              <RequirementItem title="تحديث سجل المخاطر" subText="متابعة وتحديث المخاطر أثناء التنفيذ" icon="fa-shield-virus" btnText="تحديث السجل" btnColor="bg-red-600" status={projectRisks.length > 0 ? 'done' : ''} onClick={() => setActiveModal('risks')} />
           </div>
 
           <div className="text-center mt-10 border-t pt-6">
-              <button onClick={() => transitionToGate(5)} className="bg-green-800 text-white px-12 py-3 rounded-xl font-bold shadow-lg hover:bg-green-900 transition transform hover:scale-105">
+              <button onClick={() => transitionToGate(5)} className="bg-primary-700 text-white px-12 py-3 rounded-xl font-bold shadow-lg hover:bg-primary-800 transition transform hover:scale-105">
+                  الانتقال إلى المرحلة الخامسة: التفعيل
+              </button>
+          </div>
+      </div>
+  );
+
+  // --- المرحلة 5: التفعيل ---
+  const renderGate5 = () => (
+      <div className="max-w-4xl mx-auto py-6">
+          <div className="text-center mb-10"><h3 className="text-2xl font-bold text-primary-900">المرحلة الخامسة: التفعيل</h3></div>
+
+          <div className="space-y-4">
+              <RequirementItem title="خطة التفعيل (Activation Plan)" subText="خطة تسليم المنتج وتشغيله" icon="fa-rocket" btnText="إعداد الخطة" btnColor="bg-purple-600" status={gate5Data.activationPlan?.length > 0 ? 'done' : ''} onClick={() => setActiveModal('activation')} />
+              <RequirementItem title="الدروس المستفادة" subText="توثيق الدروس للمشاريع المستقبلية" icon="fa-book-open" btnText="توثيق الدروس" btnColor="bg-yellow-600" status={gate5Data.lessons?.length > 0 ? 'done' : ''} onClick={() => setActiveModal('lessons')} />
+              <RequirementItem title="إغلاق المخاطر النهائي" subText="إغلاق جميع المخاطر المتبقية" icon="fa-shield-check" btnText="إغلاق المخاطر" btnColor="bg-green-600" status={projectRisks.every(r => r.status === 'مغلق') ? 'done' : ''} onClick={() => setActiveModal('risks')} />
+          </div>
+
+          <div className="text-center mt-10 border-t pt-6">
+              <button onClick={() => transitionToGate(6)} className="bg-green-800 text-white px-12 py-3 rounded-xl font-bold shadow-lg hover:bg-green-900 transition transform hover:scale-105">
                   إغلاق المشروع وأرشفته نهائياً
               </button>
           </div>
@@ -381,7 +400,8 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
       {viewGate === 2 && renderGate2()}
       {viewGate === 3 && renderGate3()}
       {viewGate === 4 && renderGate4()}
-      {viewGate === 5 && <div className="text-center py-20 bg-white rounded-xl shadow"><i className="fa-solid fa-check-circle text-green-600 text-6xl mb-4"></i><h2 className="text-2xl font-bold text-gray-800">تم إغلاق المشروع بنجاح</h2></div>}
+      {viewGate === 5 && renderGate5()}
+      {viewGate === 6 && <div className="text-center py-20 bg-white rounded-xl shadow"><i className="fa-solid fa-check-circle text-green-600 text-6xl mb-4"></i><h2 className="text-2xl font-bold text-gray-800">تم إغلاق المشروع بنجاح</h2></div>}
 
       {/* Modals Injection */}
       {activeModal === 'risks' && <RiskRegisterModal risks={projectRisks} onClose={() => setActiveModal(null)} onUpdate={updateRisks} />}
@@ -401,10 +421,10 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
       {activeModal === 'timeline' && <TimelineModal data={gate3Data} onClose={()=>setActiveModal(null)} onSave={(d)=>{updateGate3(d); setActiveModal(null);}} />}
       {activeModal === 'charter' && <CharterModal data={project.charter} project={project} onClose={()=>setActiveModal(null)} onSave={(d)=>{onUpdate({...project, charter:d}); setActiveModal(null);}} />}
       {activeModal === 'gate4Timeline' && <TimelineModal data={gate4Data.timeline.length ? gate4Data : gate3Data} onClose={()=>setActiveModal(null)} onSave={(d)=>{updateGate4(d); setActiveModal(null);}} />}
-      {activeModal === 'lessons' && <LessonsLearnedModal data={gate4Data.lessons} onClose={()=>setActiveModal(null)} onSave={async (d)=>{
+      {activeModal === 'lessons' && <LessonsLearnedModal data={gate5Data.lessons} onClose={()=>setActiveModal(null)} onSave={async (d)=>{
         try {
-          // حفظ الدروس في المرحلة 4
-          updateGate4({lessons:d});
+          // حفظ الدروس في المرحلة 5
+          updateGate5({lessons:d});
           
           // حفظ الدروس الجديدة في قاعدة البيانات
           const currentGlobalLessons = project.data?.lessonsLearned || [];
@@ -441,11 +461,11 @@ const GateControl = ({ project, onUpdate, currentGateView, currentUserEmail }) =
         } catch (error) {
           console.error('خطأ في حفظ الدروس المستفادة:', error);
           // في حالة الخطأ، احفظ محلياً فقط
-          updateGate4({lessons:d});
+          updateGate5({lessons:d});
           setActiveModal(null);
         }
       }} />}
-      {activeModal === 'activation' && <ActivationPlanModal data={gate4Data.activationPlan} onClose={()=>setActiveModal(null)} onSave={(d)=>{updateGate4({activationPlan:d}); setActiveModal(null);}} />}
+      {activeModal === 'activation' && <ActivationPlanModal data={gate5Data.activationPlan} onClose={()=>setActiveModal(null)} onSave={(d)=>{updateGate5({activationPlan:d}); setActiveModal(null);}} />}
     </div>  
   );
 };

@@ -6,7 +6,8 @@ const ProjectCard = ({ project, onClick, needsMyApproval }) => {
     { id: 1, title: 'المرحلة 1: التأسيس' },
     { id: 2, title: 'المرحلة 2: التفصيل' },
     { id: 3, title: 'المرحلة 3: التخطيط' },
-    { id: 4, title: 'المرحلة 4: التنفيذ' }
+    { id: 4, title: 'المرحلة 4: التنفيذ' },
+    { id: 5, title: 'المرحلة 5: التفعيل' }
   ];
   
   const currentGate = gates.find(g => g.id === project.stage) || { title: 'مكتمل' };
