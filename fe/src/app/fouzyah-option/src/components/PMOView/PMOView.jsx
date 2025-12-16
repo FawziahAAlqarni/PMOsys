@@ -27,7 +27,7 @@ const PMOView = ({ onNavigate }) => {
     return (
       <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl shadow-2xl p-8 max-w-7xl mx-auto">
         {/* Header مع خلفية متدرجة */}
-        <div className="bg-gradient-to-r from-cyan-600 to-primary-700 rounded-t-xl -mx-8 -mt-8 px-8 py-6 mb-8 text-white">
+        <div className="bg-gradient-to-r from-primary-600 via-primary-800 to-[#003d1f] rounded-t-xl -mx-8 -mt-8 px-8 py-6 mb-8 text-white">
           <div className="flex justify-between items-start">
             <div>
               <div className="flex items-center gap-3 mb-3">
@@ -49,7 +49,7 @@ const PMOView = ({ onNavigate }) => {
                 </div>
               </div>
               <div className="flex gap-2">
-                <span className="bg-white text-cyan-700 px-4 py-1.5 rounded-full font-bold text-sm shadow-md">
+                <span className="bg-secondary-gold text-primary-900 px-4 py-1.5 rounded-full font-bold text-sm shadow-md">
                   {stageNames[project.stage] || 'غير محدد'}
                 </span>
                 <span className={`px-4 py-1.5 rounded-full font-bold text-sm shadow-md ${
@@ -74,28 +74,28 @@ const PMOView = ({ onNavigate }) => {
         {/* معلومات المشروع الأساسية */}
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-4">
-            <div className="bg-blue-100 p-2 rounded-lg">
-              <i className="fa-solid fa-info-circle text-blue-600 text-xl"></i>
+            <div className="bg-primary-600 bg-opacity-10 p-2 rounded-lg">
+              <i className="fa-solid fa-info-circle text-primary-600 text-xl"></i>
             </div>
-            <h3 className="text-xl font-bold text-gray-800">المعلومات الأساسية</h3>
+            <h3 className="text-xl font-bold text-primary-900">المعلومات الأساسية</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-500 p-4 rounded-lg">
-              <div className="flex items-center gap-2 text-blue-700 font-semibold mb-2">
+            <div className="bg-gradient-to-br from-primary-50 to-green-50 border-l-4 border-primary-600 p-4 rounded-lg hover:shadow-md transition">
+              <div className="flex items-center gap-2 text-primary-800 font-semibold mb-2">
                 <i className="fa-solid fa-briefcase"></i>
                 <span>المحفظة</span>
               </div>
               <p className="text-gray-900 font-medium">{project.data?.projectInfo?.portfolio || 'غير محدد'}</p>
             </div>
-            <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 border-l-4 border-indigo-500 p-4 rounded-lg">
-              <div className="flex items-center gap-2 text-indigo-700 font-semibold mb-2">
+            <div className="bg-gradient-to-br from-amber-50 to-yellow-50 border-l-4 border-secondary-gold p-4 rounded-lg hover:shadow-md transition">
+              <div className="flex items-center gap-2 text-yellow-800 font-semibold mb-2">
                 <i className="fa-solid fa-layer-group"></i>
                 <span>البرنامج</span>
               </div>
               <p className="text-gray-900 font-medium text-sm">{project.data?.projectInfo?.program || 'غير محدد'}</p>
             </div>
-            <div className="bg-gradient-to-br from-green-50 to-green-100 border-l-4 border-green-500 p-4 rounded-lg">
-              <div className="flex items-center gap-2 text-green-700 font-semibold mb-2">
+            <div className="bg-gradient-to-br from-emerald-50 to-green-50 border-l-4 border-emerald-600 p-4 rounded-lg hover:shadow-md transition">
+              <div className="flex items-center gap-2 text-emerald-700 font-semibold mb-2">
                 <i className="fa-solid fa-dollar-sign"></i>
                 <span>الميزانية المقدرة</span>
               </div>
@@ -349,14 +349,17 @@ const PMOView = ({ onNavigate }) => {
   return (
     <div className="fade-in p-6">
       {/* Header */}
-      <div className="mb-6 flex justify-between items-center">
+      <div className="mb-6 flex justify-between items-center bg-gradient-to-r from-primary-600 to-primary-800 text-white rounded-xl p-6 shadow-lg">
         <div>
-          <h1 className="text-3xl font-bold text-primary-900 mb-2">واجهة PMO - عرض المشاريع</h1>
-          <p className="text-gray-600">عرض تفصيلي لجميع بيانات المشاريع (للقراءة فقط)</p>
+          <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
+            <i className="fa-solid fa-chart-line"></i>
+            واجهة PMO - عرض المشاريع
+          </h1>
+          <p className="text-green-100">عرض تفصيلي لجميع بيانات المشاريع (للقراءة فقط)</p>
         </div>
         <button
           onClick={() => onNavigate('dashboard')}
-          className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition"
+          className="flex items-center gap-2 bg-white text-primary-800 hover:bg-secondary-gold hover:text-primary-900 px-5 py-2.5 rounded-lg transition font-bold shadow-md"
         >
           <i className="fa-solid fa-arrow-left"></i>
           العودة للرئيسية
@@ -364,50 +367,55 @@ const PMOView = ({ onNavigate }) => {
       </div>
 
       {/* إحصائيات سريعة */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-        <div className="bg-white rounded-lg shadow p-4 text-center">
-          <div className="text-3xl font-bold text-primary-900">{projects.length}</div>
-          <div className="text-sm text-gray-600 mt-1">إجمالي المشاريع</div>
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
+        <div className="bg-gradient-to-br from-primary-600 to-primary-800 rounded-xl shadow-lg p-5 text-center text-white hover:scale-105 transition">
+          <div className="text-4xl font-bold">{projects.length}</div>
+          <div className="text-sm mt-2 text-green-100">إجمالي المشاريع</div>
         </div>
-        <div className="bg-blue-50 rounded-lg shadow p-4 text-center">
-          <div className="text-3xl font-bold text-blue-600">{projects.filter(p => p.stage === 1).length}</div>
+        <div className="bg-white rounded-xl border-2 border-primary-600 shadow p-4 text-center hover:shadow-lg transition">
+          <div className="text-3xl font-bold text-primary-600">{projects.filter(p => p.stage === 1).length}</div>
           <div className="text-sm text-gray-600 mt-1">المرحلة 1</div>
         </div>
-        <div className="bg-indigo-50 rounded-lg shadow p-4 text-center">
-          <div className="text-3xl font-bold text-indigo-600">{projects.filter(p => p.stage === 2).length}</div>
+        <div className="bg-white rounded-xl border-2 border-emerald-500 shadow p-4 text-center hover:shadow-lg transition">
+          <div className="text-3xl font-bold text-emerald-600">{projects.filter(p => p.stage === 2).length}</div>
           <div className="text-sm text-gray-600 mt-1">المرحلة 2</div>
         </div>
-        <div className="bg-purple-50 rounded-lg shadow p-4 text-center">
-          <div className="text-3xl font-bold text-purple-600">{projects.filter(p => p.stage === 3).length}</div>
+        <div className="bg-white rounded-xl border-2 border-amber-500 shadow p-4 text-center hover:shadow-lg transition">
+          <div className="text-3xl font-bold text-amber-600">{projects.filter(p => p.stage === 3).length}</div>
           <div className="text-sm text-gray-600 mt-1">المرحلة 3</div>
         </div>
-        <div className="bg-pink-50 rounded-lg shadow p-4 text-center">
-          <div className="text-3xl font-bold text-pink-600">{projects.filter(p => p.stage === 4).length}</div>
+        <div className="bg-white rounded-xl border-2 border-green-600 shadow p-4 text-center hover:shadow-lg transition">
+          <div className="text-3xl font-bold text-green-700">{projects.filter(p => p.stage === 4).length}</div>
           <div className="text-sm text-gray-600 mt-1">المرحلة 4</div>
         </div>
-        <div className="bg-white rounded-xl p-6 border-2 border-purple-200 hover:shadow-lg transition text-center">
-          <div className="text-3xl font-bold text-purple-600">{projects.filter(p => p.stage === 5).length}</div>
-          <div className="text-sm text-gray-600 mt-1">المرحلة 5</div>
+        <div className="bg-gradient-to-br from-amber-100 to-yellow-100 rounded-xl border-2 border-secondary-gold shadow p-4 text-center hover:shadow-lg transition">
+          <div className="text-3xl font-bold text-yellow-800">{projects.filter(p => p.stage === 5).length}</div>
+          <div className="text-sm text-gray-700 mt-1 font-semibold">المرحلة 5</div>
         </div>
       </div>
 
       {/* فلتر المراحل */}
-      <div className="bg-white rounded-lg shadow p-4 mb-6">
+      <div className="bg-gradient-to-r from-gray-50 to-green-50 rounded-xl shadow-md p-5 mb-6 border border-primary-200">
+        <div className="flex items-center gap-2 mb-3">
+          <i className="fa-solid fa-filter text-primary-600"></i>
+          <h3 className="font-bold text-primary-900">تصفية حسب المرحلة</h3>
+        </div>
         <div className="flex gap-2 flex-wrap">
           <button
             onClick={() => setFilterStage('all')}
-            className={`px-4 py-2 rounded-lg transition ${
-              filterStage === 'all' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            className={`px-5 py-2.5 rounded-lg font-bold transition shadow-sm ${
+              filterStage === 'all' ? 'bg-primary-600 text-white shadow-lg scale-105' : 'bg-white text-gray-700 hover:bg-primary-50 hover:text-primary-800 border border-gray-200'
             }`}
           >
+            <i className="fa-solid fa-list mr-1"></i>
             الكل ({projects.length})
           </button>
           {[1, 2, 3, 4, 5].map(stage => (
             <button
               key={stage}
               onClick={() => setFilterStage(stage.toString())}
-              className={`px-4 py-2 rounded-lg transition ${
-                filterStage === stage.toString() ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              className={`px-5 py-2.5 rounded-lg font-bold transition shadow-sm ${
+                filterStage === stage.toString() ? 'bg-secondary-gold text-primary-900 shadow-lg scale-105' : 'bg-white text-gray-700 hover:bg-amber-50 hover:text-amber-900 border border-gray-200'
               }`}
             >
               {stageNames[stage]} ({projects.filter(p => p.stage === stage).length})
@@ -420,19 +428,19 @@ const PMOView = ({ onNavigate }) => {
       {selectedProject ? (
         <ProjectDetails project={selectedProject} />
       ) : (
-        <div className="bg-white rounded-lg shadow">
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-primary-200">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b">
+              <thead className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">
                 <tr>
-                  <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">#</th>
-                  <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">اسم المشروع</th>
-                  <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">المحفظة</th>
-                  <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">البرنامج</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-700">المرحلة</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-700">الميزانية</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-700">المدة</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-700">إجراءات</th>
+                  <th className="px-4 py-4 text-right text-sm font-bold">#</th>
+                  <th className="px-4 py-4 text-right text-sm font-bold">اسم المشروع</th>
+                  <th className="px-4 py-4 text-right text-sm font-bold">المحفظة</th>
+                  <th className="px-4 py-4 text-right text-sm font-bold">البرنامج</th>
+                  <th className="px-4 py-4 text-center text-sm font-bold">المرحلة</th>
+                  <th className="px-4 py-4 text-center text-sm font-bold">الميزانية</th>
+                  <th className="px-4 py-4 text-center text-sm font-bold">المدة</th>
+                  <th className="px-4 py-4 text-center text-sm font-bold">إجراءات</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -458,21 +466,22 @@ const PMOView = ({ onNavigate }) => {
                         {project.data?.projectInfo?.program?.length > 30 && '...'}
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className="inline-block px-3 py-1 text-xs font-medium rounded-full bg-cyan-100 text-cyan-800">
-                          {project.stage}
+                        <span className="inline-block px-3 py-1 text-xs font-bold rounded-full bg-secondary-gold text-primary-900 shadow-sm">
+                          المرحلة {project.stage}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-center text-sm text-gray-900">
+                      <td className="px-4 py-3 text-center text-sm font-semibold text-gray-900">
                         {Number(project.estimatedBudget || 0).toLocaleString()}
                       </td>
-                      <td className="px-4 py-3 text-center text-sm text-gray-900">
-                        {project.durationInWeeks || 0}
+                      <td className="px-4 py-3 text-center text-sm font-semibold text-gray-900">
+                        {project.durationInWeeks || 0} أسبوع
                       </td>
                       <td className="px-4 py-3 text-center">
                         <button
                           onClick={() => setSelectedProject(project)}
-                          className="text-primary-600 hover:text-primary-800 font-medium text-sm"
+                          className="bg-primary-600 hover:bg-primary-800 text-white px-4 py-2 rounded-lg font-bold text-sm transition shadow-sm hover:shadow-md"
                         >
+                          <i className="fa-solid fa-eye ml-1"></i>
                           عرض التفاصيل
                         </button>
                       </td>
