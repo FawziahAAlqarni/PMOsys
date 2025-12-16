@@ -1,5 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { ProjectContext } from '../../context/ProjectContext';
+import ProjectCard from '../Dashboard/ProjectCard';
+import DashboardStats from '../Dashboard/DashboardStats';
 
 const PMOView = ({ onNavigate }) => {
   const { projects } = useContext(ProjectContext);
@@ -11,21 +13,200 @@ const PMOView = ({ onNavigate }) => {
     ? projects 
     : projects.filter(p => p.stage === Number(filterStage));
 
-  // أسماء المراحل
-  const stageNames = {
-    1: 'المرحلة الأولى: التأسيس',
-    2: 'المرحلة الثانية: التفصيل',
-    3: 'المرحلة الثالثة: التخطيط',
-    4: 'المرحلة الرابعة: التنفيذ والإغلاق',
-    5: 'مغلق'
-  };
-
-  // عرض تفاصيل المشروع
+  // عرض تفاصيل المشروع (نفس فورم التسجيل ولكن للقراءة فقط)
   const ProjectDetails = ({ project }) => {
     if (!project) return null;
 
     return (
-      <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg shadow-lg p-4 max-w-7xl mx-auto">
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 backdrop-blur-sm fade-in">
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl border-t-8 border-secondary-gold flex flex-col max-h-[90vh]">
+          
+          {/* Header */}
+          <div className="flex justify-between items-center p-5 border-b bg-gray-50 rounded-t-xl">
+            <h2 className="text-xl font-bold text-primary-900 flex items-center gap-2">
+              <i className="fa-solid fa-folder-open text-secondary-gold"></i>
+              عرض بيانات المشروع: {project.name}
+            </h2>
+            <button 
+              onClick={() => setSelectedProject(null)} 
+              className="text-gray-400 hover:text-red-600 transition"
+            >
+              <i className="fa-solid fa-xmark text-xl"></i>
+            </button>
+          </div>
+
+          {/* Body */}
+          <div className="overflow-y-auto p-6 custom-scrollbar flex-1">
+            <div className="space-y-6">
+              
+              {/* 1. المعلومات الأساسية */}
+              <div className="bg-primary-50 p-5 rounded-xl border border-primary-100">
+                <h3 className="text-primary-800 font-bold mb-4 border-b border-primary-200 pb-2 flex items-center gap-2">
+                  <i className="fa-solid fa-file-signature text-secondary-gold"></i> المعلومات الأساسية والنطاق
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="col-span-3">
+                    <label className="block text-xs font-bold text-primary-900 mb-1">اسم المشروع</label>
+                    <div className="w-full p-2 border rounded-lg text-sm bg-white">{project.name || '-'}</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold mb-1">البرنامج</label>
+                    <div className="w-full p-2 border rounded-lg text-sm bg-white">{project.data?.projectInfo?.program || '-'}</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold mb-1">الميزانية المقدرة</label>
+                    <div className="w-full p-2 border rounded-lg text-sm bg-white">{Number(project.estimatedBudget || 0).toLocaleString()} ريال</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold mb-1">المحفظة</label>
+                    <div className="w-full p-2 border rounded-lg text-sm bg-white">{project.data?.projectInfo?.portfolio || '-'}</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold mb-1">تاريخ البداية</label>
+                    <div className="w-full p-2 border rounded-lg text-sm bg-white">{project.data?.dates?.projectStartDate || '-'}</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold mb-1">تاريخ النهاية</label>
+                    <div className="w-full p-2 border rounded-lg text-sm bg-white">{project.data?.dates?.projectEndDate || '-'}</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold mb-1">المدة (أسابيع)</label>
+                    <div className="w-full p-2 border rounded-lg text-sm bg-white">{project.durationInWeeks || 0}</div>
+                  </div>
+                  <div className="col-span-3">
+                    <label className="block text-xs font-bold mb-1">الوصف</label>
+                    <div className="w-full p-2 border rounded-lg text-sm bg-white min-h-[60px]">{project.description || 'غير محدد'}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. فريق العمل */}
+              <div className="bg-blue-50 p-5 rounded-xl border border-blue-100">
+                <h3 className="text-blue-800 font-bold mb-4 border-b border-blue-200 pb-2 flex items-center gap-2">
+                  <i className="fa-solid fa-users text-secondary-gold"></i> فريق العمل
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold mb-1">مدير المشروع</label>
+                    <div className="w-full p-2 border rounded-lg text-sm bg-white">{project.data?.team?.projectManagerEmail || '-'}</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold mb-1">صاحب المشروع</label>
+                    <div className="w-full p-2 border rounded-lg text-sm bg-white">{project.data?.team?.projectOwnerEmail || '-'}</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold mb-1">مدير البرنامج</label>
+                    <div className="w-full p-2 border rounded-lg text-sm bg-white">{project.data?.team?.programManagerEmail || '-'}</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold mb-1">مدير المحفظة</label>
+                    <div className="w-full p-2 border rounded-lg text-sm bg-white">{project.data?.team?.portfolioManagerEmail || '-'}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. الاستراتيجية */}
+              <div className="bg-amber-50 p-5 rounded-xl border border-amber-100">
+                <h3 className="text-amber-800 font-bold mb-4 border-b border-amber-200 pb-2 flex items-center gap-2">
+                  <i className="fa-solid fa-bullseye text-secondary-gold"></i> الاستراتيجية والأهداف
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold mb-1">الهدف الاستراتيجي</label>
+                    <div className="w-full p-2 border rounded-lg text-sm bg-white min-h-[80px]">{project.data?.strategy?.objective || 'غير محدد'}</div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold mb-1">النتيجة الاستراتيجية</label>
+                    <div className="w-full p-2 border rounded-lg text-sm bg-white min-h-[80px]">{project.data?.strategy?.result || 'غير محدد'}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 4. المخاطر */}
+              <div className="bg-red-50 p-5 rounded-xl border border-red-100">
+                <h3 className="text-red-800 font-bold mb-4 border-b border-red-200 pb-2 flex items-center gap-2">
+                  <i className="fa-solid fa-triangle-exclamation text-secondary-gold"></i> المخاطر المسجلة ({project.risks?.length || 0})
+                </h3>
+                {project.risks && project.risks.length > 0 ? (
+                  <div className="space-y-2">
+                    {project.risks.map((risk, idx) => (
+                      <div key={idx} className="bg-white p-3 rounded-lg border border-gray-200">
+                        <div className="flex justify-between items-start mb-2">
+                          <div className="font-bold text-sm">{risk.title}</div>
+                          <span className={`text-xs px-2 py-1 rounded-full ${
+                            risk.category === 'threat' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
+                          }`}>
+                            {risk.category === 'threat' ? 'تهديد' : 'فرصة'}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-4 gap-2 text-xs">
+                          <div><span className="text-gray-500">الاحتمالية:</span> <span className="font-bold">{risk.prob}</span></div>
+                          <div><span className="text-gray-500">التأثير:</span> <span className="font-bold">{risk.impact}</span></div>
+                          <div><span className="text-gray-500">الاستجابة:</span> <span className="font-bold">{risk.responseType}</span></div>
+                          <div><span className="text-gray-500">الحالة:</span> <span className="font-bold">{risk.status}</span></div>
+                        </div>
+                        {risk.mitigationPlan && (
+                          <div className="mt-2 text-xs text-gray-600">
+                            <span className="font-bold">خطة التخفيف:</span> {risk.mitigationPlan}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center text-gray-500 text-sm py-4">لا توجد مخاطر مسجلة</div>
+                )}
+              </div>
+
+              {/* 5. حالة الموافقات */}
+              <div className="bg-green-50 p-5 rounded-xl border border-green-100">
+                <h3 className="text-green-800 font-bold mb-4 border-b border-green-200 pb-2 flex items-center gap-2">
+                  <i className="fa-solid fa-check-circle text-secondary-gold"></i> حالة الموافقات
+                </h3>
+                {project.approvals && Object.keys(project.approvals).length > 0 ? (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {Object.entries(project.approvals).map(([role, status]) => {
+                      const roleNames = {
+                        progMgr: 'مدير البرنامج',
+                        planning: 'التخطيط',
+                        portfolio: 'المحفظة',
+                        governance: 'الحوكمة'
+                      };
+                      return (
+                        <div key={role} className={`p-3 rounded-lg text-center ${
+                          status === 'approved' ? 'bg-green-100 border-2 border-green-500' :
+                          status === 'rejected' ? 'bg-red-100 border-2 border-red-500' :
+                          'bg-yellow-100 border-2 border-yellow-500'
+                        }`}>
+                          <div className="text-xs font-bold mb-1">{roleNames[role] || role}</div>
+                          <div className="text-sm font-bold">
+                            {status === 'approved' ? '✓ موافق' :
+                             status === 'rejected' ? '✗ مرفوض' : '⏳ معلق'}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center text-gray-500 text-sm py-4">لا توجد موافقات بعد</div>
+                )}
+              </div>
+
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="flex justify-end gap-3 p-5 border-t bg-gray-50">
+            <button
+              onClick={() => setSelectedProject(null)}
+              className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition font-bold"
+            >
+              إغلاق
+            </button>
+          </div>
+
+        </div>
+      </div>
         {/* Header مع خلفية متدرجة */}
         <div className="bg-gradient-to-r from-primary-600 via-primary-800 to-[#003d1f] rounded-t-lg -mx-4 -mt-4 px-4 py-3 mb-4 text-white">
           <div className="flex justify-between items-start">
@@ -344,65 +525,53 @@ const PMOView = ({ onNavigate }) => {
     );
   };
 
+  // فتح المشروع عند الضغط
+  const handleCardClick = (project) => {
+    setSelectedProject(project);
+  };
+
   return (
-    <div className="fade-in p-6">
+    <div className="fade-in">
+      {/* Modal لعرض التفاصيل */}
+      {selectedProject && <ProjectDetails project={selectedProject} />}
+
       {/* Header */}
-      <div className="mb-4 flex justify-between items-center bg-gradient-to-r from-primary-600 to-primary-800 text-white rounded-lg p-3 shadow-lg">
-        <div>
-          <h1 className="text-lg font-bold mb-1 flex items-center gap-2">
-            <i className="fa-solid fa-chart-line"></i>
-            واجهة PMO - عرض المشاريع
-          </h1>
-          <p className="text-green-100 text-xs">عرض تفصيلي لجميع بيانات المشاريع (للقراءة فقط)</p>
+      <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <h2 className="text-2xl font-bold text-primary-900 border-r-4 border-secondary-gold pr-3">
+              واجهة PMO - عرض المشاريع
+            </h2>
+            <span className="bg-primary-50 text-primary-600 text-xs px-2 py-1 rounded-full font-bold">
+              {filteredProjects.length} مشاريع
+            </span>
+          </div>
         </div>
         <button
           onClick={() => onNavigate('dashboard')}
-          className="flex items-center gap-1 bg-white text-primary-800 hover:bg-secondary-gold hover:text-primary-900 px-3 py-1.5 rounded-lg transition font-bold shadow-md text-sm"
+          className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-semibold shadow-md transition flex items-center gap-2"
         >
           <i className="fa-solid fa-arrow-left"></i>
-          العودة
+          العودة للرئيسية
         </button>
       </div>
 
-      {/* إحصائيات سريعة */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-2 mb-4">
-        <div className="bg-gradient-to-br from-primary-600 to-primary-800 rounded-lg shadow p-3 text-center text-white hover:scale-105 transition">
-          <div className="text-2xl font-bold">{projects.length}</div>
-          <div className="text-xs mt-1 text-green-100">إجمالي المشاريع</div>
-        </div>
-        <div className="bg-white rounded-lg border-2 border-primary-600 shadow p-2 text-center hover:shadow-lg transition">
-          <div className="text-xl font-bold text-primary-600">{projects.filter(p => p.stage === 1).length}</div>
-          <div className="text-xs text-gray-600 mt-0.5">المرحلة 1</div>
-        </div>
-        <div className="bg-white rounded-lg border-2 border-emerald-500 shadow p-2 text-center hover:shadow-lg transition">
-          <div className="text-xl font-bold text-emerald-600">{projects.filter(p => p.stage === 2).length}</div>
-          <div className="text-xs text-gray-600 mt-0.5">المرحلة 2</div>
-        </div>
-        <div className="bg-white rounded-lg border-2 border-amber-500 shadow p-2 text-center hover:shadow-lg transition">
-          <div className="text-xl font-bold text-amber-600">{projects.filter(p => p.stage === 3).length}</div>
-          <div className="text-xs text-gray-600 mt-0.5">المرحلة 3</div>
-        </div>
-        <div className="bg-white rounded-lg border-2 border-green-600 shadow p-2 text-center hover:shadow-lg transition">
-          <div className="text-xl font-bold text-green-700">{projects.filter(p => p.stage === 4).length}</div>
-          <div className="text-xs text-gray-600 mt-0.5">المرحلة 4</div>
-        </div>
-        <div className="bg-gradient-to-br from-amber-100 to-yellow-100 rounded-lg border-2 border-secondary-gold shadow p-2 text-center hover:shadow-lg transition">
-          <div className="text-xl font-bold text-yellow-800">{projects.filter(p => p.stage === 5).length}</div>
-          <div className="text-xs text-gray-700 mt-0.5 font-semibold">المرحلة 5</div>
-        </div>
-      </div>
+      {/* الإحصائيات */}
+      <DashboardStats projects={projects} />
 
       {/* فلتر المراحل */}
-      <div className="bg-gradient-to-r from-gray-50 to-green-50 rounded-lg shadow p-3 mb-4 border border-primary-200">
-        <div className="flex items-center gap-1 mb-2">
-          <i className="fa-solid fa-filter text-primary-600 text-xs"></i>
-          <h3 className="font-bold text-primary-900 text-sm">تصفية حسب المرحلة</h3>
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6 border-l-4 border-primary-600">
+        <div className="flex items-center gap-2 mb-3">
+          <i className="fa-solid fa-filter text-primary-600"></i>
+          <h3 className="font-bold text-primary-900">تصفية حسب المرحلة</h3>
         </div>
-        <div className="flex gap-1 flex-wrap">
+        <div className="flex gap-2 flex-wrap">
           <button
             onClick={() => setFilterStage('all')}
-            className={`px-3 py-1.5 rounded-lg font-bold transition text-xs ${
-              filterStage === 'all' ? 'bg-primary-600 text-white shadow-md' : 'bg-white text-gray-700 hover:bg-primary-50 hover:text-primary-800 border border-gray-200'
+            className={`px-4 py-2 rounded-lg font-bold transition ${
+              filterStage === 'all' 
+                ? 'bg-primary-600 text-white shadow-lg' 
+                : 'bg-gray-100 text-gray-700 hover:bg-primary-50 hover:text-primary-800'
             }`}
           >
             الكل ({projects.length})
@@ -411,85 +580,36 @@ const PMOView = ({ onNavigate }) => {
             <button
               key={stage}
               onClick={() => setFilterStage(stage.toString())}
-              className={`px-3 py-1.5 rounded-lg font-bold transition text-xs ${
-                filterStage === stage.toString() ? 'bg-secondary-gold text-primary-900 shadow-md' : 'bg-white text-gray-700 hover:bg-amber-50 hover:text-amber-900 border border-gray-200'
+              className={`px-4 py-2 rounded-lg font-bold transition ${
+                filterStage === stage.toString() 
+                  ? 'bg-secondary-gold text-primary-900 shadow-lg' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-amber-50'
               }`}
             >
-              م{stage} ({projects.filter(p => p.stage === stage).length})
+              المرحلة {stage} ({projects.filter(p => p.stage === stage).length})
             </button>
           ))}
         </div>
       </div>
 
-      {/* عرض التفاصيل أو القائمة */}
-      {selectedProject ? (
-        <ProjectDetails project={selectedProject} />
-      ) : (
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-primary-200">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">
-                <tr>
-                  <th className="px-4 py-4 text-right text-sm font-bold">#</th>
-                  <th className="px-4 py-4 text-right text-sm font-bold">اسم المشروع</th>
-                  <th className="px-4 py-4 text-right text-sm font-bold">المحفظة</th>
-                  <th className="px-4 py-4 text-right text-sm font-bold">البرنامج</th>
-                  <th className="px-4 py-4 text-center text-sm font-bold">المرحلة</th>
-                  <th className="px-4 py-4 text-center text-sm font-bold">الميزانية</th>
-                  <th className="px-4 py-4 text-center text-sm font-bold">المدة</th>
-                  <th className="px-4 py-4 text-center text-sm font-bold">إجراءات</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {filteredProjects.length === 0 ? (
-                  <tr>
-                    <td colSpan="8" className="px-4 py-8 text-center text-gray-500">
-                      لا توجد مشاريع
-                    </td>
-                  </tr>
-                ) : (
-                  filteredProjects.map((project, idx) => (
-                    <tr key={project.id} className="hover:bg-gray-50 transition">
-                      <td className="px-4 py-3 text-sm text-gray-600">{idx + 1}</td>
-                      <td className="px-4 py-3">
-                        <div className="font-medium text-gray-900">{project.name}</div>
-                        <div className="text-xs text-gray-500">ID: {project.id}</div>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-600">
-                        {project.data?.projectInfo?.portfolio || '-'}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-600">
-                        {project.data?.projectInfo?.program?.substring(0, 30) || '-'}
-                        {project.data?.projectInfo?.program?.length > 30 && '...'}
-                      </td>
-                      <td className="px-4 py-3 text-center">
-                        <span className="inline-block px-3 py-1 text-xs font-bold rounded-full bg-secondary-gold text-primary-900 shadow-sm">
-                          المرحلة {project.stage}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-center text-sm font-semibold text-gray-900">
-                        {Number(project.estimatedBudget || 0).toLocaleString()}
-                      </td>
-                      <td className="px-4 py-3 text-center text-sm font-semibold text-gray-900">
-                        {project.durationInWeeks || 0} أسبوع
-                      </td>
-                      <td className="px-4 py-3 text-center">
-                        <button
-                          onClick={() => setSelectedProject(project)}
-                          className="bg-primary-600 hover:bg-primary-800 text-white px-4 py-2 rounded-lg font-bold text-sm transition shadow-sm hover:shadow-md"
-                        >
-                          <i className="fa-solid fa-eye ml-1"></i>
-                          عرض التفاصيل
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+      {/* قائمة المشاريع */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        {filteredProjects.length === 0 ? (
+          <div className="col-span-full text-center py-20 bg-white rounded-xl shadow">
+            <i className="fa-solid fa-folder-open text-6xl text-gray-300 mb-4"></i>
+            <p className="text-gray-500 text-lg">لا توجد مشاريع</p>
           </div>
-        </div>
-      )}
+        ) : (
+          filteredProjects.map(project => (
+            <ProjectCard 
+              key={project.id} 
+              project={project} 
+              onClick={handleCardClick}
+              needsMyApproval={false}
+            />
+          ))
+        )}
+      </div>
     </div>
   );
 };
