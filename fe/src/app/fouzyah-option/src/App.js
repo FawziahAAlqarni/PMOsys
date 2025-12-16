@@ -6,6 +6,7 @@ import ProjectView from './components/ProjectView/ProjectView';
 import ContactPage from './components/ContactPage';
 import StatisticsPage from './components/StatisticsPage/StatisticsPage';
 import PMOView from './components/PMOView/PMOView';
+import PermissionsManagement from './components/PermissionsManagement/PermissionsManagement';
 import UserEmailPrompt from './components/UserEmailPrompt';
 
 function App() {
@@ -29,6 +30,8 @@ function App() {
         return <StatisticsPage onNavigate={navigateTo} />;
       case 'pmo':
         return <PMOView onNavigate={navigateTo} />;
+      case 'permissions':
+        return <PermissionsManagement onNavigate={navigateTo} />;
       case 'contact':
         return <ContactPage onNavigate={navigateTo} />;
       default:

@@ -7,6 +7,7 @@ import {ProjectModule} from "./projects/project.module";
 import {APP_GUARD} from "@nestjs/core";
 import {JwtAuthGuard} from "./auth/guards/jwt-auth.guard";
 import {AuthModule} from "./auth/auth.module";
+import {PermissionsModule} from "../permissions/permissions.module";
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import {AuthModule} from "./auth/auth.module";
     }),
     AuthModule,
     ProjectModule,
+    PermissionsModule,
   ],
   providers: [],
 })

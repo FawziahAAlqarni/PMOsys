@@ -42,6 +42,13 @@ const Navbar = ({ currentPage, onNavigate }) => {
                 الإحصائيات
             </button>
             <button 
+                onClick={() => onNavigate('permissions')}
+                className={`font-semibold text-sm transition flex items-center gap-2 ${currentPage === 'permissions' ? 'text-primary-600' : 'text-gray-700 hover:text-primary-600'}`}
+            >
+                <i className="fa-solid fa-user-shield"></i>
+                الصلاحيات
+            </button>
+            <button 
                 onClick={() => window.open('https://tickets.mngdp.com/', '_blank')}
                 className="text-gray-700 hover:text-primary-600 font-semibold text-sm transition flex items-center gap-2"
             >
