@@ -28,6 +28,13 @@ const Navbar = ({ currentPage, onNavigate }) => {
                 الرئيسية
             </button>
             <button 
+                onClick={() => onNavigate('pmo')}
+                className={`font-semibold text-sm transition flex items-center gap-2 ${currentPage === 'pmo' ? 'text-primary-600' : 'text-gray-700 hover:text-primary-600'}`}
+            >
+                <i className="fa-solid fa-eye"></i>
+                واجهة PMO
+            </button>
+            <button 
                 onClick={() => onNavigate('statistics')}
                 className={`font-semibold text-sm transition flex items-center gap-2 ${currentPage === 'statistics' ? 'text-primary-600' : 'text-gray-700 hover:text-primary-600'}`}
             >

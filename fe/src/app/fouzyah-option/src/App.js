@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard/Dashboard';
 import ProjectView from './components/ProjectView/ProjectView';
 import ContactPage from './components/ContactPage';
 import StatisticsPage from './components/StatisticsPage/StatisticsPage';
+import PMOView from './components/PMOView/PMOView';
 import UserEmailPrompt from './components/UserEmailPrompt';
 
 function App() {
@@ -26,6 +27,8 @@ function App() {
         return <ProjectView projectId={selectedProjectId} onNavigate={navigateTo} />;
       case 'statistics':
         return <StatisticsPage onNavigate={navigateTo} />;
+      case 'pmo':
+        return <PMOView onNavigate={navigateTo} />;
       case 'contact':
         return <ContactPage onNavigate={navigateTo} />;
       default:
