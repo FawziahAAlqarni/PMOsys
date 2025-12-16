@@ -1,6 +1,15 @@
 import React, { useContext, useState } from 'react';
 import { ProjectContext } from '../../context/ProjectContext';
 import ProjectCard from '../Dashboard/ProjectCard';
+import RiskRegisterModal from '../Modals/RiskRegisterModal';
+import ScopeModal from '../Modals/Gate2/ScopeModal';
+import ProcurementModal from '../Modals/Gate2/ProcurementModal';
+import AssumptionsModal from '../Modals/Gate2/AssumptionsModal';
+import ChangeCardModal from '../Modals/Gate2/ChangeCardModal';
+import CharterModal from '../Modals/Gate3/CharterModal';
+import TimelineModal from '../Modals/Gate3/TimelineModal';
+import LessonsLearnedModal from '../Modals/Gate4/LessonsLearnedModal';
+import ActivationPlanModal from '../Modals/Gate4/ActivationPlanModal';
 
 const PMOView = ({ onNavigate }) => {
   const { projects } = useContext(ProjectContext);
@@ -9,6 +18,17 @@ const PMOView = ({ onNavigate }) => {
   const [filterPortfolio, setFilterPortfolio] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedStage, setExpandedStage] = useState(null);
+  
+  // States للمودالات
+  const [showRiskModal, setShowRiskModal] = useState(false);
+  const [showScopeModal, setShowScopeModal] = useState(false);
+  const [showProcurementModal, setShowProcurementModal] = useState(false);
+  const [showAssumptionsModal, setShowAssumptionsModal] = useState(false);
+  const [showChangeCardModal, setShowChangeCardModal] = useState(false);
+  const [showCharterModal, setShowCharterModal] = useState(false);
+  const [showTimelineModal, setShowTimelineModal] = useState(false);
+  const [showLessonsModal, setShowLessonsModal] = useState(false);
+  const [showActivationModal, setShowActivationModal] = useState(false);
 
   const stageNames = {
     1: 'المرحلة الأولى: التأسيس',
@@ -355,7 +375,7 @@ const PMOView = ({ onNavigate }) => {
                     subText={`${projectRisks.length} مخاطر مسجلة`}
                     icon="fa-shield-virus" 
                     status={projectRisks.length > 0 ? 'done' : ''} 
-                    onClick={() => {/* سيتم عرض المخاطر في قسم المخاطر أعلاه */}} 
+                    onClick={() => setShowRiskModal(true)} 
                   />
                 </div>
               </div>
@@ -374,35 +394,35 @@ const PMOView = ({ onNavigate }) => {
                     subText="تحديد الأهداف، المخرجات، والاعتمادات" 
                     icon="fa-bullseye" 
                     status={(gate2Data.scope?.currentState || gate2Data.scope?.targetState) ? 'done' : ''} 
-                    onClick={() => {/* سيتم فتح Modal للعرض */}} 
+                    onClick={() => setShowScopeModal(true)} 
                   />
                   <RequirementItem 
                     title="خطة المشتريات وتحليل الخيارات" 
                     subText="مقارنة الخيارات (داخلي/خارجي) والتكاليف" 
                     icon="fa-shopping-cart" 
                     status={gate2Data.procurement?.selectedOption ? 'done' : ''} 
-                    onClick={() => {/* سيتم فتح Modal للعرض */}} 
+                    onClick={() => setShowProcurementModal(true)} 
                   />
                   <RequirementItem 
                     title="سجل الافتراضات والقيود" 
                     subText={`${gate2Data.assumptions?.length || 0} افتراض مسجل`}
                     icon="fa-list-check" 
                     status={gate2Data.assumptions?.length > 0 ? 'done' : ''} 
-                    onClick={() => {/* سيتم فتح Modal للعرض */}} 
+                    onClick={() => setShowAssumptionsModal(true)} 
                   />
                   <RequirementItem 
                     title="بطاقة التغيير (Change Card)" 
                     subText="إدارة التغيير وأصحاب المصلحة" 
                     icon="fa-exchange-alt" 
                     status={gate2Data.changeCard?.justification ? 'done' : ''} 
-                    onClick={() => {/* سيتم فتح Modal للعرض */}} 
+                    onClick={() => setShowChangeCardModal(true)} 
                   />
                   <RequirementItem 
                     title="تحديث سجل المخاطر" 
                     subText={`${projectRisks.length} مخاطر مسجلة`}
                     icon="fa-shield-virus" 
                     status={projectRisks.length > 0 ? 'done' : ''} 
-                    onClick={() => {/* سيتم عرض المخاطر */}} 
+                    onClick={() => setShowRiskModal(true)} 
                   />
                 </div>
               </div>
@@ -421,21 +441,21 @@ const PMOView = ({ onNavigate }) => {
                     subText="الوثيقة المرجعية المعتمدة للمشروع" 
                     icon="fa-file-contract" 
                     status={gate3Data.charter?.budget ? 'done' : ''} 
-                    onClick={() => {/* سيتم فتح Modal للعرض */}} 
+                    onClick={() => setShowCharterModal(true)} 
                   />
                   <RequirementItem 
                     title="الخطة التفصيلية (الجدول الزمني)" 
                     subText={`${gate3Data.timeline?.length || 0} مهمة في الجدول`}
                     icon="fa-calendar-days" 
                     status={gate3Data.timeline?.length > 0 ? 'done' : ''} 
-                    onClick={() => {/* سيتم فتح Modal للعرض */}} 
+                    onClick={() => setShowTimelineModal(true)} 
                   />
                   <RequirementItem 
                     title="تحديث سجل المخاطر" 
                     subText={`${projectRisks.length} مخاطر مسجلة`}
                     icon="fa-shield-virus" 
                     status={projectRisks.length > 0 ? 'done' : ''} 
-                    onClick={() => {/* سيتم عرض المخاطر */}} 
+                    onClick={() => setShowRiskModal(true)} 
                   />
                 </div>
               </div>
@@ -454,21 +474,21 @@ const PMOView = ({ onNavigate }) => {
                     subText={`${gate4Data.timeline?.length || 0} مهمة`}
                     icon="fa-calendar-check" 
                     status={gate4Data.timeline?.length > 0 ? 'done' : ''} 
-                    onClick={() => {/* سيتم فتح Modal للعرض */}} 
+                    onClick={() => setShowTimelineModal(true)} 
                   />
                   <RequirementItem 
                     title="الدروس المستفادة" 
                     subText={`${gate4Data.lessons?.length || 0} درس مسجل`}
                     icon="fa-graduation-cap" 
                     status={gate4Data.lessons?.length > 0 ? 'done' : ''} 
-                    onClick={() => {/* سيتم فتح Modal للعرض */}} 
+                    onClick={() => setShowLessonsModal(true)} 
                   />
                   <RequirementItem 
                     title="تحديث سجل المخاطر" 
                     subText={`${projectRisks.length} مخاطر مسجلة`}
                     icon="fa-shield-virus" 
                     status={projectRisks.length > 0 ? 'done' : ''} 
-                    onClick={() => {/* سيتم عرض المخاطر */}} 
+                    onClick={() => setShowRiskModal(true)} 
                   />
                 </div>
               </div>
@@ -487,21 +507,21 @@ const PMOView = ({ onNavigate }) => {
                     subText={`${gate5Data.activationPlan?.length || 0} نشاط مخطط`}
                     icon="fa-rocket" 
                     status={gate5Data.activationPlan?.length > 0 ? 'done' : ''} 
-                    onClick={() => {/* سيتم فتح Modal للعرض */}} 
+                    onClick={() => setShowActivationModal(true)} 
                   />
                   <RequirementItem 
                     title="الدروس المستفادة النهائية" 
                     subText={`${gate5Data.lessons?.length || 0} درس مسجل`}
                     icon="fa-book-open" 
                     status={gate5Data.lessons?.length > 0 ? 'done' : ''} 
-                    onClick={() => {/* سيتم فتح Modal للعرض */}} 
+                    onClick={() => setShowLessonsModal(true)} 
                   />
                   <RequirementItem 
                     title="إغلاق المخاطر النهائي" 
                     subText={`${projectRisks.length} مخاطر`}
                     icon="fa-shield-check" 
                     status={projectRisks.every(r => r.status === 'مغلق') ? 'done' : ''} 
-                    onClick={() => {/* سيتم عرض المخاطر */}} 
+                    onClick={() => setShowRiskModal(true)} 
                   />
                 </div>
               </div>
@@ -729,6 +749,102 @@ const PMOView = ({ onNavigate }) => {
           ))
         )}
       </div>
+
+      {/* المودالات - للقراءة فقط */}
+      {selectedProject && (
+        <>
+          {showRiskModal && (
+            <RiskRegisterModal
+              isOpen={showRiskModal}
+              onClose={() => setShowRiskModal(false)}
+              project={selectedProject}
+              risks={selectedProject.risks || []}
+              onSaveRisks={() => {}}
+              readOnly={true}
+            />
+          )}
+
+          {showScopeModal && (
+            <ScopeModal
+              isOpen={showScopeModal}
+              onClose={() => setShowScopeModal(false)}
+              scopeData={selectedProject.gate2Data?.scope || {}}
+              onSave={() => {}}
+              readOnly={true}
+            />
+          )}
+
+          {showProcurementModal && (
+            <ProcurementModal
+              isOpen={showProcurementModal}
+              onClose={() => setShowProcurementModal(false)}
+              procurementData={selectedProject.gate2Data?.procurement || {}}
+              onSave={() => {}}
+              readOnly={true}
+            />
+          )}
+
+          {showAssumptionsModal && (
+            <AssumptionsModal
+              isOpen={showAssumptionsModal}
+              onClose={() => setShowAssumptionsModal(false)}
+              assumptions={selectedProject.gate2Data?.assumptions || []}
+              onSave={() => {}}
+              readOnly={true}
+            />
+          )}
+
+          {showChangeCardModal && (
+            <ChangeCardModal
+              isOpen={showChangeCardModal}
+              onClose={() => setShowChangeCardModal(false)}
+              changeCardData={selectedProject.gate2Data?.changeCard || {}}
+              onSave={() => {}}
+              readOnly={true}
+            />
+          )}
+
+          {showCharterModal && (
+            <CharterModal
+              isOpen={showCharterModal}
+              onClose={() => setShowCharterModal(false)}
+              charterData={selectedProject.gate3Data?.charter || {}}
+              onSave={() => {}}
+              readOnly={true}
+            />
+          )}
+
+          {showTimelineModal && (
+            <TimelineModal
+              isOpen={showTimelineModal}
+              onClose={() => setShowTimelineModal(false)}
+              timeline={selectedProject.gate3Data?.timeline || selectedProject.gate4Data?.timeline || []}
+              onSave={() => {}}
+              readOnly={true}
+            />
+          )}
+
+          {showLessonsModal && (
+            <LessonsLearnedModal
+              isOpen={showLessonsModal}
+              onClose={() => setShowLessonsModal(false)}
+              lessons={selectedProject.gate4Data?.lessons || selectedProject.gate5Data?.lessons || []}
+              onSave={() => {}}
+              readOnly={true}
+            />
+          )}
+
+          {showActivationModal && (
+            <ActivationPlanModal
+              isOpen={showActivationModal}
+              onClose={() => setShowActivationModal(false)}
+              activationPlan={selectedProject.gate5Data?.activationPlan || []}
+              onSave={() => {}}
+              readOnly={true}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 };
