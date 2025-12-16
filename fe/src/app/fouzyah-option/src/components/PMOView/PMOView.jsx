@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { ProjectContext } from '../../context/ProjectContext';
 import ProjectCard from '../Dashboard/ProjectCard';
-import DashboardStats from '../Dashboard/DashboardStats';
 
 const PMOView = ({ onNavigate }) => {
   const { projects } = useContext(ProjectContext);
@@ -14,7 +13,8 @@ const PMOView = ({ onNavigate }) => {
     2: 'المرحلة الثانية: التخطيط',
     3: 'المرحلة الثالثة: التنفيذ',
     4: 'المرحلة الرابعة: الإغلاق',
-    5: 'المرحلة الخامسة: ما بعد التسليم'
+    5: 'المرحلة الخامسة: التفعيل',
+    6: 'مكتمل'
   };
 
   // فلترة المشاريع حسب المرحلة
@@ -473,9 +473,6 @@ const PMOView = ({ onNavigate }) => {
           العودة للرئيسية
         </button>
       </div>
-
-      {/* الإحصائيات */}
-      <DashboardStats projects={projects} />
 
       {/* فلتر المراحل */}
       <div className="bg-white rounded-xl shadow-md p-4 mb-6 border-l-4 border-primary-600">
