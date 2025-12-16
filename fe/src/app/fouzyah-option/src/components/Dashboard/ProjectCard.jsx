@@ -98,7 +98,7 @@ const ProjectCard = ({ project, onClick, needsMyApproval }) => {
           
           <i className="fa-solid fa-chevron-left text-gray-300"></i>
           
-          {/* مكتب التخطيط */}
+          {/* إدارة التخطيط */}
           <div className={`flex flex-col items-center gap-0.5 ${
             project.approvals?.planning === 'approved' ? 'text-green-600' :
             project.approvals?.planning === 'rejected' ? 'text-red-600' :
@@ -109,28 +109,12 @@ const ProjectCard = ({ project, onClick, needsMyApproval }) => {
               project.approvals?.planning === 'rejected' ? 'fa-circle-xmark' :
               project.approvals?.planning === 'pending' ? 'fa-clock' : 'fa-circle'
             } text-sm`}></i>
-            <span className="font-bold whitespace-nowrap">مكتب تخطيط</span>
+            <span className="font-bold whitespace-nowrap">إدارة تخطيط</span>
           </div>
           
           <i className="fa-solid fa-chevron-left text-gray-300"></i>
           
-          {/* مدير المحفظة */}
-          <div className={`flex flex-col items-center gap-0.5 ${
-            project.approvals?.portfolio === 'approved' ? 'text-green-600' :
-            project.approvals?.portfolio === 'rejected' ? 'text-red-600' :
-            project.approvals?.portfolio === 'pending' ? 'text-yellow-600' : 'text-gray-400'
-          }`}>
-            <i className={`fa-solid ${
-              project.approvals?.portfolio === 'approved' ? 'fa-circle-check' :
-              project.approvals?.portfolio === 'rejected' ? 'fa-circle-xmark' :
-              project.approvals?.portfolio === 'pending' ? 'fa-clock' : 'fa-circle'
-            } text-sm`}></i>
-            <span className="font-bold whitespace-nowrap">مدير محفظة</span>
-          </div>
-          
-          <i className="fa-solid fa-chevron-left text-gray-300"></i>
-          
-          {/* الحوكمة */}
+          {/* إدارة الحوكمة */}
           <div className={`flex flex-col items-center gap-0.5 ${
             project.approvals?.governance === 'approved' ? 'text-green-600' :
             project.approvals?.governance === 'rejected' ? 'text-red-600' :
@@ -141,7 +125,23 @@ const ProjectCard = ({ project, onClick, needsMyApproval }) => {
               project.approvals?.governance === 'rejected' ? 'fa-circle-xmark' :
               project.approvals?.governance === 'pending' ? 'fa-clock' : 'fa-circle'
             } text-sm`}></i>
-            <span className="font-bold whitespace-nowrap">حوكمة</span>
+            <span className="font-bold whitespace-nowrap">إدارة حوكمة</span>
+          </div>
+          
+          <i className="fa-solid fa-chevron-left text-gray-300"></i>
+          
+          {/* مدير المحافظ */}
+          <div className={`flex flex-col items-center gap-0.5 ${
+            project.approvals?.portfolio === 'approved' ? 'text-green-600' :
+            project.approvals?.portfolio === 'rejected' ? 'text-red-600' :
+            project.approvals?.portfolio === 'pending' ? 'text-yellow-600' : 'text-gray-400'
+          }`}>
+            <i className={`fa-solid ${
+              project.approvals?.portfolio === 'approved' ? 'fa-circle-check' :
+              project.approvals?.portfolio === 'rejected' ? 'fa-circle-xmark' :
+              project.approvals?.portfolio === 'pending' ? 'fa-clock' : 'fa-circle'
+            } text-sm`}></i>
+            <span className="font-bold whitespace-nowrap">مدير محافظ</span>
           </div>
         </div>
       </div>

@@ -162,7 +162,7 @@ const PMOView = ({ onNavigate }) => {
 
               <i className="fa-solid fa-chevron-left text-gray-400 text-xl mx-2"></i>
 
-              {/* مكتب التخطيط */}
+              {/* إدارة التخطيط */}
               <div className="flex-1">
                 <div className={`p-4 rounded-xl border-2 shadow-sm transition-all ${
                   project.approvals?.planning === 'approved' ? 'bg-green-50 border-green-400' :
@@ -171,7 +171,7 @@ const PMOView = ({ onNavigate }) => {
                   'bg-white border-gray-300'
                 }`}>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-gray-700">مكتب التخطيط</span>
+                    <span className="text-xs font-bold text-gray-700">إدارة التخطيط</span>
                     <i className={`fa-solid text-lg ${
                       project.approvals?.planning === 'approved' ? 'fa-circle-check text-green-600' :
                       project.approvals?.planning === 'rejected' ? 'fa-circle-xmark text-red-600' :
@@ -194,24 +194,24 @@ const PMOView = ({ onNavigate }) => {
 
               <i className="fa-solid fa-chevron-left text-gray-400 text-xl mx-2"></i>
 
-              {/* مدير المحفظة */}
+              {/* إدارة الحوكمة */}
               <div className="flex-1">
                 <div className={`p-4 rounded-xl border-2 shadow-sm transition-all ${
-                  project.approvals?.portfolio === 'approved' ? 'bg-green-50 border-green-400' :
-                  project.approvals?.portfolio === 'rejected' ? 'bg-red-50 border-red-400' :
-                  project.approvals?.portfolio === 'pending' ? 'bg-yellow-50 border-yellow-400 animate-pulse' :
+                  project.approvals?.governance === 'approved' ? 'bg-green-50 border-green-400' :
+                  project.approvals?.governance === 'rejected' ? 'bg-red-50 border-red-400' :
+                  project.approvals?.governance === 'pending' ? 'bg-yellow-50 border-yellow-400 animate-pulse' :
                   'bg-white border-gray-300'
                 }`}>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-gray-700">مدير المحفظة</span>
+                    <span className="text-xs font-bold text-gray-700">إدارة الحوكمة</span>
                     <i className={`fa-solid text-lg ${
-                      project.approvals?.portfolio === 'approved' ? 'fa-circle-check text-green-600' :
-                      project.approvals?.portfolio === 'rejected' ? 'fa-circle-xmark text-red-600' :
-                      project.approvals?.portfolio === 'pending' ? 'fa-clock text-yellow-600' :
+                      project.approvals?.governance === 'approved' ? 'fa-circle-check text-green-600' :
+                      project.approvals?.governance === 'rejected' ? 'fa-circle-xmark text-red-600' :
+                      project.approvals?.governance === 'pending' ? 'fa-clock text-yellow-600' :
                       'fa-circle text-gray-300'
                     }`}></i>
                   </div>
-                  {project.approvals?.portfolio === 'pending' && (
+                  {project.approvals?.governance === 'pending' && (
                     <div className="flex gap-2 mt-3">
                       <button className="flex-1 bg-green-500 hover:bg-green-600 text-white text-xs font-bold py-2 rounded-lg transition">
                         <i className="fa-solid fa-check"></i> موافقة
@@ -226,24 +226,24 @@ const PMOView = ({ onNavigate }) => {
 
               <i className="fa-solid fa-chevron-left text-gray-400 text-xl mx-2"></i>
 
-              {/* الحوكمة */}
+              {/* مدير المحافظ */}
               <div className="flex-1">
                 <div className={`p-4 rounded-xl border-2 shadow-sm transition-all ${
-                  project.approvals?.governance === 'approved' ? 'bg-green-50 border-green-400' :
-                  project.approvals?.governance === 'rejected' ? 'bg-red-50 border-red-400' :
-                  project.approvals?.governance === 'pending' ? 'bg-yellow-50 border-yellow-400 animate-pulse' :
+                  project.approvals?.portfolio === 'approved' ? 'bg-green-50 border-green-400' :
+                  project.approvals?.portfolio === 'rejected' ? 'bg-red-50 border-red-400' :
+                  project.approvals?.portfolio === 'pending' ? 'bg-yellow-50 border-yellow-400 animate-pulse' :
                   'bg-white border-gray-300'
                 }`}>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-gray-700">الحوكمة</span>
+                    <span className="text-xs font-bold text-gray-700">مدير المحافظ</span>
                     <i className={`fa-solid text-lg ${
-                      project.approvals?.governance === 'approved' ? 'fa-circle-check text-green-600' :
-                      project.approvals?.governance === 'rejected' ? 'fa-circle-xmark text-red-600' :
-                      project.approvals?.governance === 'pending' ? 'fa-clock text-yellow-600' :
+                      project.approvals?.portfolio === 'approved' ? 'fa-circle-check text-green-600' :
+                      project.approvals?.portfolio === 'rejected' ? 'fa-circle-xmark text-red-600' :
+                      project.approvals?.portfolio === 'pending' ? 'fa-clock text-yellow-600' :
                       'fa-circle text-gray-300'
                     }`}></i>
                   </div>
-                  {project.approvals?.governance === 'pending' && (
+                  {project.approvals?.portfolio === 'pending' && (
                     <div className="flex gap-2 mt-3">
                       <button className="flex-1 bg-green-500 hover:bg-green-600 text-white text-xs font-bold py-2 rounded-lg transition">
                         <i className="fa-solid fa-check"></i> موافقة
