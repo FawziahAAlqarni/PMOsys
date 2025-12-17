@@ -21,9 +21,13 @@ import {PermissionsModule} from "../permissions/permissions.module";
       password: process.env.DB_PASSWORD || 'postgres',
       database: process.env.DB_NAME || 'project_management',
       autoLoadEntities: true,
-      synchronize: process.env.NODE_ENV !== 'production',
+      //synchronize: process.env.NODE_ENV !== 'production',
       logging: false,
-      ssl: false,
+      //ssl: true,
+      synchronize: true,
+ssl: process.env.DB_SSL === 'true',
+
+     
     }),
     AuthModule,
     ProjectModule,
