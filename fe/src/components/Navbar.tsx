@@ -5,7 +5,7 @@ import NavButton from './ui/NavButton';
 
 export default function Navbar({ currentView, setCurrentView, onReset }: any) {
   return (
-    <nav className="bg-[#006C35] text-white shadow-lg shrink-0 z-30 border-b-4 border-[#C5A96F]">
+    <nav className="bg-[#0d6b3a] text-white shadow-lg shrink-0 z-30 border-b-4 border-[#C5A96F]">
       <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
         <div className="flex items-center gap-5">
           <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center p-1 shadow-md">
