@@ -6,6 +6,8 @@ import {Gate2} from './entities/gate2.entity';
 import {Gate3} from './entities/gate3.entity';
 import {Gate4} from './entities/gate4.entity';
 import {RiskRegister} from './entities/risk-register.entity';
+import { RiskRegisterService } from './risk-register.service';
+import { RiskRegisterController } from './risk-register.controller';
 import {Gate2Scope} from './entities/gate2-scope.entity';
 import {Gate2Procurement} from './entities/gate2-procurement.entity';
 import {Gate2Assumptions} from './entities/gate2-assumptions.entity';
@@ -18,8 +20,8 @@ import {ProjectController} from './project.controller';
     Project, Gate1, Gate2, Gate3, Gate4,
     RiskRegister, Gate2Scope, Gate2Procurement, Gate2Assumptions, Gate2ChangeCard
   ])],
-  controllers: [ProjectController],
-  providers: [ProjectService],
+  controllers: [ProjectController, RiskRegisterController],
+  providers: [ProjectService, RiskRegisterService],
 })
 export class ProjectModule {
 }

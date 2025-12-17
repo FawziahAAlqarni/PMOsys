@@ -32,6 +32,15 @@ async function bootstrap() {
 
  
 
+
+  // --- تفعيل Swagger UI ---
+  const config = new DocumentBuilder()
+    .setTitle('PMOsys API')
+    .setDescription('توثيق REST API لنظام إدارة المشاريع')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
   // --- نهاية التعديل ---
 
   // Enable global validation pipe
